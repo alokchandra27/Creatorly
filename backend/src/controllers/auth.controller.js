@@ -10,6 +10,7 @@ async function registerSeller(req, res) {
       email,
       username,
       password,
+      storeName,
     } = req.body;
 
     // Check if the user already exists
@@ -27,6 +28,7 @@ async function registerSeller(req, res) {
       fullName: { firstName, lastName },
       email,
       username,
+      storeName,
       password: hashedPassword,
     });
 

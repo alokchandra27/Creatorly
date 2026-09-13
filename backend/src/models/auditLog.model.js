@@ -18,6 +18,9 @@ const auditLogSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        storeName: {
+            type: String,
+        },
         performedBy: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
