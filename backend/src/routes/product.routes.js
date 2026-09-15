@@ -18,11 +18,11 @@ router.post(
   productController.createProduct,
 );
 
-router.get('/products', productController.getAllProducts);
-router.get('/products/:id', productController.getProductById);
+router.get('/', productController.getAllProducts);
+router.get('/:id', productController.getProductById);
 
 router.put(
-  "/products/:id",
+  "/:id",
   authMiddleware.authUser,
   upload.fields([
     { name: "productImage1", maxCount: 1 },
@@ -33,7 +33,7 @@ router.put(
   ]),
   productController.updateProduct,
 );
-// router.delete('/products/:id', authMiddleware.authUser, productController.deleteProduct);
+router.delete('/:id', authMiddleware.authUser, productController.deleteProduct);
 
 
 module.exports = router;

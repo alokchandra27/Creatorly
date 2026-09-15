@@ -33,6 +33,12 @@ const sellerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    bio: {
+      type: String,
+    },
+    profileImage: {
+      type: String,
+    },
   },
   {
     timestamps: true,

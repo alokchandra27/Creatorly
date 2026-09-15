@@ -1,12 +1,12 @@
 const productModel = require("../models/product.model");
 const sellerModel = require("../models/seller.model"); // 🌟 Make sure to import your Seller Model!
-const { uploadImage } = require("../services/storage.service");
+const { uploadImage, deleteImage } = require("../services/storage.service");
 
 async function createProduct(req, res) {
   try {
     const sellerId = req.user.id;
 
-    // 1. Fetch the seller from the DB to get their name
+
     const seller = await sellerModel.findById(sellerId);
     if (!seller) {
       return res.status(404).json({ message: "Seller profile not found" });
@@ -38,10 +38,15 @@ async function createProduct(req, res) {
 
         if (fileArray && fileArray.length > 0) {
           const fileObject = fileArray[0];
+          const imageResponse = await uploadImage(
+            fileObject,
+            sanitizedSellerName,
+          );
 
-          // 3. Pass the dynamic folder target name here!
-          const imageUrl = await uploadImage(fileObject, sanitizedSellerName);
-          uploadedImages[fieldName] = imageUrl;
+          uploadedImages[fieldName] = {
+            url: imageResponse.url,
+            fileId: imageResponse.fileId,
+          };
         }
       }
     }
@@ -57,12 +62,14 @@ async function createProduct(req, res) {
       size,
       extraDetails,
       customization,
-      sellerUsername: sanitizedSellerName, // Store the sanitized seller name in the product document
-      storeName: seller.storeName, // Store the seller's store name in the product document
+      sellerUsername: sanitizedSellerName, 
+      storeName: seller.storeName, 
       productImage1: uploadedImages.productImage1,
       productImage2: uploadedImages.productImage2,
       productImage3: uploadedImages.productImage3,
       productImage4: uploadedImages.productImage4,
+      isDeleted: false, 
+      deletedAt: null,
     });
 
     const savedProduct = await newProduct.save();
@@ -75,39 +82,38 @@ async function createProduct(req, res) {
     });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        message: "Server error during product creation",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Server error during product creation",
+      error: error.message,
+    });
   }
 }
 
 async function getAllProducts(req, res) {
   try {
-    const products = await productModel.find();
+    const products = await productModel.find({
+      isDeleted: false, 
+    });
     res.status(200).json({
       message: "Products fetched successfully",
       products: products,
     });
-  }  catch (error) {
+  } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        message: "Server error while fetching products",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Server error while fetching products",
+      error: error.message,
+    });
   }
 }
 
 async function getProductById(req, res) {
-  try {
+   try {
     const productId = req.params.id;
-    const product = await productModel.findById(productId);
+
+    const product = await productModel.findOne({ _id: productId, isDeleted: false });
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: "Product not found or deleted" });
     }
     res.status(200).json({
       message: "Product fetched successfully",
@@ -115,67 +121,82 @@ async function getProductById(req, res) {
     });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        message: "Server error while fetching product",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Server error while fetching product",
+      error: error.message,
+    });
   }
 }
 
 async function updateProduct(req, res) {
   try {
     const productId = req.params.id;
-    const sellerId = req.user.id; 
+    const sellerId = req.user.id;
 
-    // 1. Find the existing product first to verify ownership
+
     const existingProduct = await productModel.findById(productId);
     if (!existingProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Security check: ensure this product belongs to the logged-in seller
+
     if (existingProduct.sellerId.toString() !== sellerId) {
-      return res.status(403).json({ message: "Unauthorized to update this product" });
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to update this product" });
     }
 
-    // 2. Fetch seller details to get the folder path name
     const seller = await sellerModel.findById(sellerId);
     const sanitizedSellerName = seller
-      ? seller.username.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-")
+      ? seller.username
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
       : "unknown-seller";
 
-    // 3. Destructure text fields from req.body
+
     const updatePayload = { ...req.body };
 
-    // 4. Handle any new image file uploads
-    if (req.files) {
+ if (req.files) {
       for (const fieldName in req.files) {
         const fileArray = req.files[fieldName];
-        
         if (fileArray && fileArray.length > 0) {
-          const fileObject = fileArray[0];
-          // Upload the new image to ImageKit using the seller folder path
-          const newImageUrl = await uploadImage(fileObject, sanitizedSellerName);
-          // Add it directly to the update payload
-          updatePayload[fieldName] = newImageUrl;
+          const fileObject = fileArray[0]; 
+
+          console.log(`Uploading new image for field: ${fieldName} for product ID: ${productId}`);
+
+          const plainProductObject = existingProduct.toObject();
+          
+          if (plainProductObject[fieldName] && plainProductObject[fieldName].fileId) {
+            const targetFileId = plainProductObject[fieldName].fileId;
+            
+            console.log(`Attempting to delete from ImageKit with File ID: ${targetFileId}`);
+            await deleteImage(targetFileId); 
+            
+            console.log(`Deleted old image for field: ${fieldName}`);
+          }
+
+          const imageResponse = await uploadImage(fileObject, sanitizedSellerName);
+
+          updatePayload[fieldName] = {
+            url: imageResponse.url,
+            fileId: imageResponse.fileId
+          };
         }
       }
     }
 
-    // 5. Update the document in MongoDB
+
     const updatedProduct = await productModel.findByIdAndUpdate(
       productId,
       updatePayload,
-      { new: true, runValidators: true } // runValidators ensures the update matches your schema types
+      { returnDocument: "after", runValidators: true }, 
     );
 
     res.status(200).json({
       message: "Product updated successfully",
       product: updatedProduct,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -185,4 +206,44 @@ async function updateProduct(req, res) {
   }
 }
 
-module.exports = { createProduct, getAllProducts, updateProduct , getProductById };
+async function deleteProduct(req, res) {
+  try {
+    const productId = req.params.id;
+    const sellerId = req.user.id;
+
+    const existingProduct = await productModel.findById(productId);
+    if (!existingProduct || existingProduct.isDeleted) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (existingProduct.sellerId.toString() !== sellerId) {
+      return res.status(403).json({ message: "Unauthorized to delete this product" });
+    }
+
+    const deletedProduct = await productModel.findByIdAndUpdate(
+      productId,
+      { isDeleted: true, deletedAt: new Date() },
+      { returnDocument: 'after' }
+    );
+
+    res.status(200).json({
+      message: "Product deleted successfully (Archived)",
+      product: deletedProduct,
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Server error while deleting product",
+      error: error.message,
+    });
+  }
+}
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  updateProduct,
+  getProductById,
+  deleteProduct,
+};

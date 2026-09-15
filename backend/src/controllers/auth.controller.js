@@ -13,23 +13,21 @@ async function registerSeller(req, res) {
       storeName,
     } = req.body;
 
-    // Check if the user already exists
+
 
     const existingUser = await sellerModel.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Create a new user
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10).select("password");
 
     const newSeller = await sellerModel.create({
       fullName: { firstName, lastName },
       email,
       username,
       storeName,
-      password: hashedPassword,
     });
 
     const token = jwt.sign({ id: newSeller._id }, process.env.JWT_SECRET, {
