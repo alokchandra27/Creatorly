@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --creator-bg: #faf9f6;
+  --creator-text: #1c1a17;
+  --creator-primary: #5f6f65;
+  --creator-accent: #d4a373;
+  --creator-pink: #e8c5c8;
+}
+
+@theme inline {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+  --color-creator-bg: var(--creator-bg);
+  --color-creator-text: var(--creator-text);          
+  --color-creator-primary: var(--creator-primary);
+  --color-creator-accent: var(--creator-accent);
+  --color-creator-pink: var(--creator-pink);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--creator-bg);
+  color: var(--creator-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
