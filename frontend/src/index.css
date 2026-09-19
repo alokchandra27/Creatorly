@@ -2,6 +2,7 @@
 
 :root {
   --creator-bg: #faf9f6;
+  --creator-bg-butter: rgb(248, 244, 234);
   --creator-text: #1c1a17;
   --creator-primary: #5f6f65;
   --creator-accent: #d4a373;
@@ -11,8 +12,13 @@
 @theme inline {
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
+
+  --font-caveat: "Caveat", cursive;
+
+  --color-creator-bg-butter: var(--creator-bg-butter);
+
   --color-creator-bg: var(--creator-bg);
-  --color-creator-text: var(--creator-text);          
+  --color-creator-text: var(--creator-text);
   --color-creator-primary: var(--creator-primary);
   --color-creator-accent: var(--creator-accent);
   --color-creator-pink: var(--creator-pink);
@@ -25,7 +31,8 @@ body,
 }
 
 body {
-  background-color: var(--creator-bg);
+  background-color: var(--creator-bg-butter);
+
   color: var(--creator-text);
   font-family: var(--font-sans);
   min-height: 100vh;

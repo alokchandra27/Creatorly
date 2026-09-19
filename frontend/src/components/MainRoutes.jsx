@@ -6,6 +6,7 @@ import ProductDetails from '../pages/ProductDetails'
 import Cart from '../pages/Cart'
 import PublicStore from '../pages/PublicStore'
 import VibeLoader from '../components/VibeLoader'
+import Intro from './Intro'
 
 const MainRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const MainRoutes = () => {
             <Route path="/cart" element={<Cart/>} />
             <Route path= "/publicStore/:id" element={<PublicStore/>} />
             <Route path= "/loader" element={<VibeLoader/>} />
+            <Route path= "intro" element={<Intro/>} />
         </Routes>
     </div>
   )
