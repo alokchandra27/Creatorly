@@ -71,16 +71,20 @@ import gsap from 'gsap';
 
 const VibeLoader = () => {
   return (
-    <div>
-        <div className="loader-screen fixed inset-0 z-50 flex  items-center justify-center bg-creator-bg text-creator-text select-none ">
-            <span className="floating-emoji">🧶</span>
+        <div className="loader-screen fixed inset-0 z-50 flex flex-col  items-center justify-center bg-creator-bg text-creator-text select-none ">
+          <div className='flex gap-2'>
+              <span className="floating-emoji">🧶</span>
             <span className="floating-emoji">🎨</span>
             <span className="floating-emoji">🌸</span>
             <span className="floating-emoji">✏️</span>
-            <span className="floating-emoji">🖌️</span>
-            <span className="floating-emoji">🖍️</span>
+            <span className="floating-emoji">🖌️</span>      </div>      
+        <div className="text-center font-sans z">
+         <p className="text-xs tracking-widest text-creator-primary font-medium uppercase mb-1">
+          Assembling Creators
+                 </p>
         </div>
-    </div>
+        </div>
+    
   )
 }
 

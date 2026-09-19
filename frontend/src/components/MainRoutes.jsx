@@ -5,7 +5,7 @@ import Explore from '../pages/Explore'
 import ProductDetails from '../pages/ProductDetails'
 import Cart from '../pages/Cart'
 import PublicStore from '../pages/PublicStore'
-import VibeLoader from './vibeLoader'
+import VibeLoader from '../components/VibeLoader'
 
 const MainRoutes = () => {
   return (
