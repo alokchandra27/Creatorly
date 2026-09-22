@@ -171,7 +171,7 @@ export default function VibeLoader({ onComplete }) {
           alt="palette"
           className=" lg:h-30 md:h-20  h-20 "
         />
-      </div>{" "}
+      </div>
       {/* Image 1 Palette */}
       {/* ─── CENTER CONTENT AREA ─── */}
       <div className="text-center max-w-sm px-6 relative z-10">
@@ -223,7 +223,7 @@ export default function VibeLoader({ onComplete }) {
             </p>
             <span className="text-red-300 text-lg flex items-center justify-center gap-2">
               <img
-                src="/src/assets/heart.svg"
+                src="/src/assets/flowerDaisy.png"
                 alt="My Icon"
                 className="w-10 h-10 transform -skew-y-3"
               />
