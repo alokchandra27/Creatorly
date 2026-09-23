@@ -17,7 +17,7 @@ const MainRoutes = () => {
             <Route path="/explore" element={<Explore/>} />
             <Route path="/productDetails/:id" element={<ProductDetails/>} />
             <Route path="/cart" element={<Cart/>} />
-            <Route path= "/publicStore/:id" element={<PublicStore/>} />
+            <Route path= "/publicStore/:storeName" element={<PublicStore/>} />
             <Route path= "/loader" element={<VibeLoader/>} />
             <Route path= "intro" element={<Intro/>} />
             <Route path="/auth" element={<Auth/>} />
