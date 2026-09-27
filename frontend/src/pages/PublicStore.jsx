@@ -17,7 +17,7 @@ import {
   CheckCircle2,
   ArrowRight,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import axios from "axios";
 import API from "../components/API/API";
 import { useEffect } from "react";
@@ -57,6 +57,8 @@ const PublicStore = () => {
     "Handmade",
     "Other",
   ];
+
+  const navigate = useNavigate();
 
   // const products = [
   //   {
@@ -390,6 +392,10 @@ const PublicStore = () => {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 md:gap-[18px]">
             {filteredProducts.map((product) => (
               <article
+
+                onClick={() => {
+                  navigate(`/productDetails/${product._id}`)
+                }}
                 key={product.id}
                 className="group overflow-hidden rounded-[10px] border border-[#eee9e2] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(44,50,47,0.08)]"
               >

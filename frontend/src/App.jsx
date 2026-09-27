@@ -2,6 +2,7 @@ import { useState } from "react";
 import Intro from "./components/Intro";
 import MainRoutes from "./components/MainRoutes";
 import VibeLoader from "./components/VibeLoader";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   // const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +30,7 @@ const App = () => {
 
   return (
     <div>
+      <Navbar/>
       <MainRoutes />
     </div>
   );

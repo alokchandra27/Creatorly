@@ -8,6 +8,9 @@ import PublicStore from '../pages/PublicStore'
 import VibeLoader from '../components/VibeLoader'
 import Intro from './Intro'
 import Auth from '../pages/Auth'
+import SellerDashboard from './Seller/SellerDashboard'
+import ProductsManagement from './Seller/ProductManagement'
+import StoreSettings from './Seller/StoreSettings'
 
 const MainRoutes = () => {
   return (
@@ -21,9 +24,12 @@ const MainRoutes = () => {
             <Route path= "/loader" element={<VibeLoader/>} />
             <Route path= "intro" element={<Intro/>} />
             <Route path="/auth" element={<Auth/>} />
+            <Route path="/sellerDashboard" element={<SellerDashboard/>} />
+            <Route path="/productManagement" element={<ProductsManagement/>} />
+            <Route path="/storeSettings" element={<StoreSettings/>} />
         </Routes>
     </div>
   )
 }
 
-export default MainRoutes
+export default MainRoutes 
