@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 // Pages aur Components ke Direct Imports
-import Homejsx from "../pages/Home"; 
+import Home from "../pages/Home"; 
 import Explore from "../pages/Explore";
 import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
@@ -20,7 +20,7 @@ const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <Routes>
       {/* Universal Customer/Visitor Paths */}
-      <Route path="/" element={<Homejsx isLoggedIn={isLoggedIn} />} />
+      <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
       <Route path="/explore" element={<Explore />} />
       <Route path="/productDetails/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
