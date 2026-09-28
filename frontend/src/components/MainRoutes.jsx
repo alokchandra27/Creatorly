@@ -1,35 +1,43 @@
-import React from 'react'
-import { Route , Routes } from 'react-router-dom'
-import Home from '../pages/Home'
-import Explore from '../pages/Explore'
-import ProductDetails from '../pages/ProductDetails'
-import Cart from '../pages/Cart'
-import PublicStore from '../pages/PublicStore'
-import VibeLoader from '../components/VibeLoader'
-import Intro from './Intro'
-import Auth from '../pages/Auth'
-import SellerDashboard from './Seller/SellerDashboard'
-import ProductsManagement from './Seller/ProductManagement'
-import StoreSettings from './Seller/StoreSettings'
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-const MainRoutes = () => {
+// Pages aur Components ke Direct Imports
+import Homejsx from "../pages/Home"; 
+import Explore from "../pages/Explore";
+import ProductDetails from "../pages/ProductDetails";
+import Cart from "../pages/Cart";
+import PublicStore from "../pages/PublicStore";
+import VibeLoader from "./VibeLoader";
+import Intro from "./Intro";
+import Auth from "../pages/Auth";
+
+// Seller Sections
+import SellerDashboard from "./Seller/SellerDashboard";
+import ProductsManagement from "./Seller/ProductManagement";
+import StoreSettings from "./Seller/StoreSettings";
+
+const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
-    <div>
-        <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/explore" element={<Explore/>} />
-            <Route path="/productDetails/:id" element={<ProductDetails/>} />
-            <Route path="/cart" element={<Cart/>} />
-            <Route path= "/publicStore/:storeName" element={<PublicStore/>} />
-            <Route path= "/loader" element={<VibeLoader/>} />
-            <Route path= "intro" element={<Intro/>} />
-            <Route path="/auth" element={<Auth/>} />
-            <Route path="/sellerDashboard" element={<SellerDashboard/>} />
-            <Route path="/productManagement" element={<ProductsManagement/>} />
-            <Route path="/storeSettings" element={<StoreSettings/>} />
-        </Routes>
-    </div>
-  )
-}
+    <Routes>
+      {/* Universal Customer/Visitor Paths */}
+      <Route path="/" element={<Homejsx isLoggedIn={isLoggedIn} />} />
+      <Route path="/explore" element={<Explore />} />
+      <Route path="/productDetails/:id" element={<ProductDetails />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/publicStore/:storeName" element={<PublicStore />} />
+      <Route path="/loader" element={<VibeLoader />} />
+      <Route path="/intro" element={<Intro />} />
+      <Route
+        path="/auth"
+        element={<Auth setIsLoggedIn={setIsLoggedIn} />}
+      />
 
-export default MainRoutes 
+      {/* Flat Dashboard Paths: Kisi alag template wrapper ki zarurat nahi h */}
+      <Route path="/dashboard" element={<SellerDashboard />} />
+      <Route path="/dashboard/products" element={<ProductsManagement />} />
+      <Route path="/dashboard/settings" element={<StoreSettings />} />
+    </Routes>
+  );
+};
+
+export default MainRoutes;

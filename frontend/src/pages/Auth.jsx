@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import API from "../components/API/API"; // Adjust the import path based on your project structure
 import { useNavigate } from "react-router-dom";
 
-const Auth = () => {
+const Auth = ({ setIsLoggedIn }) => {
   const [isLogin, setIsLogin] = useState(false); // false for register, true for login
   const [isLoading, setIsLoading] = useState(false); // For handling loading state
   const [showPassword, setShowPassword] = useState(false); // For toggling password visibility
@@ -53,6 +53,9 @@ const Auth = () => {
         if (response?.data?.user) {
           localStorage.setItem("user", JSON.stringify(response.data.user));
         }
+
+        setIsLoggedIn(true);
+        navigate("/dashboard");
       }
 
       toast.update(toastId, {
