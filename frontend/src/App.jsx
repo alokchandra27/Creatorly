@@ -41,29 +41,31 @@
 import React, { useState } from "react";
 import MainRoutes from "./components/MainRoutes";
 import Navbar from "./components/Navbar";
+import CreatorNavbar from "./components/CreatorNavbar";
+import { useLocation } from "react-router-dom";
 
 const App = () => {
-
   // Current login state
   const [isLoggedIn, setIsLoggedIn] = useState(() =>
     Boolean(localStorage.getItem("token")),
   );
 
+  const location = useLocation();
+
+  // Updated to match your exact URL structure: /publicStore/balbeerandsons
+  const isCreatorStoreRoute = location.pathname.startsWith("/publicStore");
+
   return (
     <div className="min-h-screen bg-creator-bg-butter">
+      {/* Dynamic Navbar Switcher */}
+      {isCreatorStoreRoute ? (
+        <CreatorNavbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      ) : (
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      )}
 
-      {/* Navbar */}
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-      />
-
-      {/* Routes */}
-      <MainRoutes
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-      />
-
+      {/* Application Routing Structure */}
+      <MainRoutes isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     </div>
   );
 };

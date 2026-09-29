@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-// Pages aur Components ke Direct Imports
+// Pages aur Components ke Imports
 import Home from "../pages/Home"; 
 import Explore from "../pages/Explore";
 import ProductDetails from "../pages/ProductDetails";
@@ -19,23 +19,30 @@ import StoreSettings from "./Seller/StoreSettings";
 const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <Routes>
-      {/* Universal Customer/Visitor Paths */}
+      {/* =====================================================
+          1. UNIVERSAL CUSTOMER / VISITOR PATHS (No Navbars Here!)
+          ===================================================== */}
       <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
       <Route path="/explore" element={<Explore />} />
       <Route path="/productDetails/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/publicStore/:storeName" element={<PublicStore />} />
       <Route path="/loader" element={<VibeLoader />} />
       <Route path="/intro" element={<Intro />} />
-      <Route
-        path="/auth"
-        element={<Auth setIsLoggedIn={setIsLoggedIn} />}
-      />
+      <Route path="/auth" element={<Auth setIsLoggedIn={setIsLoggedIn} />} />
 
-      {/* Flat Dashboard Paths: Kisi alag template wrapper ki zarurat nahi h */}
-      <Route path="/dashboard" element={<SellerDashboard />} />
-      <Route path="/dashboard/products" element={<ProductsManagement />} />
-      <Route path="/dashboard/settings" element={<StoreSettings />} />
+      {/* =====================================================
+          2. PERSONAL ISOLATED SELLER STOREFRONT PATHS
+          ===================================================== */}
+      {/* publicStore ke dono pages plain render honge, App.jsx automatically ispar CreatorNavbar lagayega */}
+      <Route path="/publicStore/:storeName" element={<PublicStore />} />
+      <Route path="/publicStore/:storeName/product/:id" element={<ProductDetails />} /> 
+
+      {/* =====================================================
+          3. FLAT SELLER DASHBOARD CONTROL PATHS
+          ===================================================== */}
+      {/* <Route path="/dashboard" element={<SellerDashboard />} /> */}
+      <Route path="/products" element={<ProductsManagement />} />
+      <Route path="/store/settings" element={<StoreSettings />} />
     </Routes>
   );
 };

@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const productModel = require("../models/product.model");
 const sellerModel = require("../models/seller.model"); // 🌟 Make sure to import your Seller Model!
 const { uploadImage, deleteImage } = require("../services/storage.service");
@@ -110,11 +111,15 @@ async function getAllProducts(req, res) {
 async function getProductById(req, res) {
    try {
     const productId = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: "Invalid Product ID format" });
+    }
 
     const product = await productModel.findOne({ _id: productId, isDeleted: false });
     if (!product) {
       return res.status(404).json({ message: "Product not found or deleted" });
     }
+    
     res.status(200).json({
       message: "Product fetched successfully",
       product: product,

@@ -85,62 +85,124 @@ const Auth = ({ setIsLoggedIn }) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-creator-bg text-creator-text overflow-hidden">
-      <section className="min-h-screen w-full flex flex-col lg:flex-row">
+    <div className="h-screen w-full overflow-hidden bg-creator-bg text-creator-text lg:-mt-10">
+      <section className="flex h-full w-full flex-col lg:flex-row">
+
         {/* ================= LEFT ================= */}
-        <div className="hidden lg:flex w-full lg:w-1/2 min-h-[55vh] lg:min-h-screen flex-col justify-center  px-8 sm:px-12 md:px-16 lg:px-20 xl:px-28 py-16">
-          {/* Small Creators */}
-          <div className="w-full">
-            <h1 className="font-caveat text-6xl sm:text-7xl md:text-8xl font-normal leading-none -rotate-3">
-              {" "}
-              Small{" "}
-            </h1>
-            <h2 className="font-caveat text-6xl sm:text-7xl md:text-8xl font-normal leading-none -rotate-3">
-              {" "}
-              Creators.{" "}
-            </h2>
+        <div className="relative hidden h-full min-h-0 w-full overflow-hidden px-8 py-10 sm:px-12 md:px-16 lg:flex lg:w-1/2 lg:px-20 xl:px-24">
+          {/* Soft decorative background shapes */}
+          <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-creator-pink/10 blur-3xl" />
+
+          <div className="absolute bottom-[-120px] left-[20%] w-80 h-80 rounded-full bg-amber-100/40 blur-3xl" />
+
+          {/* Main Content */}
+          <div className="relative z-10 mx-auto flex h-full w-full max-w-xl flex-col justify-center pb-10">
+            {/* Small label */}
+            <div className="mb-4 flex items-center gap-3">
+              <span className="w-8 h-[1px] bg-creator-pink" />
+
+              <p className="font-caveat text-xl text-creator-pink">
+                A home for creative work
+              </p>
+            </div>
+
+            {/* Main Heading */}
+            <div className="flex flex-col gap-3">
+              <div>
+                <h1 className="font-caveat text-5xl font-normal leading-[0.82] -rotate-2 text-neutral-800 xl:text-5xl">
+                Make
+              </h1>
+
+              <h2 className="font-caveat text-5xl font-normal leading-[0.82] -rotate-2 text-neutral-800 xl:text-5xl">
+                it Creatorly.
+              </h2>
+              </div>
+
+              <h2 className="mt-2 font-caveat text-5xl font-normal leading-[0.82] -rotate-1 text-creator-pink xl:text-5xl">
+                Share your story.
+              </h2>
+            </div>
+
+            {/* Description */}
+            <div className="mt-6 max-w-md">
+              <p className="text-sm leading-6 text-neutral-500 xl:text-sm">
+                Your work, your space, your people. Creatorly helps you put it
+                all in one place.
+              </p>
+
+              <LineSquiggle
+                size={40}
+                strokeWidth={1.5}
+                className="text-creator-pink"
+              />
+            </div>
+
+            {/* Creator Features */}
+            <div className="mt-2 flex flex-wrap gap-2">
+              <div className=" border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
+                ✦ Your own storefront
+              </div>
+
+              <div className=" border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
+                ♡ Showcase your work
+              </div>
+
+              <div className="border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
+                ↗ Share anywhere
+              </div>
+            </div>
+
+            {/* Mini CTA */}
+            <div className="mt-5">
+              <div className="inline-flex items-center gap-2 text-sm font-medium text-neutral-700">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-creator-pink text-white">
+                  <MoveRight size={15} />
+                </span>
+
+                <span>Your creator journey starts here.</span>
+              </div>
+            </div>
           </div>
-          {/* Big Stories */}
-          <div className="mt-5">
-            <h2 className="font-caveat text-6xl sm:text-7xl md:text-8xl font-normal leading-none text-creator-pink -rotate-2">
-              {" "}
-              Big Stories.{" "}
-            </h2>
-          </div>
-          {/* Description */}
-          <div className="mt-6">
-            <p className="font-caveat text-xl sm:text-2xl text-creator-text">
-              {" "}
-              Handmade * DIY * Crochet & More{" "}
-            </p>
-            <LineSquiggle
-              size={100}
-              strokeWidth={1.5}
-              className="text-creator-pink mt-1"
+
+          {/* ================= DECORATIVE ARTWORK ================= */}
+
+          {/* Main artwork */}
+          <div className="absolute bottom-[16%] right-[5%] aspect-square w-[150px] rotate-6 border-[7px] border-creator-bg bg-white shadow-[0_15px_40px_rgba(0,0,0,0.15)] xl:right-[6%] xl:w-[190px]">
+            <img
+              src="/src/assets/yarnKaGola.jpg"
+              alt=""
+              className="w-full h-full object-cover"
             />
           </div>
-          {/* CTA */}
-          <div className="mt-6">
-            <button className="bg-creator-pink hover:bg-creator-accent text-white py-3 px-5 rounded-full flex items-center gap-2 text-sm transition-all duration-300 hover:scale-105">
-              {" "}
-              Explore More <MoveRight size={18} />{" "}
-            </button>
+
+          {/* clay artwork */}
+          <div className="absolute bottom-[15%] right-[28%] aspect-square w-[90px] -rotate-12 border-[6px] border-creator-bg bg-white shadow-[0_12px_30px_rgba(0,0,0,0.12)] xl:right-[30%] xl:w-[110px]">
+            <img
+              src="/src/assets/clay.jpg"
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* palette decoration */}
+          <div className="absolute bottom-[10%] right-[1%] xl:right-[5%] opacity-90">
+            <img src="/src/assets/palette.png" alt="" className="w-12 xl:w-16" />
+          </div>
+
+          {/* Daisy */}
+          <div className="absolute bottom-[12%] left-[7%] opacity-70">
+            <img
+              src="/src/assets/redcolor.png"
+              alt=""
+              className="w-12 xl:w-16"
+            />
           </div>
         </div>
 
-        {/* ================= RIGHT (SELLER REGISTER PANEL) - 100% PERFECTLY CENTERED ================= */}
+        {/* ================= RIGHT (SELLER REGISTER PANEL)================= */}
         <div className="w-full lg:w-1/2 h-screen lg:h-screen flex items-center justify-center px-4 sm:px-8 py-6 lg:py-0 border-t-0 lg:border-t-0 lg:border-l-[1px] border-creator-accent relative bg-creator-bg overflow-hidden">
-          {/* Top Right Decorative Leaf */}
-          <div className="absolute top-[4%] right-[6%] opacity-40 hidden xl:block">
-            <img
-              src="/src/assets/leafStem.png"
-              alt=""
-              className="w-10 rotate-45"
-            />
-          </div>
-
           {/* Form Main Container */}
-          <div className="w-full max-w-[440px] bg-white rounded-2xl p-5 sm:p-7 shadow-sm border border-neutral-100/80 flex flex-col relative">
+          <div className="w-full max-w-[440px] bg-white rounded-2xl px-5 py-0 sm:p-7 shadow-sm border border-neutral-100/80 flex flex-col relative">
             {/* Header / Logo Style */}
             <div className="text-center mb-4">
               <div className="flex items-center justify-center gap-1 mb-0.5">
@@ -326,15 +388,6 @@ const Auth = ({ setIsLoggedIn }) => {
                 </p>
               </div>
             </form>
-          </div>
-
-          {/* Bottom Right Decorative Leaf */}
-          <div className="absolute bottom-[4%] right-[4%] opacity-40 hidden xl:block">
-            <img
-              src="/src/assets/leafStem.png"
-              alt=""
-              className="w-12 -rotate-12"
-            />
           </div>
         </div>
       </section>

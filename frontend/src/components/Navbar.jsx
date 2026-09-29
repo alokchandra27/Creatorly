@@ -119,16 +119,16 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               <>
                 {/* Dashboard */}
                 <button
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() => navigate("/products")}
                   className="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100 hover:bg-emerald-100 transition shadow-sm active:scale-95 font-sans normal-case text-xs cursor-pointer"
                 >
-                  🎛️ Dashboard
+                  🎛️ Products
                 </button>
 
                 {/* Store Settings */}
                 <button
                   onClick={() =>
-                    navigate("/dashboard/settings")
+                    navigate("/store/settings")
                   }
                   className={`hover:text-creator-text transition-colors  cursor-pointer ${
                     isActive("/dashboard/settings")
