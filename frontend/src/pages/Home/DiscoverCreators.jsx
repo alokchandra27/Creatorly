@@ -1,275 +1,380 @@
-import React from 'react'
-import { ArrowRight, Heart } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import {
+  ArrowRight,
+  Search,
+  MapPin,
+  Sparkles,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const DiscoverCreators = () => {
-
-     // =======================================================
-  // DEMO / SEEDED CREATORS
-  // =======================================================
+  const navigate = useNavigate();
 
   const creators = [
     {
       username: "mystriispot",
       name: "MystriiSpot",
       location: "Rishikesh",
-      desc: "Handmade with a little magic ✨",
-      category: "Handmade art & DIY",
-      // image: creator1,
-      // avatar: avatar1,
+      category: "Handmade Art",
+      description: "Handmade with a little magic ✨",
+      image: "/src/assets/creator1.png",
+      accent: "bg-orange-100",
     },
     {
       username: "theclaycorner",
       name: "TheClayCorner",
       location: "Dehradun",
-      desc: "Dream it • Shape it • Love it",
-      category: "Clay & home decor",
-      // image: creator2,
-      // avatar: avatar2,
+      category: "Clay & Home Decor",
+      description: "Dream it • Shape it • Love it",
+      image: "/src/assets/creator2.png",
+      accent: "bg-yellow-100",
     },
     {
       username: "threadandtales",
       name: "ThreadAndTales",
       location: "Rishikesh",
-      desc: "Crochet stories in every loop",
-      category: "Crochet & handmade gifts",
-      // image: creator3,
-      // avatar: avatar3,
+      category: "Crochet",
+      description: "Crochet stories in every loop",
+      image: "/src/assets/creator3.png",
+      accent: "bg-green-100",
     },
     {
       username: "woodenwhimsy",
       name: "WoodenWhimsy",
       location: "Dehradun",
-      desc: "Carved with care",
-      category: "Wooden decor & gifts",
-      // image: creator4,
-      // avatar: avatar4,
+      category: "Wooden Decor",
+      description: "Carved with care",
+      image: "/src/assets/creator4.png",
+      accent: "bg-amber-100",
     },
   ];
 
-   const goToExplore = () => {
-    navigate("/explore");
-  };
+  const categories = [
+    "All",
+    "Handmade Art",
+    "Clay & Home Decor",
+    "Crochet",
+    "Wooden Decor",
+  ];
+
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [showFilters, setShowFilters] = useState(false);
+
+  const filteredCreators = useMemo(() => {
+    return creators.filter((creator) => {
+      const matchesSearch =
+        creator.name.toLowerCase().includes(search.toLowerCase()) ||
+        creator.category.toLowerCase().includes(search.toLowerCase()) ||
+        creator.location.toLowerCase().includes(search.toLowerCase());
+
+      const matchesCategory =
+        activeCategory === "All" ||
+        creator.category === activeCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [search, activeCategory]);
 
   return (
-       <section className="w-full bg-[#FAF7F2] px-6 py-20 sm:px-10 md:py-24 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          {/* SECTION HEADER */}
+    <main className="min-h-screen bg-[#faf7f0] text-neutral-900">
 
-          <div
-            className="
-              mb-10
-              flex
-              flex-col
-              gap-5
-              md:flex-row
-              md:items-end
-              md:justify-between
-            "
-          >
-            <div>
-              <p className="font-caveat text-lg text-creator-pink sm:text-xl">
-                Made by independent creators.
-              </p>
+      {/* ================================================= */}
+      {/* HERO */}
+      {/* ================================================= */}
 
-              <h2
-                className="
-                  mt-1
-                  font-playfair
-                  text-3xl
-                  font-bold
-                  text-neutral-800
-                  sm:text-4xl
-                  md:text-5xl
-                "
-              >
-                Discover Creators
-              </h2>
+      <section className="relative overflow-hidden px-5 pb-14 pt-20 sm:px-8 sm:pt-24 lg:px-16 lg:pb-20">
 
-              <p className="mt-3 max-w-lg text-sm text-neutral-500">
-                Explore artists, makers and small businesses building something
-                of their own.
-              </p>
+        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-orange-200/30 blur-3xl" />
+
+        <div className="pointer-events-none absolute -left-40 top-72 h-80 w-80 rounded-full bg-yellow-200/20 blur-3xl" />
+
+        <div className="relative mx-auto max-w-6xl">
+
+          <div className="max-w-3xl">
+
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-xs font-medium text-neutral-600 shadow-sm">
+              <Sparkles size={14} />
+              Discover independent creators
             </div>
 
-            <button
-              onClick={goToExplore}
-              className="
-                group
-                flex
-                w-fit
-                items-center
-                gap-2
-                rounded-full
-                border
-                border-creator-pink
-                px-5
-                py-2.5
-                text-sm
-                text-creator-pink
-                transition-all
-                duration-300
-                hover:bg-creator-pink
-                hover:text-white
-              "
-            >
-              View All Creators
-              <ArrowRight
-                size={16}
-                className="transition-transform group-hover:translate-x-1"
+            <h1 className="text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+              Discover people
+              <span className="block font-serif italic font-normal text-neutral-600">
+                behind the things they make.
+              </span>
+            </h1>
+
+            <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg">
+              Explore handmade artists, crafters and small creators.
+              Visit their Creatorly stores and discover the work they
+              create with their own hands.
+            </p>
+
+          </div>
+
+
+          {/* Search */}
+          <div className="mt-10 max-w-2xl">
+
+            <div className="group flex items-center gap-3 rounded-2xl border border-neutral-200 bg-white px-4 py-3.5 shadow-sm transition-all duration-300 focus-within:border-neutral-400 focus-within:shadow-lg">
+
+              <Search
+                size={19}
+                className="shrink-0 text-neutral-400"
               />
-            </button>
+
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search creators, categories or locations..."
+                className="w-full bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
+              />
+
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="rounded-full p-1 text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-900"
+                >
+                  <X size={16} />
+                </button>
+              )}
+
+            </div>
+
           </div>
 
-          {/* CREATOR CARDS */}
-
-          <div
-            className="
-              grid
-              grid-cols-1
-              gap-6
-              sm:grid-cols-2
-              lg:grid-cols-4
-            "
-          >
-            {creators.map((creator) => (
-              <article
-                key={creator.username}
-                className="
-                  group
-                  overflow-hidden
-                  rounded-2xl
-                  border
-                  border-neutral-100
-                  bg-white
-                  shadow-sm
-                  transition-all
-                  duration-500
-                  hover:-translate-y-2
-                  hover:shadow-xl
-                "
-              >
-                {/* IMAGE */}
-
-                <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100">
-                  <img
-                    // src={creator.image}
-                    // alt={creator.name}
-                    className="
-                      h-full
-                      w-full
-                      object-cover
-                      transition-transform
-                      duration-700
-                      group-hover:scale-105
-                    "
-                  />
-
-                  {/* HEART */}
-
-                  <button
-                    onClick={(e) => e.stopPropagation()}
-                    className="
-                      absolute
-                      right-3
-                      top-3
-                      flex
-                      h-9
-                      w-9
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-white/90
-                      text-neutral-500
-                      shadow-sm
-                      backdrop-blur
-                      transition-all
-                      hover:scale-110
-                      hover:text-rose-500
-                    "
-                  >
-                    <Heart size={16} />
-                  </button>
-                </div>
-
-                {/* CONTENT */}
-
-                <div className="p-5">
-                  <div className="flex items-center gap-3">
-                    <img
-                      // src={creator.avatar}
-                      // alt={creator.name}
-                      className="
-                        h-9
-                        w-9
-                        rounded-full
-                        object-cover
-                        ring-2
-                        ring-neutral-100
-                      "
-                    />
-
-                    <div>
-                      <h3 className="text-sm font-semibold text-neutral-800">
-                        {creator.name}
-                      </h3>
-
-                      <p className="text-[11px] text-neutral-400">
-                        {creator.location}
-                      </p>
-                    </div>
-                  </div>
-
-                  <p className="mt-4 text-xs leading-5 text-neutral-500">
-                    {creator.desc}
-                  </p>
-
-                  <p className="mt-1 text-[11px] font-medium text-neutral-400">
-                    {creator.category}
-                  </p>
-
-                  {/* VIEW STORE */}
-
-                  <button
-                    onClick={() => navigate(`/${creator.username}`)}
-                    className="
-                      group/button
-                      mt-5
-                      flex
-                      w-full
-                      items-center
-                      justify-center
-                      gap-2
-                      rounded-full
-                      border
-                      border-creator-pink
-                      px-4
-                      py-2.5
-                      text-xs
-                      font-medium
-                      text-creator-pink
-                      transition-all
-                      duration-300
-                      hover:bg-creator-pink
-                      hover:text-white
-                    "
-                  >
-                    View Store
-                    <ArrowRight
-                      size={14}
-                      className="
-                        transition-transform
-                        duration-300
-                        group-hover/button:translate-x-1
-                      "
-                    />
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
         </div>
       </section>
-  )
-}
 
-export default DiscoverCreators
+
+      {/* ================================================= */}
+      {/* CREATOR CONTENT */}
+      {/* ================================================= */}
+
+      <section className="px-5 pb-24 sm:px-8 lg:px-16">
+
+        <div className="mx-auto max-w-6xl">
+
+          {/* Toolbar */}
+
+          <div className="flex flex-col gap-4 border-b border-neutral-200 pb-5 lg:flex-row lg:items-center lg:justify-between">
+
+            <div>
+              <p className="text-sm text-neutral-500">
+                {filteredCreators.length} creators
+              </p>
+
+              <h2 className="mt-1 text-xl font-semibold">
+                Find your next favourite creator
+              </h2>
+            </div>
+
+
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="inline-flex w-fit items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md lg:hidden"
+            >
+              <SlidersHorizontal size={16} />
+              Filters
+            </button>
+
+          </div>
+
+
+          {/* Filters */}
+
+          <div
+            className={`${
+              showFilters ? "flex" : "hidden"
+            } mt-5 flex-wrap gap-2 lg:flex`}
+          >
+
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`rounded-full px-4 py-2 text-sm transition-all duration-300 ${
+                  activeCategory === category
+                    ? "bg-neutral-900 text-white shadow-md"
+                    : "border border-neutral-200 bg-white text-neutral-600 hover:-translate-y-0.5 hover:shadow-sm"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+
+          </div>
+
+
+          {/* Creator Grid */}
+
+          {filteredCreators.length > 0 ? (
+
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+              {filteredCreators.map((creator, index) => (
+
+                <article
+                  key={creator.username}
+                  className="group overflow-hidden rounded-[1.75rem] border border-neutral-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
+                  style={{
+                    animationDelay: `${index * 80}ms`,
+                  }}
+                >
+
+                  {/* Image */}
+
+                  <div
+                    className={`relative aspect-[4/3] overflow-hidden ${creator.accent}`}
+                  >
+
+                    <img
+                      src={creator.image}
+                      alt={creator.name}
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+
+                    <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                  </div>
+
+
+                  {/* Content */}
+
+                  <div className="p-6">
+
+                    <div className="flex items-start justify-between gap-4">
+
+                      <div>
+
+                        <h3 className="text-xl font-semibold tracking-tight">
+                          {creator.name}
+                        </h3>
+
+                        <div className="mt-2 flex items-center gap-1.5 text-xs text-neutral-500">
+                          <MapPin size={13} />
+                          {creator.location}
+                        </div>
+
+                      </div>
+
+                    </div>
+
+
+                    <p className="mt-5 text-sm leading-6 text-neutral-500">
+                      {creator.description}
+                    </p>
+
+
+                    <div className="mt-5">
+
+                      <span className="inline-flex rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-600">
+                        {creator.category}
+                      </span>
+
+                    </div>
+
+
+                    <button
+                      onClick={() =>
+                        navigate(`/${creator.username}`)
+                      }
+                      className="group/btn mt-6 flex w-full items-center justify-between rounded-xl bg-neutral-900 px-4 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:bg-neutral-800 active:scale-[0.98]"
+                    >
+
+                      Visit store
+
+                      <ArrowRight
+                        size={17}
+                        className="transition-transform duration-300 group-hover/btn:translate-x-1"
+                      />
+
+                    </button>
+
+                  </div>
+
+                </article>
+
+              ))}
+
+            </div>
+
+          ) : (
+
+            /* Empty State */
+
+            <div className="mt-12 rounded-[2rem] border border-dashed border-neutral-300 bg-white px-6 py-20 text-center">
+
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-neutral-100">
+                <Search size={22} className="text-neutral-500" />
+              </div>
+
+              <h3 className="mt-5 text-xl font-semibold">
+                No creators found
+              </h3>
+
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-500">
+                Try another creator name, category or location.
+              </p>
+
+              <button
+                onClick={() => {
+                  setSearch("");
+                  setActiveCategory("All");
+                }}
+                className="mt-6 rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                Clear filters
+              </button>
+
+            </div>
+
+          )}
+
+        </div>
+
+      </section>
+
+
+      {/* ================================================= */}
+      {/* BOTTOM CTA */}
+      {/* ================================================= */}
+
+      <section className="border-t border-neutral-200 bg-white px-5 py-20 sm:px-8 lg:px-16">
+
+        <div className="mx-auto max-w-5xl rounded-[2rem] bg-[#f4ead9] px-7 py-14 text-center sm:px-12 lg:py-20">
+
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-neutral-500">
+            Are you a creator?
+          </p>
+
+          <h2 className="mx-auto mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+            Give your work a place of its own.
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-neutral-600 sm:text-base">
+            Create your Creatorly store and share one simple link with
+            your audience.
+          </p>
+
+          <button
+            onClick={() => navigate("/auth")}
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-neutral-900 px-7 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95"
+          >
+            Create your store
+            <ArrowRight size={17} />
+          </button>
+
+        </div>
+
+      </section>
+
+    </main>
+  );
+};
+
+export default DiscoverCreators;

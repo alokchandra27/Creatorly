@@ -15,6 +15,7 @@ import Auth from "../pages/Auth";
 import SellerDashboard from "./Seller/SellerDashboard";
 import ProductsManagement from "./Seller/ProductManagement";
 import StoreSettings from "./Seller/StoreSettings";
+import EditProduct from "./Seller/EditProduct";
 
 const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
@@ -43,6 +44,7 @@ const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
       {/* <Route path="/dashboard" element={<SellerDashboard />} /> */}
       <Route path="/products" element={<ProductsManagement />} />
       <Route path="/store/settings" element={<StoreSettings />} />
+      <Route path="/products/edit/:productId" element={<EditProduct />} />
     </Routes>
   );
 };

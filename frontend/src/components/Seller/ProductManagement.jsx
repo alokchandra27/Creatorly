@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import API from "../API/API";
+import { useNavigate } from "react-router-dom";
 import {
   Plus,
   Search,
@@ -27,6 +28,8 @@ export default function ProductsManagement() {
     size: "",
     customization: false,
   });
+
+  const navigate = useNavigate();
 
   const [mockProducts, setMockProducts] = useState([]);
   const [search, setSearch] = useState("");
@@ -67,6 +70,26 @@ export default function ProductsManagement() {
     setActiveTab("list");
   };
 
+  const editProduct = (productId) => {
+    navigate(`/products/edit/${productId}`);
+  };
+
+  const deleteHandler = async (productId) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) {
+      return;
+    }
+
+    try {
+      await API.delete(`/api/products/${productId}`);
+      setMockProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== productId),
+      );
+    } catch (error) {
+      console.error("Delete product error:", error);
+      alert(error?.response?.data?.message || "Failed to delete product.");
+    }
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -90,6 +113,8 @@ export default function ProductsManagement() {
 
     fetchProducts();
   }, []);
+
+
 
   const filteredProducts = useMemo(() => {
     let products = [...mockProducts];
@@ -149,6 +174,8 @@ export default function ProductsManagement() {
     (product) => product.customization === true,
   ).length;
 
+
+
   return (
     <div className="min-h-screen bg-creator-bg-butter text-creator-text antialiased">
       {/* =====================================================
@@ -175,7 +202,7 @@ export default function ProductsManagement() {
                 Products<span className="text-creator-pink">.</span>
               </h1>
 
-              <p className="mt-2 max-w-md text-sm leading-6 text-neutral-500 font-sans sm:text-base">
+              <p className="mt-2 max-w-md text-sm leading-6 text-neutral-500 font-sans sm:text-basecd frontendcd">
                 Everything you make, in one place. Keep your collection
                 beautiful and easy to manage.
               </p>
@@ -184,8 +211,7 @@ export default function ProductsManagement() {
             {/* Add Product */}
             <button
               onClick={() => setActiveTab("add")}
-              className="
-                group
+              className="group
                 inline-flex
                 w-fit
                 items-center
@@ -463,6 +489,8 @@ export default function ProductsManagement() {
                     key={product._id}
                     product={product}
                     index={index}
+                    onEdit={editProduct}
+                    onDelete={deleteHandler}
                   />
                 ))}
               </div>
@@ -526,7 +554,7 @@ function StatCard({ icon, number, label }) {
    PRODUCT CARD
 ============================================================= */
 
-function ProductCard({ product, index }) {
+function ProductCard({ product, index, onEdit, onDelete }) {
   const image =
     product?.productImage1?.url ||
     "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=700";
@@ -698,7 +726,10 @@ function ProductCard({ product, index }) {
           "
           title="View product"
         >
-          <ArrowUpRight size={15} />
+          <ArrowUpRight
+                     onClick={() => onEdit(product._id)}
+
+          size={15} />
         </button>
       </div>
 
@@ -760,7 +791,9 @@ function ProductCard({ product, index }) {
             pt-3
           "
         >
+          
           <button
+            onClick={() => onEdit(product._id)}
             className="
               flex
               items-center
@@ -777,6 +810,7 @@ function ProductCard({ product, index }) {
           </button>
 
           <button
+            onClick={() => onDelete(product._id)}
             className="
               flex
               items-center

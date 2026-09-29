@@ -81,7 +81,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
                 isActive(`/publicStore/\${username}`) ? "text-creator-text font-bold" : ""
               }`}
             >
-              Shop Home
+              Shop
             </span>
 
             <span
@@ -90,7 +90,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
                 isActive(`/publicStore/\${username}/about`) ? "text-creator-text font-bold" : ""
               }`}
             >
-              About Creator
+              About Store
             </span>
 
             {isLoggedIn && (

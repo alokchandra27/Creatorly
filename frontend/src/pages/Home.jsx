@@ -37,6 +37,7 @@ import HowCreatorlyWorks from "./Home/HowCreatorlyWorks";
 import PeoplePassionPurpose from "./Home/PeoplePassionPurpose";
 import FinalCTA from "./Home/FinalCTA";
 import Footer from "./Footer";
+import CreatorlyValueSection from "./Home/CreatorlyValueSection";
 // import creator2 from "/src/assets/creator2.png";
 // import creator3 from "/src/assets/creator3.png";
 // import creator4 from "/src/assets/creator4.png";
@@ -296,8 +297,8 @@ const Home = () => {
           DISCOVER CREATORS
       ===================================================== */}
 
-      <DiscoverCreators />
-
+      <CreatorlyValueSection  />
+      {/* <DiscoverCreators/> */}
       {/* =====================================================
           HOW CREATORLY WORKS
       ===================================================== */}
