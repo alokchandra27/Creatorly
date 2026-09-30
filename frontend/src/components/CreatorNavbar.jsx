@@ -48,17 +48,11 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
 
   return (
     <nav
-      className={`sticky top-0 z-50 bg-creator-bg hover:bg-creator-bg-butter backdrop-blur-md transition-all duration-500 ease-in-out ${
-        isScrolled
-          ? "border-b border-creator-text/10 shadow-sm"
-          : "border-b border-transparent"
-      }`}
+      className={`sticky top-0 z-50 bg-creator-bg hover:bg-creator-bg-butter backdrop-blur-md transition-all duration-500 ease-in-out ${ isScrolled ? "border-b border-creator-text/10 shadow-sm" : "border-b border-transparent" }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className={`flex items-center justify-between transition-all duration-500 ease-in-out ${
-            isScrolled ? "h-14" : "h-20"
-          }`}
+          className={`flex items-center justify-between transition-all duration-500 ease-in-out ${ isScrolled ? "h-14" : "h-20" }`}
         >
           {/* LEFT: Dynamic Branding mapped to URL */}
           <div
@@ -77,18 +71,14 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <span
               onClick={() => navigate(`/publicStore/${username}`)}
-              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${
-                isActive(`/publicStore/\${username}`) ? "text-creator-text font-bold" : ""
-              }`}
+              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${ isActive(`/publicStore/\${username}`) ? "text-creator-text font-bold" : "" }`}
             >
               Shop
             </span>
 
             <span
               onClick={() => navigate(`/publicStore/${username}/about`)}
-              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${
-                isActive(`/publicStore/\${username}/about`) ? "text-creator-text font-bold" : ""
-              }`}
+              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${ isActive(`/publicStore/\${username}/about`) ? "text-creator-text font-bold" : "" }`}
             >
               About Store
             </span>

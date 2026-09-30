@@ -62,19 +62,13 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
   return (
     <nav
-      className={`sticky top-0 z-50 bg-creator-bg hover:bg-creator-bg-butter backdrop-blur-md transition-all duration-500 ease-in-out ${
-        isScrolled
-          ? "border-b border-creator-text/10 shadow-sm"
-          : "border-b border-transparent"
-      }`}
+      className={`sticky top-0 z-50 bg-creator-bg hover:bg-creator-bg-butter backdrop-blur-md transition-all duration-500 ease-in-out ${ isScrolled ? "border-b border-creator-text/10 shadow-sm" : "border-b border-transparent" }`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Dynamic height transitions handle mapping rows */}
         <div
-          className={`flex items-center justify-between transition-all duration-500 ease-in-out ${
-            isScrolled ? "h-14" : "h-20"
-          }`}
+          className={`flex items-center justify-between transition-all duration-500 ease-in-out ${ isScrolled ? "h-14" : "h-20" }`}
         >
 
           {/* LEFT: Branding Section */}
@@ -93,11 +87,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             {/* Home */}
             <span
               onClick={() => navigate("/")}
-              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${
-                isActive("/")
-                  ? "text-creator-text"
-                  : ""
-              }`}
+              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${ isActive("/") ? "text-creator-text" : "" }`}
             >
               Home
             </span>
@@ -105,11 +95,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
             {/* Explore */}
             <span
               onClick={() => navigate("/explore")}
-              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${
-                isActive("/explore")
-                  ? "text-creator-text"
-                  : ""
-              }`}
+              className={`cursor-pointer hover:text-creator-text transition-colors duration-150 text-creator-text/70 ${ isActive("/explore") ? "text-creator-text" : "" }`}
             >
               Explore
             </span>
@@ -130,11 +116,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
                   onClick={() =>
                     navigate("/store/settings")
                   }
-                  className={`hover:text-creator-text transition-colors  cursor-pointer ${
-                    isActive("/dashboard/settings")
-                      ? "text-creator-text"
-                      : ""
-                  }`}
+                  className={`hover:text-creator-text transition-colors cursor-pointer ${ isActive("/dashboard/settings") ? "text-creator-text" : "" }`}
                 >
                   Store Settings
                 </button>
@@ -274,11 +256,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
       {/* MOBILE COLLAPSIBLE PANEL OVERLAY */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen
-            ? "max-h-[32rem] opacity-100 border-t border-creator-text/5 bg-creator-bg-butter"
-            : "max-h-0 opacity-0 pointer-events-none"
-        }`}
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${ isOpen ? "max-h-[32rem] opacity-100 border-t border-creator-text/5 bg-creator-bg-butter" : "max-h-0 opacity-0 pointer-events-none" }`}
         id="mobile-menu"
       >
         <div className="space-y-1 px-4 py-3">

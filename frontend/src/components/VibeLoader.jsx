@@ -150,9 +150,9 @@ export default function VibeLoader({ onComplete }) {
 
 
 
-      {/* <div className="absolute -bottom-20 left-0 opacity-40 ">
+      {/* <div className="absolute -bottom-20 left-0 opacity-40">
         <div
-          className="lg:w-30 lg:h-30 md:w-20 md:h-20 w-40 h-40 transform skew-y-20  bg-black "
+          className="lg:w-30 lg:h-30 md:w-20 md:h-20 w-40 h-40 transform skew-y-20 bg-black"
           style={{
             mask: "url('/src/assets/heart.svg') no-repeat center / contain",
             WebkitMask:
@@ -165,11 +165,11 @@ export default function VibeLoader({ onComplete }) {
       <div className="aesthetic-element floating-item opacity-0 absolute bottom-[8%] right-[40%] lg:right-[50%] text-7xl">
         🐱
       </div>
-      <div className="floating-item absolute bottom-[10%] right-[10%] ">
+      <div className="floating-item absolute bottom-[10%] right-[10%]">
         <img
           src="/src/assets/palette.png"
           alt="palette"
-          className=" lg:h-30 md:h-20  h-20 "
+          className="lg:h-30 md:h-20 h-20"
         />
       </div>
       {/* Image 1 Palette */}
@@ -205,7 +205,7 @@ export default function VibeLoader({ onComplete }) {
         {/* ─── DYNAMIC SUB-TEXT ─── */}
         {progress < 65 ? (
           <div className="animate-fade-in">
-            <p className="text-sm font-caveat italic text-creator-text  mb-1 px-20 tracking-wider">
+            <p className="text-sm font-caveat italic text-creator-text mb-1 px-20 tracking-wider">
               something creative is on its way...
             </p>
             <span className="text-red-300 text-lg flex items-center justify-center gap-2">
@@ -218,7 +218,7 @@ export default function VibeLoader({ onComplete }) {
           </div>
         ) : (
           <div className="animate-fade-in">
-            <p className="text-sm font-caveat italic text-creator-text  mb-1 px-20 tracking-wider">
+            <p className="text-sm font-caveat italic text-creator-text mb-1 px-20 tracking-wider">
               You're one step closer to something beautiful
             </p>
             <span className="text-red-300 text-lg flex items-center justify-center gap-2">

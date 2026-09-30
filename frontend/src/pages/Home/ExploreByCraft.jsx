@@ -65,15 +65,7 @@ const ExploreByCraft = () => {
           </p>
 
           <h2
-            className="
-              mt-2
-              font-playfair
-              text-3xl
-              font-bold
-              text-neutral-800
-              sm:text-4xl
-              md:text-5xl
-            "
+            className="mt-2 font-playfair text-3xl font-bold text-neutral-800 sm:text-4xl md:text-5xl"
           >
             Explore by Craft
           </h2>
@@ -85,16 +77,7 @@ const ExploreByCraft = () => {
           {/* CRAFT GRID */}
 
           <div
-            className="
-              mx-auto
-              mt-12
-              grid
-              max-w-5xl
-              grid-cols-2
-              gap-6
-              sm:grid-cols-4
-              lg:grid-cols-8
-            "
+            className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-8"
           >
             {crafts.map((craft, index) => (
               <button
@@ -103,24 +86,7 @@ const ExploreByCraft = () => {
                 className="group flex flex-col items-center"
               >
                 <div
-                  className={`
-                    flex
-                    h-20
-                    w-20
-                    items-center
-                    justify-center
-                    text-3xl
-                    ${craft.bgColor}
-                    ${craft.textColor}
-                    shadow-sm
-                    transition-all
-                    duration-300
-                    group-hover:-translate-y-2
-                    group-hover:scale-105
-                    group-hover:shadow-md
-                    sm:h-24
-                    sm:w-24
-                  `}
+                  className={`flex h-20 w-20 items-center justify-center text-3xl ${craft.bgColor} ${craft.textColor} shadow-sm transition-all duration-300 group-hover:-translate-y-2 group-hover:scale-105 group-hover:shadow-md sm:h-24 sm:w-24`}
                   style={{
                     borderRadius:
                       index % 2 === 0
@@ -132,14 +98,7 @@ const ExploreByCraft = () => {
                 </div>
 
                 <span
-                  className="
-                    mt-3
-                    text-sm
-                    font-medium
-                    text-neutral-700
-                    transition-colors
-                    group-hover:text-creator-pink
-                  "
+                  className="mt-3 text-sm font-medium text-neutral-700 transition-colors group-hover:text-creator-pink"
                 >
                   {craft.name}
                 </span>

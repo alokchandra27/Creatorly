@@ -9,16 +9,7 @@ const HowCreatorlyWorks = () => {
         <img
           // src={leafImage}
           alt=""
-          className="
-            pointer-events-none
-            absolute
-            -left-5
-            top-8
-            w-20
-            rotate-[-35deg]
-            opacity-50
-            sm:w-28
-          "
+          className="pointer-events-none absolute -left-5 top-8 w-20 rotate-[-35deg] opacity-50 sm:w-28"
         />
 
         <div className="relative mx-auto max-w-7xl">
@@ -28,15 +19,7 @@ const HowCreatorlyWorks = () => {
             </p>
 
             <h2
-              className="
-                mt-1
-                font-playfair
-                text-3xl
-                font-bold
-                text-neutral-800
-                sm:text-4xl
-                md:text-5xl
-              "
+              className="mt-1 font-playfair text-3xl font-bold text-neutral-800 sm:text-4xl md:text-5xl"
             >
               How Creatorly Works
             </h2>
@@ -45,33 +28,13 @@ const HowCreatorlyWorks = () => {
           {/* STEPS */}
 
           <div
-            className="
-              grid
-              grid-cols-1
-              gap-8
-              md:grid-cols-2
-              lg:grid-cols-4
-              lg:gap-5
-            "
+            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-5"
           >
             {/* STEP 1 */}
 
             <div className="group relative">
               <div
-                className="
-                  mb-5
-                  flex
-                  h-14
-                  w-14
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-pink-100
-                  text-creator-pink
-                  transition-transform
-                  duration-300
-                  group-hover:scale-110
-                "
+                className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-pink-100 text-creator-pink transition-transform duration-300 group-hover:scale-110"
               >
                 <UserRound size={23} />
               </div>
@@ -92,20 +55,7 @@ const HowCreatorlyWorks = () => {
 
             <div className="group relative">
               <div
-                className="
-                  mb-5
-                  flex
-                  h-14
-                  w-14
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-green-100
-                  text-green-700
-                  transition-transform
-                  duration-300
-                  group-hover:scale-110
-                "
+                className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-700 transition-transform duration-300 group-hover:scale-110"
               >
                 <Palette size={23} />
               </div>
@@ -126,20 +76,7 @@ const HowCreatorlyWorks = () => {
 
             <div className="group relative">
               <div
-                className="
-                  mb-5
-                  flex
-                  h-14
-                  w-14
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-yellow-100
-                  text-yellow-700
-                  transition-transform
-                  duration-300
-                  group-hover:scale-110
-                "
+                className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-yellow-100 text-yellow-700 transition-transform duration-300 group-hover:scale-110"
               >
                 <Link2 size={23} />
               </div>
@@ -160,20 +97,7 @@ const HowCreatorlyWorks = () => {
 
             <div className="group relative">
               <div
-                className="
-                  mb-5
-                  flex
-                  h-14
-                  w-14
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-purple-100
-                  text-purple-700
-                  transition-transform
-                  duration-300
-                  group-hover:scale-110
-                "
+                className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 text-purple-700 transition-transform duration-300 group-hover:scale-110"
               >
                 <Package size={23} />
               </div>
@@ -194,23 +118,7 @@ const HowCreatorlyWorks = () => {
           {/* SOCIAL CONNECTION STRIP */}
 
           <div
-            className="
-              mt-16
-              flex
-              flex-col
-              items-center
-              justify-center
-              gap-4
-              rounded-3xl
-              border
-              border-neutral-100
-              bg-white
-              px-6
-              py-6
-              shadow-sm
-              sm:flex-row
-              sm:gap-6
-            "
+            className="mt-16 flex flex-col items-center justify-center gap-4 rounded-3xl border border-neutral-100 bg-white px-6 py-6 shadow-sm sm:flex-row sm:gap-6"
           >
             <div className="flex items-center gap-2 text-creator-pink">
               {/* <Instagram size={18} /> */}

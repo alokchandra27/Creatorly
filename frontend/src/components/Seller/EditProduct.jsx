@@ -246,11 +246,7 @@ const EditProduct = () => {
     return (
       <div
         key={field}
-        className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 ${
-          preview
-            ? "border-black/10 bg-black/[0.03]"
-            : "border-dashed border-black/15 bg-black/[0.02] hover:border-black/30 hover:bg-black/[0.04]"
-        }`}
+        className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 ${ preview ? "border-black/10 bg-black/[0.03]" : "border-dashed border-black/15 bg-black/[0.02] hover:border-black/30 hover:bg-black/[0.04]" }`}
       >
         {preview ? (
           <>

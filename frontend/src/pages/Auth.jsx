@@ -139,11 +139,11 @@ const Auth = ({ setIsLoggedIn }) => {
 
             {/* Creator Features */}
             <div className="mt-2 flex flex-wrap gap-2">
-              <div className=" border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
+              <div className="border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
                 ✦ Your own storefront
               </div>
 
-              <div className=" border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
+              <div className="border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
                 ♡ Showcase your work
               </div>
 
@@ -350,12 +350,7 @@ const Auth = ({ setIsLoggedIn }) => {
                 <button
                   type="submit"
                   disabled={isLoading} // React handles disabling here cleanly
-                  className={`w-full py-2.5 rounded-xl text-xs font-medium transition-all duration-300 tracking-wide text-white flex items-center justify-center gap-2
-      ${
-        isLoading
-          ? "bg-neutral-400 cursor-not-allowed opacity-80"
-          : "bg-[#1A2E26] hover:bg-neutral-800 cursor-pointer"
-      }`}
+                  className={`w-full py-2.5 rounded-xl text-xs font-medium transition-all duration-300 tracking-wide text-white flex items-center justify-center gap-2 ${ isLoading ? "bg-neutral-400 cursor-not-allowed opacity-80" : "bg-[#1A2E26] hover:bg-neutral-800 cursor-pointer" }`}
                 >
                   {/* Corrected Text Logic Hierarchy */}
                   {isLoading

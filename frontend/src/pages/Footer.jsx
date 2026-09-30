@@ -12,17 +12,7 @@ const Footer = () => {
       }
   return (
      <footer
-        className="
-          flex
-          flex-col
-          items-center
-          justify-between
-          gap-5
-          px-6
-          py-8
-          sm:px-10
-          md:flex-row
-        "
+        className="flex flex-col items-center justify-between gap-5 px-6 py-8 sm:px-10 md:flex-row"
       >
         {/* BRAND */}
 

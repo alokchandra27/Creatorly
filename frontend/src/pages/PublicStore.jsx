@@ -115,16 +115,7 @@ const ProductCard = ({
   return (
     <article
       onClick={openProduct}
-      className="
-        group relative cursor-pointer
-        overflow-hidden
-        rounded-[18px]
-        border border-creator-text/10
-        bg-white
-        transition-all duration-500
-        hover:-translate-y-1.5
-        hover:shadow-[0_18px_35px_rgba(60,50,40,0.10)]
-      "
+      className="group relative cursor-pointer overflow-hidden rounded-[18px] border border-creator-text/10 bg-white transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_18px_35px_rgba(60,50,40,0.10)]"
     >
 
       {/* ================================================== */}
@@ -132,13 +123,7 @@ const ProductCard = ({
       {/* ================================================== */}
 
       <div
-        className="
-          relative
-          aspect-[0.92]
-          overflow-hidden
-          bg-creator-bg
-          touch-pan-y
-        "
+        className="relative aspect-[0.92] overflow-hidden bg-creator-bg touch-pan-y"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -165,15 +150,7 @@ const ProductCard = ({
                     index + 1
                   }`}
                   draggable="false"
-                  className="
-                    h-full
-                    w-full
-                    select-none
-                    object-cover
-                    transition-transform
-                    duration-700
-                    group-hover:scale-[1.035]
-                  "
+                  className="h-full w-full select-none object-cover transition-transform duration-700 group-hover:scale-[1.035]"
                 />
               </div>
             ))
@@ -191,18 +168,7 @@ const ProductCard = ({
 
         {/* SOFT IMAGE OVERLAY */}
 
-        <div className="
-          pointer-events-none
-          absolute inset-0
-          bg-gradient-to-t
-          from-black/20
-          via-transparent
-          to-transparent
-          opacity-0
-          transition-opacity
-          duration-500
-          group-hover:opacity-100
-        " />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
 
         {/* HEART */}
@@ -210,20 +176,7 @@ const ProductCard = ({
         <button
           onClick={(event) => event.stopPropagation()}
           aria-label="Save product"
-          className="
-            absolute right-3 top-3
-            flex h-9 w-9
-            items-center justify-center
-            rounded-full
-            bg-white/90
-            text-creator-text
-            shadow-sm
-            backdrop-blur-sm
-            transition-all duration-300
-            hover:scale-110
-            hover:-rotate-6
-            active:scale-90
-          "
+          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-creator-text shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:-rotate-6 active:scale-90"
         >
           <Heart size={15} />
         </button>
@@ -233,19 +186,7 @@ const ProductCard = ({
 
         {product?.customization && (
           <span
-            className="
-              absolute left-3 top-3
-              rounded-full
-              bg-white/90
-              px-2.5 py-1.5
-              text-[8px]
-              font-semibold
-              uppercase
-              tracking-[0.08em]
-              text-creator-text
-              shadow-sm
-              backdrop-blur
-            "
+            className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text shadow-sm backdrop-blur"
           >
             Customizable
           </span>
@@ -256,17 +197,7 @@ const ProductCard = ({
 
         {images.length > 1 && (
           <span
-            className="
-              absolute
-              bottom-3 left-3
-              rounded-full
-              bg-black/50
-              px-2.5 py-1
-              text-[9px]
-              font-medium
-              text-white
-              backdrop-blur
-            "
+            className="absolute bottom-3 left-3 rounded-full bg-black/50 px-2.5 py-1 text-[9px] font-medium text-white backdrop-blur"
           >
             {activeImage + 1}/{images.length}
           </span>
@@ -279,40 +210,14 @@ const ProductCard = ({
           <>
             <button
               onClick={previousImage}
-              className="
-                absolute left-2 top-1/2
-                hidden h-8 w-8
-                -translate-y-1/2
-                items-center justify-center
-                rounded-full
-                bg-white/90
-                shadow-sm
-                transition-all
-                hover:scale-110
-                sm:flex
-                opacity-0
-                group-hover:opacity-100
-              "
+              className="absolute left-2 top-1/2 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 shadow-sm transition-all hover:scale-110 sm:flex opacity-0 group-hover:opacity-100"
             >
               <ChevronLeft size={15} />
             </button>
 
             <button
               onClick={nextImage}
-              className="
-                absolute right-2 top-1/2
-                hidden h-8 w-8
-                -translate-y-1/2
-                items-center justify-center
-                rounded-full
-                bg-white/90
-                shadow-sm
-                transition-all
-                hover:scale-110
-                sm:flex
-                opacity-0
-                group-hover:opacity-100
-              "
+              className="absolute right-2 top-1/2 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 shadow-sm transition-all hover:scale-110 sm:flex opacity-0 group-hover:opacity-100"
             >
               <ChevronRight size={15} />
             </button>
@@ -324,14 +229,7 @@ const ProductCard = ({
 
         {images.length > 1 && (
           <div
-            className="
-              absolute
-              bottom-3
-              left-1/2
-              flex
-              -translate-x-1/2
-              gap-1
-            "
+            className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1"
           >
             {images.map((_, index) => (
               <button
@@ -340,16 +238,7 @@ const ProductCard = ({
                   event.stopPropagation();
                   setActiveImage(index);
                 }}
-                className={`
-                  h-1.5
-                  rounded-full
-                  transition-all duration-300
-                  ${
-                    activeImage === index
-                      ? "w-4 bg-white"
-                      : "w-1.5 bg-white/60"
-                  }
-                `}
+                className={`h-1.5 rounded-full transition-all duration-300 ${ activeImage === index ? "w-4 bg-white" : "w-1.5 bg-white/60" }`}
               />
             ))}
           </div>
@@ -367,16 +256,7 @@ const ProductCard = ({
         <div className="flex items-start justify-between gap-2">
 
           <span
-            className="
-              rounded-full
-              bg-creator-accent/30
-              px-2 py-1
-              text-[8px]
-              font-semibold
-              uppercase
-              tracking-[0.08em]
-              text-creator-text/60
-            "
+            className="rounded-full bg-creator-accent/30 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text/60"
           >
             {product?.category || "Handmade"}
           </span>
@@ -391,29 +271,14 @@ const ProductCard = ({
 
 
         <h3
-          className="
-            mt-3
-            truncate
-            font-serif
-            text-[15px]
-            font-semibold
-            text-creator-text
-            sm:text-lg
-          "
+          className="mt-3 truncate font-serif text-[15px] font-semibold text-creator-text sm:text-lg"
         >
           {product?.productName}
         </h3>
 
 
         <p
-          className="
-            mt-1.5
-            line-clamp-2
-            text-[10px]
-            leading-4
-            text-creator-text/45
-            sm:text-[11px]
-          "
+          className="mt-1.5 line-clamp-2 text-[10px] leading-4 text-creator-text/45 sm:text-[11px]"
         >
           {product?.productDescription ||
             "Handmade with care and love."}
@@ -425,12 +290,7 @@ const ProductCard = ({
         <div className="mt-4 flex items-center justify-between">
 
           <strong
-            className="
-              font-serif
-              text-base
-              text-creator-text
-              sm:text-lg
-            "
+            className="font-serif text-base text-creator-text sm:text-lg"
           >
             ₹
             {Number(
@@ -448,18 +308,7 @@ const ProductCard = ({
                 addToCart();
               }
             }}
-            className={`
-              flex h-9 w-9
-              items-center justify-center
-              rounded-full
-              text-white
-              transition-all duration-300
-              ${
-                isOutOfStock
-                  ? "cursor-not-allowed bg-neutral-300"
-                  : "bg-creator-text hover:scale-110 hover:rotate-6 hover:bg-creator-primary active:scale-90"
-              }
-            `}
+            className={`flex h-9 w-9 items-center justify-center rounded-full text-white transition-all duration-300 ${ isOutOfStock ? "cursor-not-allowed bg-neutral-300" : "bg-creator-text hover:scale-110 hover:rotate-6 hover:bg-creator-primary active:scale-90" }`}
           >
             <ShoppingCart size={15} />
           </button>
@@ -724,11 +573,7 @@ const PublicStore = () => {
 
     return (
       <div
-        className="
-          min-h-screen
-          bg-creator-bg-butter
-          px-4 py-8
-        "
+        className="min-h-screen bg-creator-bg-butter px-4 py-8"
       >
 
         <div className="mx-auto max-w-6xl animate-pulse">
@@ -791,73 +636,34 @@ const PublicStore = () => {
 
     return (
       <div
-        className="
-          flex min-h-screen
-          items-center justify-center
-          bg-creator-bg-butter
-          px-5
-        "
+        className="flex min-h-screen items-center justify-center bg-creator-bg-butter px-5"
       >
 
         <div
-          className="
-            w-full max-w-md
-            rounded-[28px]
-            bg-white
-            p-8
-            text-center
-            shadow-sm
-          "
+          className="w-full max-w-md rounded-[28px] bg-white p-8 text-center shadow-sm"
         >
 
           <div
-            className="
-              mx-auto
-              flex h-14 w-14
-              items-center justify-center
-              rounded-full
-              bg-red-50
-              text-red-500
-            "
+            className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500"
           >
             <X size={24} />
           </div>
 
           <h1
-            className="
-              mt-5
-              font-serif
-              text-2xl
-              font-semibold
-            "
+            className="mt-5 font-serif text-2xl font-semibold"
           >
             Store unavailable
           </h1>
 
           <p
-            className="
-              mt-3
-              text-sm
-              leading-6
-              text-creator-text/55
-            "
+            className="mt-3 text-sm leading-6 text-creator-text/55"
           >
             {error}
           </p>
 
           <button
             onClick={() => navigate("/")}
-            className="
-              mt-7
-              rounded-full
-              bg-creator-text
-              px-6 py-3
-              text-xs font-semibold
-              text-white
-              transition
-              hover:-translate-y-0.5
-              hover:shadow-lg
-            "
+            className="mt-7 rounded-full bg-creator-text px-6 py-3 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
           >
             Back to Creatorly
           </button>
@@ -875,13 +681,7 @@ const PublicStore = () => {
 
   return (
     <div
-      className="
-        min-h-screen
-        overflow-x-hidden
-        bg-creator-bg-butter
-        text-creator-text
-        mt-10
-      "
+      className="min-h-screen overflow-x-hidden bg-creator-bg-butter text-creator-text mt-10"
     >
 
       {/* ===================================================== */}
@@ -889,15 +689,7 @@ const PublicStore = () => {
       {/* ===================================================== */}
 
       <main
-        className="
-          mx-auto
-          w-[calc(100%-24px)]
-          max-w-6xl
-          px-1
-          pb-20
-          sm:w-[calc(100%-48px)]
-          lg:px-0
-        "
+        className="mx-auto w-[calc(100%-24px)] max-w-6xl px-1 pb-20 sm:w-[calc(100%-48px)] lg:px-0"
       >
 
 
@@ -906,50 +698,20 @@ const PublicStore = () => {
         {/* ================================================= */}
 
         <section
-          className="
-            relative
-            grid
-            overflow-hidden
-            rounded-[28px]
-            bg-creator-bg
-            shadow-[0_18px_55px_rgba(82,60,42,0.08)]
-            lg:grid-cols-[0.86fr_1.14fr]
-          "
+          className="relative grid overflow-hidden rounded-[28px] bg-creator-bg shadow-[0_18px_55px_rgba(82,60,42,0.08)] lg:grid-cols-[0.86fr_1.14fr]"
         >
 
           {/* DECORATIVE BRUSH */}
 
           <div
-            className="
-              pointer-events-none
-              absolute
-              -left-7
-              top-16
-              h-10
-              w-28
-              rotate-[-12deg]
-              rounded-full
-              bg-creator-pink/20
-              blur-[1px]
-            "
+            className="pointer-events-none absolute -left-7 top-16 h-10 w-28 rotate-[-12deg] rounded-full bg-creator-pink/20 blur-[1px]"
           />
 
 
           {/* HERO TEXT */}
 
           <div
-            className="
-              relative z-10
-              flex
-              min-h-[350px]
-              flex-col
-              justify-center
-              gap-2
-              px-7 py-10
-              sm:px-12
-              lg:min-h-[440px]
-              lg:px-14
-            "
+            className="relative z-10 flex min-h-[350px] flex-col justify-center gap-2 px-7 py-10 sm:px-12 lg:min-h-[440px] lg:px-14"
           >
 
             {/* handwritten mini label */}
@@ -962,11 +724,7 @@ const PublicStore = () => {
               />
 
               <span
-                className="
-                  font-caveat
-                  text-lg
-                  text-creator-text/70
-                "
+                className="font-caveat text-lg text-creator-text/70"
               >
                 a little handmade world
               </span>
@@ -975,15 +733,7 @@ const PublicStore = () => {
 
 
             <h1
-              className="
-                max-w-md
-                font-caveat
-                text-5xl
-                font-normal
-                leading-[0.9]
-                text-creator-text
-                sm:text-7xl
-              "
+              className="max-w-md font-caveat text-5xl font-normal leading-[0.9] text-creator-text sm:text-7xl"
             >
               Made by hand,
 
@@ -994,24 +744,11 @@ const PublicStore = () => {
 
 
             <p
-              className="
-                mt-5
-                max-w-sm
-                text-sm
-                leading-6
-                text-creator-text/60
-                sm:text-base
-              "
+              className="mt-5 max-w-sm text-sm leading-6 text-creator-text/60 sm:text-base"
             >
               Discover thoughtful pieces from{" "}
               <span
-                className="
-                  font-semibold
-                  underline
-                  decoration-creator-pink
-                  decoration-2
-                  underline-offset-4
-                "
+                className="font-semibold underline decoration-creator-pink decoration-2 underline-offset-4"
               >
                 {store?.storeName ||
                   "a small creator"}
@@ -1022,36 +759,13 @@ const PublicStore = () => {
 
             <a
               href="#collection"
-              className="
-                group
-                mt-7
-                flex
-                w-fit
-                items-center
-                gap-2
-                rounded-full
-                bg-creator-pink
-                px-5 py-3
-                text-xs
-                font-semibold
-                text-white
-                shadow-sm
-                transition-all duration-300
-                hover:-translate-y-1
-                hover:rotate-[-1deg]
-                hover:shadow-lg
-                active:scale-95
-              "
+              className="group mt-7 flex w-fit items-center gap-2 rounded-full bg-creator-pink px-5 py-3 text-xs font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg active:scale-95"
             >
               Explore the collection
 
               <ArrowRight
                 size={15}
-                className="
-                  transition-transform
-                  duration-300
-                  group-hover:translate-x-1
-                "
+                className="transition-transform duration-300 group-hover:translate-x-1"
               />
             </a>
 
@@ -1059,17 +773,7 @@ const PublicStore = () => {
             {/* little handwritten detail */}
 
             <span
-              className="
-                absolute
-                bottom-7
-                right-8
-                hidden
-                rotate-[-5deg]
-                font-caveat
-                text-lg
-                text-creator-text/60
-                sm:block
-              "
+              className="absolute bottom-7 right-8 hidden rotate-[-5deg] font-caveat text-lg text-creator-text/60 sm:block"
             >
               made with love ♡
             </span>
@@ -1080,12 +784,7 @@ const PublicStore = () => {
           {/* HERO IMAGE */}
 
           <div
-            className="
-              relative
-              min-h-[270px]
-              overflow-hidden
-              lg:min-h-[440px]
-            "
+            className="relative min-h-[270px] overflow-hidden lg:min-h-[440px]"
           >
 
             <img
@@ -1094,46 +793,19 @@ const PublicStore = () => {
                 "/src/assets/banner.jpg",
               )}
               alt="Store banner"
-              className="
-                h-full
-                w-full
-                object-cover
-                transition-transform
-                duration-[1200ms]
-                hover:scale-[1.035]
-              "
+              className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]"
             />
 
 
             <div
-              className="
-                absolute inset-0
-                bg-gradient-to-t
-                from-black/20
-                via-transparent
-                to-transparent
-              "
+              className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
             />
 
 
             {/* taped-note feeling */}
 
             <div
-              className="
-                absolute
-                bottom-7
-                left-7
-                rotate-[-4deg]
-                bg-white/90
-                px-4 py-2
-                font-caveat
-                text-sm
-                shadow-sm
-                backdrop-blur
-                transition-transform
-                duration-300
-                hover:rotate-2
-              "
+              className="absolute bottom-7 left-7 rotate-[-4deg] bg-white/90 px-4 py-2 font-caveat text-sm shadow-sm backdrop-blur transition-transform duration-300 hover:rotate-2"
             >
               handmade
               <br />
@@ -1142,24 +814,7 @@ const PublicStore = () => {
 
 
             <span
-              className="
-                absolute
-                bottom-5
-                right-5
-                rotate-[2deg]
-                rounded-full
-                bg-white/90
-                px-3 py-2
-                font-caveat
-                text-sm
-                font-semibold
-                text-creator-text
-                shadow-sm
-                transition-all
-                duration-300
-                hover:-rotate-3
-                hover:scale-105
-              "
+              className="absolute bottom-5 right-5 rotate-[2deg] rounded-full bg-white/90 px-3 py-2 font-caveat text-sm font-semibold text-creator-text shadow-sm transition-all duration-300 hover:-rotate-3 hover:scale-105"
             >
               small business · big heart
             </span>
@@ -1174,33 +829,13 @@ const PublicStore = () => {
         {/* ================================================= */}
 
         <section
-          className="
-            relative
-            flex
-            flex-col
-            gap-5
-            border-b
-            border-creator-text/10
-            px-2 py-8
-            md:flex-row
-            md:gap-7
-            md:py-10
-          "
+          className="relative flex flex-col gap-5 border-b border-creator-text/10 px-2 py-8 md:flex-row md:gap-7 md:py-10"
         >
 
           {/* small decorative heart */}
 
           <span
-            className="
-              absolute
-              right-2
-              top-4
-              rotate-12
-              font-caveat
-              text-xl
-              text-creator-pink
-              md:right-5
-            "
+            className="absolute right-2 top-4 rotate-12 font-caveat text-xl text-creator-pink md:right-5"
           >
             ♡
           </span>
@@ -1209,27 +844,7 @@ const PublicStore = () => {
           {/* LOGO */}
 
           <div
-            className="
-              mx-auto
-              h-[115px]
-              w-[115px]
-              shrink-0
-              rotate-[-2deg]
-              overflow-hidden
-              rounded-full
-              border-[6px]
-              border-white
-              bg-creator-accent
-              shadow-sm
-              transition-all duration-500
-              hover:rotate-3
-              hover:scale-105
-              sm:h-[135px]
-              sm:w-[135px]
-              md:mx-0
-              md:h-[145px]
-              md:w-[145px]
-            "
+            className="mx-auto h-[115px] w-[115px] shrink-0 rotate-[-2deg] overflow-hidden rounded-full border-[6px] border-white bg-creator-accent shadow-sm transition-all duration-500 hover:rotate-3 hover:scale-105 sm:h-[135px] sm:w-[135px] md:mx-0 md:h-[145px] md:w-[145px]"
           >
 
             <img
@@ -1238,14 +853,7 @@ const PublicStore = () => {
                 "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=300",
               )}
               alt={store?.storeName || "Store"}
-              className="
-                h-full
-                w-full
-                object-cover
-                transition-transform
-                duration-700
-                hover:scale-[1.12]
-              "
+              className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.12]"
             />
 
           </div>
@@ -1254,30 +862,13 @@ const PublicStore = () => {
           {/* PROFILE CONTENT */}
 
           <div
-            className="
-              flex
-              flex-1
-              flex-col
-              justify-between
-              gap-5
-              md:flex-row
-            "
+            className="flex flex-1 flex-col justify-between gap-5 md:flex-row"
           >
 
             <div className="text-center md:text-left">
 
               <h2
-                className="
-                  flex
-                  items-center
-                  justify-center
-                  gap-1.5
-                  font-serif
-                  text-3xl
-                  font-semibold
-                  text-creator-text
-                  md:justify-start
-                "
+                className="flex items-center justify-center gap-1.5 font-serif text-3xl font-semibold text-creator-text md:justify-start"
               >
                 {store?.storeName ||
                   "Your handmade store"}
@@ -1285,25 +876,14 @@ const PublicStore = () => {
 
 
               <p
-                className="
-                  mb-2
-                  mt-1
-                  font-caveat
-                  text-xl
-                  text-creator-pink
-                "
+                className="mb-2 mt-1 font-caveat text-xl text-creator-pink"
               >
                 Handcrafted with love ✨
               </p>
 
 
               <p
-                className="
-                  max-w-[500px]
-                  text-sm
-                  leading-6
-                  text-creator-text/60
-                "
+                className="max-w-[500px] text-sm leading-6 text-creator-text/60"
               >
                 {store?.bio ||
                   "Thoughtful handmade pieces for everyday joy."}
@@ -1313,56 +893,24 @@ const PublicStore = () => {
               {/* SOCIAL PNGS — PRESERVED */}
 
               <div
-                className="
-                  mt-3
-                  flex
-                  items-center
-                  justify-center
-                  gap-4
-                  rounded-full
-                  bg-creator-bg/50
-                  py-2
-                  md:justify-start
-                "
+                className="mt-3 flex items-center justify-center gap-4 rounded-full bg-creator-bg/50 py-2 md:justify-start"
               >
 
                 {/* INSTAGRAM */}
 
                 <div
                   onClick={openInstagram}
-                  className="
-                    flex
-                    cursor-pointer
-                    items-center
-                    gap-1.5
-                    text-creator-primary
-                    transition-all
-                    duration-300
-                    hover:scale-105
-                    hover:-rotate-2
-                  "
+                  className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:-rotate-2"
                 >
 
                   <img
                     src="/src/assets/instagram.png"
                     alt="Instagram"
-                    className="
-                      h-10
-                      w-10
-                      object-cover
-                      transition-transform
-                      duration-300
-                      hover:rotate-6
-                    "
+                    className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6"
                   />
 
                   <p
-                    className="
-                      font-sans
-                      text-xs
-                      font-semibold
-                      text-creator-text
-                    "
+                    className="font-sans text-xs font-semibold text-creator-text"
                   >
                     {store?.instagramUsername ||
                       "@yourhandle"}
@@ -1375,39 +923,17 @@ const PublicStore = () => {
 
                 <div
                   onClick={openWhatsApp}
-                  className="
-                    flex
-                    cursor-pointer
-                    items-center
-                    gap-1.5
-                    text-creator-primary
-                    transition-all
-                    duration-300
-                    hover:scale-105
-                    hover:rotate-2
-                  "
+                  className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:rotate-2"
                 >
 
                   <img
                     src="/src/assets/whatsapp.png"
                     alt="WhatsApp"
-                    className="
-                      h-10
-                      w-10
-                      object-cover
-                      transition-transform
-                      duration-300
-                      hover:-rotate-6
-                    "
+                    className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6"
                   />
 
                   <p
-                    className="
-                      font-sans
-                      text-xs
-                      font-semibold
-                      text-creator-text
-                    "
+                    className="font-sans text-xs font-semibold text-creator-text"
                   >
                     {store?.whatsappNumber ||
                       "not available"}
@@ -1423,32 +949,14 @@ const PublicStore = () => {
             {/* RIGHT */}
 
             <div
-              className="
-                flex
-                flex-col
-                items-center
-                md:items-end
-              "
+              className="flex flex-col items-center md:items-end"
             >
 
               <div className="flex gap-2">
 
                 <button
                   onClick={openInstagram}
-                  className="
-                    rounded-full
-                    bg-creator-text
-                    px-7 py-2.5
-                    text-xs
-                    text-white
-                    transition-all
-                    duration-300
-                    hover:-translate-y-0.5
-                    hover:rotate-[-1deg]
-                    hover:bg-creator-primary
-                    hover:shadow-lg
-                    active:scale-95
-                  "
+                  className="rounded-full bg-creator-text px-7 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:rotate-[-1deg] hover:bg-creator-primary hover:shadow-lg active:scale-95"
                 >
                   Follow My Store
                 </button>
@@ -1457,23 +965,7 @@ const PublicStore = () => {
                 <button
                   onClick={shareStore}
                   aria-label="Share store"
-                  className="
-                    flex
-                    h-10
-                    w-10
-                    items-center
-                    justify-center
-                    rounded-full
-                    border
-                    border-neutral-100
-                    bg-white
-                    transition-all
-                    duration-300
-                    hover:-translate-y-1
-                    hover:rotate-6
-                    hover:shadow-md
-                    active:scale-90
-                  "
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-100 bg-white transition-all duration-300 hover:-translate-y-1 hover:rotate-6 hover:shadow-md active:scale-90"
                 >
                   <Share2 size={17} />
                 </button>
@@ -1486,47 +978,17 @@ const PublicStore = () => {
               {/* ================================================= */}
 
               <div
-                className="
-                  relative
-                  mt-3
-                  h-32
-                  w-32
-                  cursor-pointer
-                  transition-all
-                  duration-500
-                  hover:rotate-[-5deg]
-                  hover:scale-105
-                "
+                className="relative mt-3 h-32 w-32 cursor-pointer transition-all duration-500 hover:rotate-[-5deg] hover:scale-105"
               >
 
                 <img
                   src="/src/assets/redcolor.png"
                   alt=""
-                  className="
-                    h-32
-                    w-32
-                    object-contain
-                    transition-transform
-                    duration-500
-                    hover:rotate-3
-                  "
+                  className="h-32 w-32 object-contain transition-transform duration-500 hover:rotate-3"
                 />
 
                 <p
-                  className="
-                    absolute
-                    inset-0
-                    flex
-                    items-center
-                    justify-center
-                    px-5
-                    text-center
-                    font-caveat
-                    text-sm
-                    font-semibold
-                    leading-4
-                    text-creator-text
-                  "
+                  className="absolute inset-0 flex items-center justify-center px-5 text-center font-caveat text-sm font-semibold leading-4 text-creator-text"
                 >
                   More stats
                   <br />
@@ -1554,17 +1016,7 @@ const PublicStore = () => {
           {/* handwritten decoration */}
 
           <div
-            className="
-              absolute
-              -right-1
-              top-10
-              hidden
-              rotate-[-8deg]
-              font-caveat
-              text-lg
-              text-creator-text/60
-              sm:block
-            "
+            className="absolute -right-1 top-10 hidden rotate-[-8deg] font-caveat text-lg text-creator-text/60 sm:block"
           >
             little things.
             <br />
@@ -1573,25 +1025,14 @@ const PublicStore = () => {
 
 
           <p
-            className="
-              font-caveat
-              text-lg
-              text-creator-pink
-            "
+            className="font-caveat text-lg text-creator-pink"
           >
             the little collection
           </p>
 
 
           <h2
-            className="
-              mt-1
-              font-serif
-              text-3xl
-              font-semibold
-              text-creator-text
-              sm:text-4xl
-            "
+            className="mt-1 font-serif text-3xl font-semibold text-creator-text sm:text-4xl"
           >
             Made with intention
             <span className="text-creator-pink">
@@ -1601,13 +1042,7 @@ const PublicStore = () => {
 
 
           <p
-            className="
-              mt-2
-              max-w-xl
-              text-sm
-              leading-6
-              text-creator-text/50
-            "
+            className="mt-2 max-w-xl text-sm leading-6 text-creator-text/50"
           >
             A few things made by hand, one piece at
             a time.
@@ -1617,13 +1052,7 @@ const PublicStore = () => {
           {/* CATEGORY */}
 
           <div
-            className="
-              scrollbar-hide
-              flex
-              gap-2
-              overflow-x-auto
-              py-6
-            "
+            className="scrollbar-hide flex gap-2 overflow-x-auto py-6"
           >
 
             {categories.map((category) => (
@@ -1633,20 +1062,7 @@ const PublicStore = () => {
                 onClick={() =>
                   setActiveCategory(category)
                 }
-                className={`
-                  shrink-0
-                  rounded-full
-                  px-5 py-2.5
-                  text-[11px]
-                  transition-all
-                  duration-300
-                  hover:-translate-y-0.5
-                  ${
-                    activeCategory === category
-                      ? "bg-creator-pink text-white shadow-sm"
-                      : "bg-white/75 text-creator-text/60 hover:bg-white hover:shadow-sm"
-                  }
-                `}
+                className={`shrink-0 rounded-full px-5 py-2.5 text-[11px] transition-all duration-300 hover:-translate-y-0.5 ${ activeCategory === category ? "bg-creator-pink text-white shadow-sm" : "bg-white/75 text-creator-text/60 hover:bg-white hover:shadow-sm" }`}
               >
                 {category}
               </button>
@@ -1666,92 +1082,40 @@ const PublicStore = () => {
           filteredProducts.length === 0 && (
 
             <section
-              className="
-                relative
-                mb-14
-                overflow-hidden
-                rounded-[26px]
-                border
-                border-dashed
-                border-creator-text/15
-                bg-white/60
-                px-6 py-20
-                text-center
-              "
+              className="relative mb-14 overflow-hidden rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center"
             >
 
               {/* decoration */}
 
               <span
-                className="
-                  absolute
-                  left-6
-                  top-5
-                  rotate-[-10deg]
-                  font-caveat
-                  text-xl
-                  text-creator-pink/60
-                "
+                className="absolute left-6 top-5 rotate-[-10deg] font-caveat text-xl text-creator-pink/60"
               >
                 ♡
               </span>
 
               <span
-                className="
-                  absolute
-                  right-7
-                  bottom-6
-                  rotate-6
-                  font-caveat
-                  text-lg
-                  text-creator-text/40
-                "
+                className="absolute right-7 bottom-6 rotate-6 font-caveat text-lg text-creator-text/40"
               >
                 maybe soon...
               </span>
 
 
               <div
-                className="
-                  mx-auto
-                  flex
-                  h-16
-                  w-16
-                  rotate-[-4deg]
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-creator-accent/50
-                  transition-transform
-                  duration-500
-                  hover:rotate-6
-                "
+                className="mx-auto flex h-16 w-16 rotate-[-4deg] items-center justify-center rounded-full bg-creator-accent/50 transition-transform duration-500 hover:rotate-6"
               >
                 <Package size={25} />
               </div>
 
 
               <h3
-                className="
-                  mt-5
-                  font-serif
-                  text-2xl
-                  font-semibold
-                "
+                className="mt-5 font-serif text-2xl font-semibold"
               >
                 No {activeCategory} products
               </h3>
 
 
               <p
-                className="
-                  mx-auto
-                  mt-3
-                  max-w-md
-                  text-sm
-                  leading-6
-                  text-creator-text/50
-                "
+                className="mx-auto mt-3 max-w-md text-sm leading-6 text-creator-text/50"
               >
                 There are currently no{" "}
                 {activeCategory.toLowerCase()} products
@@ -1763,20 +1127,7 @@ const PublicStore = () => {
                 onClick={() =>
                   setActiveCategory("All")
                 }
-                className="
-                  mt-6
-                  rounded-full
-                  bg-creator-text
-                  px-5 py-2.5
-                  text-xs
-                  font-semibold
-                  text-white
-                  transition-all
-                  duration-300
-                  hover:-translate-y-1
-                  hover:rotate-[-1deg]
-                  hover:shadow-lg
-                "
+                className="mt-6 rounded-full bg-creator-text px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg"
               >
                 View all products
               </button>
@@ -1792,50 +1143,23 @@ const PublicStore = () => {
         {products.length === 0 && (
 
           <section
-            className="
-              mb-14
-              rounded-[26px]
-              border
-              border-dashed
-              border-creator-text/15
-              bg-white/60
-              px-6 py-20
-              text-center
-            "
+            className="mb-14 rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center"
           >
 
             <div
-              className="
-                mx-auto
-                flex h-16 w-16
-                items-center justify-center
-                rounded-full
-                bg-creator-accent/40
-              "
+              className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-creator-accent/40"
             >
               <Package size={25} />
             </div>
 
             <h3
-              className="
-                mt-5
-                font-serif
-                text-2xl
-                font-semibold
-              "
+              className="mt-5 font-serif text-2xl font-semibold"
             >
               Products are coming soon.
             </h3>
 
             <p
-              className="
-                mx-auto
-                mt-3
-                max-w-md
-                text-sm
-                leading-6
-                text-creator-text/50
-              "
+              className="mx-auto mt-3 max-w-md text-sm leading-6 text-creator-text/50"
             >
               This creator is still preparing the
               collection. Check back soon.
@@ -1856,33 +1180,14 @@ const PublicStore = () => {
             {/* small decorative line */}
 
             <div
-              className="
-                pointer-events-none
-                absolute
-                -left-5
-                top-0
-                hidden
-                rotate-[-8deg]
-                font-caveat
-                text-sm
-                text-creator-text/40
-                lg:block
-              "
+              className="pointer-events-none absolute -left-5 top-0 hidden rotate-[-8deg] font-caveat text-sm text-creator-text/40 lg:block"
             >
               made slowly ♡
             </div>
 
 
             <div
-              className="
-                grid
-                grid-cols-2
-                gap-3
-                sm:grid-cols-3
-                sm:gap-5
-                lg:grid-cols-4
-                lg:gap-5
-              "
+              className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-5"
             >
 
               {filteredProducts.map(
@@ -1908,34 +1213,13 @@ const PublicStore = () => {
 
         <section
           id="about"
-          className="
-            relative
-            mb-16
-            overflow-hidden
-            rounded-[26px]
-            border
-            border-creator-text/10
-            bg-white/70
-            p-3
-            md:grid
-            md:grid-cols-[1fr_1.2fr]
-            md:gap-7
-          "
+          className="relative mb-16 overflow-hidden rounded-[26px] border border-creator-text/10 bg-white/70 p-3 md:grid md:grid-cols-[1fr_1.2fr] md:gap-7"
         >
 
           {/* decorative */}
 
           <span
-            className="
-              absolute
-              right-5
-              top-3
-              z-20
-              rotate-12
-              font-caveat
-              text-xl
-              text-creator-pink
-            "
+            className="absolute right-5 top-3 z-20 rotate-12 font-caveat text-xl text-creator-pink"
           >
             made with ♡
           </span>
@@ -1944,12 +1228,7 @@ const PublicStore = () => {
           {/* IMAGE */}
 
           <div
-            className="
-              relative
-              min-h-[240px]
-              overflow-hidden
-              rounded-[18px]
-            "
+            className="relative min-h-[240px] overflow-hidden rounded-[18px]"
           >
 
             <img
@@ -1964,36 +1243,12 @@ const PublicStore = () => {
                 ),
               )}
               alt="About store"
-              className="
-                h-full
-                min-h-[240px]
-                w-full
-                object-cover
-                transition-transform
-                duration-700
-                hover:scale-[1.04]
-              "
+              className="h-full min-h-[240px] w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
             />
 
 
             <div
-              className="
-                absolute
-                bottom-5
-                left-5
-                rotate-[-5deg]
-                rounded-sm
-                bg-white/90
-                px-4 py-2
-                font-caveat
-                text-xl
-                leading-5
-                text-creator-text
-                shadow-sm
-                transition-transform
-                duration-300
-                hover:rotate-[-1deg]
-              "
+              className="absolute bottom-5 left-5 rotate-[-5deg] rounded-sm bg-white/90 px-4 py-2 font-caveat text-xl leading-5 text-creator-text shadow-sm transition-transform duration-300 hover:rotate-[-1deg]"
             >
               Crafting
               <br />
@@ -2010,25 +1265,14 @@ const PublicStore = () => {
           <div className="px-2 py-6 md:py-5">
 
             <p
-              className="
-                font-caveat
-                text-lg
-                text-creator-pink
-              "
+              className="font-caveat text-lg text-creator-pink"
             >
               the story behind the work
             </p>
 
 
             <h2
-              className="
-                mt-1
-                font-serif
-                text-2xl
-                font-semibold
-                text-creator-text
-                sm:text-3xl
-              "
+              className="mt-1 font-serif text-2xl font-semibold text-creator-text sm:text-3xl"
             >
               About{" "}
               {store?.storeName ||
@@ -2037,13 +1281,7 @@ const PublicStore = () => {
 
 
             <p
-              className="
-                mt-3
-                max-w-[500px]
-                text-sm
-                leading-6
-                text-creator-text/55
-              "
+              className="mt-3 max-w-[500px] text-sm leading-6 text-creator-text/55"
             >
               {store?.bio ||
                 "A small handmade business passionate about creating unique and meaningful products. Every piece is made with love, patience and care."}
@@ -2053,40 +1291,22 @@ const PublicStore = () => {
             {/* FEATURES */}
 
             <div
-              className="
-                mt-7
-                grid
-                grid-cols-2
-                gap-5
-                sm:grid-cols-4
-              "
+              className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-4"
             >
 
               <div
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  transition-transform
-                  hover:-translate-y-1
-                "
+                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
               >
 
                 <Heart size={19} />
 
                 <span
-                  className="
-                    text-[9px]
-                    text-creator-text/70
-                  "
+                  className="text-[9px] text-creator-text/70"
                 >
                   Handmade
 
                   <small
-                    className="
-                      block
-                      text-creator-text/40
-                    "
+                    className="block text-creator-text/40"
                   >
                     with Love
                   </small>
@@ -2096,30 +1316,18 @@ const PublicStore = () => {
 
 
               <div
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  transition-transform
-                  hover:-translate-y-1
-                "
+                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
               >
 
                 <Package size={19} />
 
                 <span
-                  className="
-                    text-[9px]
-                    text-creator-text/70
-                  "
+                  className="text-[9px] text-creator-text/70"
                 >
                   Small
 
                   <small
-                    className="
-                      block
-                      text-creator-text/40
-                    "
+                    className="block text-creator-text/40"
                   >
                     batches
                   </small>
@@ -2129,30 +1337,18 @@ const PublicStore = () => {
 
 
               <div
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  transition-transform
-                  hover:-translate-y-1
-                "
+                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
               >
 
                 <Sparkles size={19} />
 
                 <span
-                  className="
-                    text-[9px]
-                    text-creator-text/70
-                  "
+                  className="text-[9px] text-creator-text/70"
                 >
                   Unique
 
                   <small
-                    className="
-                      block
-                      text-creator-text/40
-                    "
+                    className="block text-creator-text/40"
                   >
                     creations
                   </small>
@@ -2162,30 +1358,18 @@ const PublicStore = () => {
 
 
               <div
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  transition-transform
-                  hover:-translate-y-1
-                "
+                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
               >
 
                 <MessageCircle size={19} />
 
                 <span
-                  className="
-                    text-[9px]
-                    text-creator-text/70
-                  "
+                  className="text-[9px] text-creator-text/70"
                 >
                   Direct
 
                   <small
-                    className="
-                      block
-                      text-creator-text/40
-                    "
+                    className="block text-creator-text/40"
                   >
                     creator contact
                   </small>
@@ -2208,80 +1392,38 @@ const PublicStore = () => {
           store?.instagramLink) && (
 
           <section
-            className="
-              relative
-              mb-16
-              overflow-hidden
-              rounded-[28px]
-              bg-creator-accent
-              px-7 py-10
-              sm:px-12
-            "
+            className="relative mb-16 overflow-hidden rounded-[28px] bg-creator-accent px-7 py-10 sm:px-12"
           >
 
             {/* decorative */}
 
             <div
-              className="
-                absolute
-                -right-8
-                -top-8
-                h-32
-                w-32
-                rotate-12
-                rounded-full
-                border-[18px]
-                border-white/30
-              "
+              className="absolute -right-8 -top-8 h-32 w-32 rotate-12 rounded-full border-[18px] border-white/30"
             />
 
 
             <div
-              className="
-                relative
-                flex
-                flex-col
-                gap-6
-                md:flex-row
-                md:items-center
-                md:justify-between
-              "
+              className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
             >
 
               <div>
 
                 <p
-                  className="
-                    font-caveat
-                    text-xl
-                    text-creator-pink
-                  "
+                  className="font-caveat text-xl text-creator-pink"
                 >
                   found something you love?
                 </p>
 
 
                 <h2
-                  className="
-                    mt-1
-                    font-serif
-                    text-2xl
-                    font-semibold
-                    sm:text-3xl
-                  "
+                  className="mt-1 font-serif text-2xl font-semibold sm:text-3xl"
                 >
                   Talk directly to the creator.
                 </h2>
 
 
                 <p
-                  className="
-                    mt-2
-                    max-w-lg
-                    text-sm
-                    leading-6
-                    text-creator-text/55
-                  "
+                  className="mt-2 max-w-lg text-sm leading-6 text-creator-text/55"
                 >
                   Ask about availability, customization,
                   or anything else before placing your order.
@@ -2296,22 +1438,7 @@ const PublicStore = () => {
 
                   <button
                     onClick={openWhatsApp}
-                    className="
-                      flex
-                      items-center
-                      gap-2
-                      rounded-full
-                      bg-creator-text
-                      px-5 py-3
-                      text-xs
-                      font-semibold
-                      text-white
-                      transition-all
-                      duration-300
-                      hover:-translate-y-1
-                      hover:rotate-[-1deg]
-                      hover:shadow-lg
-                    "
+                    className="flex items-center gap-2 rounded-full bg-creator-text px-5 py-3 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg"
                   >
                     <MessageCircle size={15} />
                     WhatsApp
@@ -2324,24 +1451,7 @@ const PublicStore = () => {
 
                   <button
                     onClick={openInstagram}
-                    className="
-                      flex
-                      items-center
-                      gap-2
-                      rounded-full
-                      border
-                      border-creator-text/20
-                      bg-white/60
-                      px-5 py-3
-                      text-xs
-                      font-semibold
-                      text-creator-text
-                      transition-all
-                      duration-300
-                      hover:-translate-y-1
-                      hover:rotate-1
-                      hover:bg-white
-                    "
+                    className="flex items-center gap-2 rounded-full border border-creator-text/20 bg-white/60 px-5 py-3 text-xs font-semibold text-creator-text transition-all duration-300 hover:-translate-y-1 hover:rotate-1 hover:bg-white"
                   >
                     Instagram
                   </button>
@@ -2366,50 +1476,13 @@ const PublicStore = () => {
       <button
         aria-label="Open cart"
         onClick={() => navigate("/cart")}
-        className="
-          fixed
-          bottom-6
-          right-5
-          z-40
-          flex
-          h-14
-          w-14
-          items-center
-          justify-center
-          rounded-full
-          border-[3px]
-          border-white
-          bg-creator-text
-          text-white
-          shadow-[0_8px_30px_rgba(0,0,0,0.15)]
-          transition-all
-          duration-300
-          hover:scale-110
-          hover:rotate-6
-          hover:shadow-xl
-          active:scale-90
-        "
+        className="fixed bottom-6 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-white bg-creator-text text-white shadow-[0_8px_30px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-xl active:scale-90"
       >
 
         <ShoppingCart size={23} />
 
         <span
-          className="
-            absolute
-            -right-1
-            -top-1
-            flex
-            h-[19px]
-            min-w-[19px]
-            items-center
-            justify-center
-            rounded-full
-            bg-creator-pink
-            px-1
-            text-[9px]
-            font-bold
-            text-white
-          "
+          className="absolute -right-1 -top-1 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-creator-pink px-1 text-[9px] font-bold text-white"
         >
           {cartCount}
         </span>
@@ -2422,31 +1495,13 @@ const PublicStore = () => {
       {/* ===================================================== */}
 
       <footer
-        className="
-          relative
-          overflow-hidden
-          border-t
-          border-creator-text/10
-          bg-creator-text
-          px-7
-          py-10
-          text-white
-        "
+        className="relative overflow-hidden border-t border-creator-text/10 bg-creator-text px-7 py-10 text-white"
       >
 
         {/* decorative handwritten */}
 
         <span
-          className="
-            pointer-events-none
-            absolute
-            right-5
-            top-5
-            rotate-[-8deg]
-            font-caveat
-            text-lg
-            text-white/35
-          "
+          className="pointer-events-none absolute right-5 top-5 rotate-[-8deg] font-caveat text-lg text-white/35"
         >
           Support
           <br />
@@ -2457,16 +1512,7 @@ const PublicStore = () => {
 
 
         <div
-          className="
-            mx-auto
-            flex
-            max-w-6xl
-            flex-col
-            gap-8
-            md:flex-row
-            md:items-center
-            md:justify-between
-          "
+          className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between"
         >
 
           {/* BRAND */}
@@ -2474,10 +1520,7 @@ const PublicStore = () => {
           <div>
 
             <h2
-              className="
-                font-serif
-                text-2xl
-              "
+              className="font-serif text-2xl"
             >
               Creatorly
               <span className="ml-1 text-xs">
@@ -2487,11 +1530,7 @@ const PublicStore = () => {
 
 
             <p
-              className="
-                mt-1
-                text-[10px]
-                text-white/50
-              "
+              className="mt-1 text-[10px] text-white/50"
             >
               Support creators · Shop handmade
             </p>
@@ -2502,21 +1541,11 @@ const PublicStore = () => {
           {/* CENTER */}
 
           <div
-            className="
-              flex
-              items-center
-              gap-4
-            "
+            className="flex items-center gap-4"
           >
 
             <div
-              className="
-                text-right
-                font-caveat
-                text-base
-                leading-4
-                text-white/65
-              "
+              className="text-right font-caveat text-base leading-4 text-white/65"
             >
               Small creators.
               <br />
@@ -2542,22 +1571,7 @@ const PublicStore = () => {
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="
-              flex
-              w-fit
-              items-center
-              gap-2
-              rounded-full
-              border
-              border-white/30
-              px-5 py-2.5
-              text-[10px]
-              transition-all
-              duration-300
-              hover:bg-white
-              hover:text-creator-text
-              hover:-translate-y-0.5
-            "
+            className="flex w-fit items-center gap-2 rounded-full border border-white/30 px-5 py-2.5 text-[10px] transition-all duration-300 hover:bg-white hover:text-creator-text hover:-translate-y-0.5"
           >
             <Home size={15} />
             Back to Home
@@ -2569,22 +1583,7 @@ const PublicStore = () => {
         {/* COPYRIGHT */}
 
         <div
-          className="
-            mx-auto
-            mt-8
-            flex
-            max-w-6xl
-            flex-col
-            gap-2
-            border-t
-            border-white/10
-            pt-6
-            text-[9px]
-            text-white/35
-            sm:flex-row
-            sm:items-center
-            sm:justify-between
-          "
+          className="mx-auto mt-8 flex max-w-6xl flex-col gap-2 border-t border-white/10 pt-6 text-[9px] text-white/35 sm:flex-row sm:items-center sm:justify-between"
         >
 
           <span>

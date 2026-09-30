@@ -480,11 +480,7 @@ I found this product on your Creatorly store.
                         key={index}
                         onClick={() => goToImage(index)}
                         aria-label={`View image ${index + 1}`}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          activeImageIndex === index
-                            ? "w-5 bg-creator-text"
-                            : "w-1.5 bg-creator-text/25 hover:bg-creator-text/50"
-                        }`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${ activeImageIndex === index ? "w-5 bg-creator-text" : "w-1.5 bg-creator-text/25 hover:bg-creator-text/50" }`}
                       />
                     ))}
                   </div>
@@ -506,11 +502,7 @@ I found this product on your Creatorly store.
                   <button
                     key={index}
                     onClick={() => goToImage(index)}
-                    className={`group relative h-[68px] w-[68px] shrink-0 overflow-hidden rounded-xl border-2 bg-white p-0.5 transition duration-300 sm:h-[76px] sm:w-[76px] ${
-                      activeImageIndex === index
-                        ? "scale-[0.96] border-creator-pink shadow-md"
-                        : "border-transparent opacity-65 hover:scale-[0.98] hover:opacity-100"
-                    }`}
+                    className={`group relative h-[68px] w-[68px] shrink-0 overflow-hidden rounded-xl border-2 bg-white p-0.5 transition duration-300 sm:h-[76px] sm:w-[76px] ${ activeImageIndex === index ? "scale-[0.96] border-creator-pink shadow-md" : "border-transparent opacity-65 hover:scale-[0.98] hover:opacity-100" }`}
                   >
                     <img
                       src={image}
@@ -573,11 +565,7 @@ I found this product on your Creatorly store.
               <button
                 onClick={() => setSaved((prev) => !prev)}
                 aria-label="Save product"
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition duration-300 ${
-                  saved
-                    ? "border-creator-pink bg-creator-pink/10 text-creator-pink"
-                    : "border-creator-text/10 bg-white hover:-translate-y-0.5 hover:rotate-[-4deg]"
-                }`}
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition duration-300 ${ saved ? "border-creator-pink bg-creator-pink/10 text-creator-pink" : "border-creator-text/10 bg-white hover:-translate-y-0.5 hover:rotate-[-4deg]" }`}
               >
                 <Heart
                   size={17}
@@ -753,11 +741,7 @@ I found this product on your Creatorly store.
                 <button
                   onClick={addToCart}
                   disabled={addingToCart}
-                  className={`group flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-semibold shadow-[0_10px_25px_rgba(44,50,47,0.12)] transition duration-300 active:scale-[0.98] ${
-                    addedToCart
-                      ? "bg-emerald-600 text-white"
-                      : "bg-creator-text text-white hover:-translate-y-1 hover:bg-creator-primary"
-                  }`}
+                  className={`group flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-sm font-semibold shadow-[0_10px_25px_rgba(44,50,47,0.12)] transition duration-300 active:scale-[0.98] ${ addedToCart ? "bg-emerald-600 text-white" : "bg-creator-text text-white hover:-translate-y-1 hover:bg-creator-primary" }`}
                 >
                   {addingToCart ? (
                     <>
@@ -916,11 +900,7 @@ I found this product on your Creatorly store.
           <div className="mx-auto flex max-w-md items-center gap-2">
             <button
               onClick={addToCart}
-              className={`flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-4 text-xs font-semibold text-white shadow-lg transition active:scale-[0.98] ${
-                addedToCart
-                  ? "bg-emerald-600"
-                  : "bg-creator-text"
-              }`}
+              className={`flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-4 text-xs font-semibold text-white shadow-lg transition active:scale-[0.98] ${ addedToCart ? "bg-emerald-600" : "bg-creator-text" }`}
             >
               {addedToCart ? (
                 <>

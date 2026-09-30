@@ -285,9 +285,7 @@ const Explore = () => {
                     >
                       <Heart
                         size={17}
-                        className={
-                          favorites.includes(product.id)
-                            ? "fill-current text-red-500"
+                        className={favorites.includes(product.id) ?"fill-current text-red-500"
                             : "text-neutral-700"
                         }
                       />
@@ -397,11 +395,7 @@ const Explore = () => {
               <button
                 key={item}
                 onClick={() => setCategory(item)}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm transition-all duration-300 ${
-                  category === item
-                    ? "bg-neutral-900 text-white shadow-md"
-                    : "border border-neutral-200 bg-white text-neutral-600 hover:-translate-y-0.5 hover:shadow-sm"
-                }`}
+                className={`shrink-0 rounded-full px-4 py-2 text-sm transition-all duration-300 ${ category === item ? "bg-neutral-900 text-white shadow-md" : "border border-neutral-200 bg-white text-neutral-600 hover:-translate-y-0.5 hover:shadow-sm" }`}
               >
                 {item}
               </button>
@@ -441,9 +435,7 @@ const Explore = () => {
                     >
                       <Heart
                         size={17}
-                        className={
-                          favorites.includes(product.id)
-                            ? "fill-current text-red-500"
+                        className={favorites.includes(product.id) ?"fill-current text-red-500"
                             : "text-neutral-700"
                         }
                       />

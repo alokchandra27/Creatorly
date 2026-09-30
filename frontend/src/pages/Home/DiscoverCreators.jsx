@@ -188,20 +188,14 @@ const DiscoverCreators = () => {
           {/* Filters */}
 
           <div
-            className={`${
-              showFilters ? "flex" : "hidden"
-            } mt-5 flex-wrap gap-2 lg:flex`}
+            className={`${ showFilters ? "flex" : "hidden" } mt-5 flex-wrap gap-2 lg:flex`}
           >
 
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`rounded-full px-4 py-2 text-sm transition-all duration-300 ${
-                  activeCategory === category
-                    ? "bg-neutral-900 text-white shadow-md"
-                    : "border border-neutral-200 bg-white text-neutral-600 hover:-translate-y-0.5 hover:shadow-sm"
-                }`}
+                className={`rounded-full px-4 py-2 text-sm transition-all duration-300 ${ activeCategory === category ? "bg-neutral-900 text-white shadow-md" : "border border-neutral-200 bg-white text-neutral-600 hover:-translate-y-0.5 hover:shadow-sm" }`}
               >
                 {category}
               </button>

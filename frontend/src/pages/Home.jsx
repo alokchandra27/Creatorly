@@ -128,16 +128,7 @@ const Home = () => {
           {/* a little space/  Small Creators */}
           <div className="w-full lg:-mt-30 md:-mt-0 xl:-mt-30">
             {/* <p
-              className="
-              -mb-2
-                text-center
-                font-caveat
-                text-lg
-                tracking-wide
-                text-creator-pink
-                sm:text-xl
-                lg:text-left
-              "
+              className="-mb-2 text-center font-caveat text-lg tracking-wide text-creator-pink sm:text-xl lg:text-left"
             >
               A little space for big ideas ✦
             </p> */}
@@ -169,24 +160,7 @@ const Home = () => {
           <div className="flex justify-center lg:justify-start md:justify-center xl:justify-start mt-6 xl:mt-2 md:mt-2 lg:mt-2 gap-5">
             <button
               onClick={goToExplore}
-              className="
-                  group
-                  flex
-                  items-center
-                  cursor-pointer
-                  bg-creator-pink
-                  px-6
-                  py-3
-                  text-sm
-                  font-medium
-                  text-white
-                  shadow-sm
-                  transition-all
-                  duration-300
-                  hover:-translate-y-1
-                  hover:bg-creator-accent
-                  hover:shadow-lg
-                "
+              className="group flex items-center cursor-pointer bg-creator-pink px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-creator-accent hover:shadow-lg"
             >
               Explore Creators
               <ArrowRight
@@ -197,23 +171,7 @@ const Home = () => {
 
             <button
               onClick={goToAuth}
-              className="
-                  flex
-                  items-center
-                  cursor-pointer
-                  border
-                  border-creator-pink/50
-                  bg-white/60
-                  px-6
-                  py-3
-                  text-sm
-                  font-medium
-                  text-creator-text
-                  transition-all
-                  duration-300
-                  hover:-translate-y-1
-                  hover:bg-white
-                "
+              className="flex items-center cursor-pointer border border-creator-pink/50 bg-white/60 px-6 py-3 text-sm font-medium text-creator-text transition-all duration-300 hover:-translate-y-1 hover:bg-white"
             >
               I'm a Creator
             </button>
