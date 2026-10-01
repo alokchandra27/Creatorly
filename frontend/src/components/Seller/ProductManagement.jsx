@@ -1,19 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import API from "../API/API";
 import { useNavigate } from "react-router-dom";
-import {
-  Plus,
-  Search,
-  SlidersHorizontal,
-  Package,
-  Pencil,
-  Trash2,
-  ArrowUpRight,
-  Sparkles,
-  Palette,
-  X,
-  ChevronDown,
-} from "lucide-react";
+import { Plus, Search, SlidersHorizontal, Package, Pencil, Trash2, ArrowUpRight, Sparkles, Palette, X, ChevronDown, ImagePlus, Loader2 } from "lucide-react";
 
 export default function ProductsManagement() {
   const [activeTab, setActiveTab] = useState("list");
@@ -26,8 +14,18 @@ export default function ProductsManagement() {
     stocks: "",
     color: "",
     size: "",
+    extraDetails: "",
     customization: false,
   });
+
+  const [images, setImages] = useState({
+    productImage1: null,
+    productImage2: null,
+    productImage3: null,
+    productImage4: null,
+  });
+
+  const [isSaving, setIsSaving] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,19 +35,7 @@ export default function ProductsManagement() {
   const [sortBy, setSortBy] = useState("latest");
   const [isLoading, setIsLoading] = useState(true);
 
-  const categories = [
-    "all",
-    "clay",
-    "resin",
-    "wood",
-    "metal",
-    "fabric",
-    "crochet",
-    "3d-printing",
-    "handmade",
-    "petal",
-    "Other",
-  ];
+  const categories = ["all", "clay", "resin", "wood", "metal", "fabric", "crochet", "3d-printing", "handmade", "petal", "Other"];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -60,14 +46,88 @@ export default function ProductsManagement() {
     });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleImageChange = (e, imageField) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Each image must be 5 MB or smaller.");
+      e.target.value = "";
+      return;
+    }
+
+    setImages((previousImages) => ({
+      ...previousImages,
+      [imageField]: file,
+    }));
+  };
+
+  const removeImage = (imageField) => {
+    setImages((previousImages) => ({
+      ...previousImages,
+      [imageField]: null,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    alert(
-      "UI Logic Check: Product payload read completed successfully! (Backend connection baad me)",
-    );
+    if (!images.productImage1) {
+      alert("Please add the main product image.");
+      return;
+    }
 
-    setActiveTab("list");
+    try {
+      setIsSaving(true);
+
+      const payload = new FormData();
+
+      Object.entries(formData).forEach(([key, value]) => {
+        payload.append(key, value);
+      });
+
+      Object.entries(images).forEach(([key, file]) => {
+        if (file) payload.append(key, file);
+      });
+
+      const response = await API.post("/api/products/create-product", payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setMockProducts((previousProducts) => [response.data.product, ...previousProducts]);
+      setFormData({
+        productName: "",
+        productDescription: "",
+        productPrice: "",
+        category: "clay",
+        stocks: "",
+        color: "",
+        size: "",
+        extraDetails: "",
+        customization: false,
+      });
+      setImages({
+        productImage1: null,
+        productImage2: null,
+        productImage3: null,
+        productImage4: null,
+      });
+      setActiveTab("list");
+    } catch (error) {
+      console.error("Create product error:", error);
+      alert(error?.response?.data?.message || "Failed to create product.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const editProduct = (productId) => {
@@ -81,9 +141,7 @@ export default function ProductsManagement() {
 
     try {
       await API.delete(`/api/products/${productId}`);
-      setMockProducts((prevProducts) =>
-        prevProducts.filter((product) => product._id !== productId),
-      );
+      setMockProducts((prevProducts) => prevProducts.filter((product) => product._id !== productId));
     } catch (error) {
       console.error("Delete product error:", error);
       alert(error?.response?.data?.message || "Failed to delete product.");
@@ -114,8 +172,6 @@ export default function ProductsManagement() {
     fetchProducts();
   }, []);
 
-
-
   const filteredProducts = useMemo(() => {
     let products = [...mockProducts];
 
@@ -123,24 +179,14 @@ export default function ProductsManagement() {
       const query = search.toLowerCase();
 
       products = products.filter((product) =>
-        [
-          product.productName,
-          product.productDescription,
-          product.category,
-          product.color,
-          product.sellerUsername,
-          product.storeName,
-        ]
+        [product.productName, product.productDescription, product.category, product.color, product.sellerUsername, product.storeName]
           .filter(Boolean)
           .some((value) => String(value).toLowerCase().includes(query)),
       );
     }
 
     if (category !== "all") {
-      products = products.filter(
-        (product) =>
-          String(product.category).toLowerCase() === category.toLowerCase(),
-      );
+      products = products.filter((product) => String(product.category).toLowerCase() === category.toLowerCase());
     }
 
     if (sortBy === "price-low") {
@@ -156,9 +202,7 @@ export default function ProductsManagement() {
     }
 
     if (sortBy === "latest") {
-      products.sort(
-        (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0),
-      );
+      products.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
     }
 
     return products;
@@ -166,15 +210,9 @@ export default function ProductsManagement() {
 
   const totalProducts = mockProducts.length;
 
-  const inStock = mockProducts.filter(
-    (product) => Number(product.stocks) > 0,
-  ).length;
+  const inStock = mockProducts.filter((product) => Number(product.stocks) > 0).length;
 
-  const customizable = mockProducts.filter(
-    (product) => product.customization === true,
-  ).length;
-
-
+  const customizable = mockProducts.filter((product) => product.customization === true).length;
 
   return (
     <div className="min-h-screen bg-creator-bg-butter text-creator-text antialiased">
@@ -193,9 +231,7 @@ export default function ProductsManagement() {
               <div className="mb-3 flex items-center gap-2">
                 <span className="h-px w-7 bg-creator-pink" />
 
-                <span className="font-caveat text-lg text-creator-pink">
-                  your little collection
-                </span>
+                <span className="font-caveat text-lg text-creator-pink">your little collection</span>
               </div>
 
               <h1 className="font-caveat text-3xl font-semibold tracking-tight text-neutral-800 sm:text-4xl">
@@ -203,8 +239,7 @@ export default function ProductsManagement() {
               </h1>
 
               <p className="mt-2 max-w-md text-sm leading-6 text-neutral-500 font-sans sm:text-basecd frontendcd">
-                Everything you make, in one place. Keep your collection
-                beautiful and easy to manage.
+                Everything you make, in one place. Keep your collection beautiful and easy to manage.
               </p>
             </div>
 
@@ -213,10 +248,7 @@ export default function ProductsManagement() {
               onClick={() => setActiveTab("add")}
               className="group inline-flex w-fit items-center gap-2 rounded-full bg-[#1A2E26] px-5 py-3 text-xs font-semibold tracking-wide text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-neutral-800 hover:shadow-lg active:scale-95"
             >
-              <Plus
-                size={16}
-                className="transition-transform duration-300 group-hover:rotate-90"
-              />
+              <Plus size={16} className="transition-transform duration-300 group-hover:rotate-90" />
               Add Product
             </button>
           </div>
@@ -226,23 +258,11 @@ export default function ProductsManagement() {
           ================================================== */}
 
           <div className="mt-7 grid grid-cols-3 gap-2 sm:max-w-xl sm:gap-3">
-            <StatCard
-              icon={<Package size={15} />}
-              number={totalProducts}
-              label="Products"
-            />
+            <StatCard icon={<Package size={15} />} number={totalProducts} label="Products" />
 
-            <StatCard
-              icon={<Sparkles size={15} />}
-              number={inStock}
-              label="In stock"
-            />
+            <StatCard icon={<Sparkles size={15} />} number={inStock} label="In stock" />
 
-            <StatCard
-              icon={<Palette size={15} />}
-              number={customizable}
-              label="Custom"
-            />
+            <StatCard icon={<Palette size={15} />} number={customizable} label="Custom" />
           </div>
         </section>
 
@@ -254,30 +274,22 @@ export default function ProductsManagement() {
           <div className="flex gap-6">
             <button
               onClick={() => setActiveTab("list")}
-              className={`relative pb-3 text-xs font-semibold transition-colors duration-300 ${ activeTab === "list" ? "text-neutral-900" : "text-neutral-400 hover:text-neutral-700" }`}
+              className={`relative pb-3 text-xs font-semibold transition-colors duration-300 ${activeTab === "list" ? "text-neutral-900" : "text-neutral-400 hover:text-neutral-700"}`}
             >
               All Products
-              {activeTab === "list" && (
-                <span className="absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-creator-pink" />
-              )}
+              {activeTab === "list" && <span className="absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-creator-pink" />}
             </button>
 
             <button
               onClick={() => setActiveTab("add")}
-              className={`relative pb-3 text-xs font-semibold transition-colors duration-300 ${ activeTab === "add" ? "text-neutral-900" : "text-neutral-400 hover:text-neutral-700" }`}
+              className={`relative pb-3 text-xs font-semibold transition-colors duration-300 ${activeTab === "add" ? "text-neutral-900" : "text-neutral-400 hover:text-neutral-700"}`}
             >
               Add New
-              {activeTab === "add" && (
-                <span className="absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-creator-pink" />
-              )}
+              {activeTab === "add" && <span className="absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-creator-pink" />}
             </button>
           </div>
 
-          {activeTab === "list" && (
-            <span className="hidden pb-3 text-[10px] text-neutral-400 sm:block">
-              {filteredProducts.length} showing
-            </span>
-          )}
+          {activeTab === "list" && <span className="hidden pb-3 text-[10px] text-neutral-400 sm:block">{filteredProducts.length} showing</span>}
         </div>
 
         {/* =====================================================
@@ -289,10 +301,7 @@ export default function ProductsManagement() {
             {/* Search + filters */}
             <div className="mb-7 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div className="relative w-full lg:max-w-sm">
-                <Search
-                  size={16}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400"
-                />
+                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" />
 
                 <input
                   value={search}
@@ -302,10 +311,7 @@ export default function ProductsManagement() {
                 />
 
                 {search && (
-                  <button
-                    onClick={() => setSearch("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-700"
-                  >
+                  <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-700">
                     <X size={13} />
                   </button>
                 )}
@@ -313,10 +319,7 @@ export default function ProductsManagement() {
 
               <div className="flex w-full gap-2 overflow-x-auto pb-1 lg:w-auto">
                 <div className="relative shrink-0">
-                  <SlidersHorizontal
-                    size={14}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                  />
+                  <SlidersHorizontal size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
 
                   <select
                     value={category}
@@ -330,10 +333,7 @@ export default function ProductsManagement() {
                     ))}
                   </select>
 
-                  <ChevronDown
-                    size={13}
-                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                  />
+                  <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                 </div>
 
                 <div className="relative shrink-0">
@@ -348,10 +348,7 @@ export default function ProductsManagement() {
                     <option value="stock-low">Low Stock</option>
                   </select>
 
-                  <ChevronDown
-                    size={13}
-                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"
-                  />
+                  <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                 </div>
               </div>
             </div>
@@ -369,17 +366,9 @@ export default function ProductsManagement() {
                 }}
               />
             ) : (
-              <div
-                className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-              >
+              <div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredProducts.map((product, index) => (
-                  <ProductCard
-                    key={product._id}
-                    product={product}
-                    index={index}
-                    onEdit={editProduct}
-                    onDelete={deleteHandler}
-                  />
+                  <ProductCard key={product._id} product={product} index={index} onEdit={editProduct} onDelete={deleteHandler} />
                 ))}
               </div>
             )}
@@ -393,7 +382,11 @@ export default function ProductsManagement() {
         {activeTab === "add" && (
           <AddProductForm
             formData={formData}
+            images={images}
+            isSaving={isSaving}
             handleInputChange={handleInputChange}
+            handleImageChange={handleImageChange}
+            removeImage={removeImage}
             handleFormSubmit={handleFormSubmit}
             onCancel={() => setActiveTab("list")}
           />
@@ -409,18 +402,14 @@ export default function ProductsManagement() {
 
 function StatCard({ icon, number, label }) {
   return (
-    <div
-      className="group rounded-2xl border border-neutral-200/70 bg-white/60 p-3 sm:p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-sm"
-    >
+    <div className="group rounded-2xl border border-neutral-200/70 bg-white/60 p-3 sm:p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-sm">
       <div className="flex items-center gap-2 text-neutral-400">
         {icon}
 
         <span className="text-[10px] uppercase tracking-wider">{label}</span>
       </div>
 
-      <p className="mt-1 font-serif text-xl font-semibold text-neutral-800">
-        {number}
-      </p>
+      <p className="mt-1 font-serif text-xl font-semibold text-neutral-800">{number}</p>
     </div>
   );
 }
@@ -430,9 +419,7 @@ function StatCard({ icon, number, label }) {
 ============================================================= */
 
 function ProductCard({ product, index, onEdit, onDelete }) {
-  const image =
-    product?.productImage1?.url ||
-    "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=700";
+  const image = product?.productImage1?.url || "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=700";
 
   const stock = Number(product?.stocks || 0);
 
@@ -447,34 +434,22 @@ function ProductCard({ product, index, onEdit, onDelete }) {
       }}
     >
       {/* Image */}
-      <div
-        className="relative aspect-[4/4.4] overflow-hidden rounded-[22px] bg-neutral-100 shadow-sm transition-all duration-500 group-hover:shadow-xl"
-      >
-        <img
-          src={image}
-          alt={product.productName}
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-        />
+      <div className="relative aspect-[4/4.4] overflow-hidden rounded-[22px] bg-neutral-100 shadow-sm transition-all duration-500 group-hover:shadow-xl">
+        <img src={image} alt={product.productName} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
 
         {/* Soft image overlay */}
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
         {/* Category */}
         {product.category && (
-          <span
-            className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-wider text-neutral-600 shadow-sm backdrop-blur transition-transform duration-300 group-hover:-translate-y-0.5"
-          >
+          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-wider text-neutral-600 shadow-sm backdrop-blur transition-transform duration-300 group-hover:-translate-y-0.5">
             {product.category}
           </span>
         )}
 
         {/* Custom badge */}
         {product.customization && (
-          <span
-            className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-[#1A2E26]/90 px-3 py-1.5 text-[9px] font-medium text-white backdrop-blur"
-          >
+          <span className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-[#1A2E26]/90 px-3 py-1.5 text-[9px] font-medium text-white backdrop-blur">
             <Sparkles size={10} />
             Customizable
           </span>
@@ -482,13 +457,9 @@ function ProductCard({ product, index, onEdit, onDelete }) {
 
         {/* Stock */}
         <span
-          className={`absolute right-3 top-3 rounded-full px-3 py-1.5 text-[9px] font-semibold backdrop-blur ${ isOutOfStock ? "bg-red-50/95 text-red-600" : isLowStock ? "bg-amber-50/95 text-amber-700" : "bg-white/90 text-emerald-700" }`}
+          className={`absolute right-3 top-3 rounded-full px-3 py-1.5 text-[9px] font-semibold backdrop-blur ${isOutOfStock ? "bg-red-50/95 text-red-600" : isLowStock ? "bg-amber-50/95 text-amber-700" : "bg-white/90 text-emerald-700"}`}
         >
-          {isOutOfStock
-            ? "Out of stock"
-            : isLowStock
-              ? `${stock} left`
-              : "In stock"}
+          {isOutOfStock ? "Out of stock" : isLowStock ? `${stock} left` : "In stock"}
         </span>
 
         {/* Hover action */}
@@ -496,10 +467,7 @@ function ProductCard({ product, index, onEdit, onDelete }) {
           className="absolute bottom-3 right-3 flex h-9 w-9 translate-y-3 items-center justify-center rounded-full bg-white text-neutral-700 opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:scale-110"
           title="View product"
         >
-          <ArrowUpRight
-                     onClick={() => onEdit(product._id)}
-
-          size={15} />
+          <ArrowUpRight onClick={() => onEdit(product._id)} size={15} />
         </button>
       </div>
 
@@ -507,20 +475,12 @@ function ProductCard({ product, index, onEdit, onDelete }) {
       <div className="px-1 pt-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3
-              className="truncate font-serif text-base font-semibold capitalize text-neutral-800"
-            >
-              {product.productName}
-            </h3>
+            <h3 className="truncate font-serif text-base font-semibold capitalize text-neutral-800">{product.productName}</h3>
 
-            <p className="mt-1 line-clamp-1 text-[11px] text-neutral-400">
-              {product.productDescription || "Handmade with care."}
-            </p>
+            <p className="mt-1 line-clamp-1 text-[11px] text-neutral-400">{product.productDescription || "Handmade with care."}</p>
           </div>
 
-          <p className="shrink-0 font-serif text-base font-semibold text-neutral-800">
-            ₹{Number(product.productPrice || 0).toLocaleString("en-IN")}
-          </p>
+          <p className="shrink-0 font-serif text-base font-semibold text-neutral-800">₹{Number(product.productPrice || 0).toLocaleString("en-IN")}</p>
         </div>
 
         {/* Details */}
@@ -543,22 +503,13 @@ function ProductCard({ product, index, onEdit, onDelete }) {
         </div>
 
         {/* Actions */}
-        <div
-          className="mt-3 flex items-center gap-4 border-t border-neutral-200/70 pt-3"
-        >
-          
-          <button
-            onClick={() => onEdit(product._id)}
-            className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-600 transition-colors hover:text-creator-pink"
-          >
+        <div className="mt-3 flex items-center gap-4 border-t border-neutral-200/70 pt-3">
+          <button onClick={() => onEdit(product._id)} className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-600 transition-colors hover:text-creator-pink">
             <Pencil size={12} />
             Edit
           </button>
 
-          <button
-            onClick={() => onDelete(product._id)}
-            className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-400 transition-colors hover:text-red-500"
-          >
+          <button onClick={() => onDelete(product._id)} className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-400 transition-colors hover:text-red-500">
             <Trash2 size={12} />
             Delete
           </button>
@@ -574,39 +525,21 @@ function ProductCard({ product, index, onEdit, onDelete }) {
 
 function EmptyProducts({ hasProducts, onAdd, onClear }) {
   return (
-    <div
-      className="flex min-h-[380px] flex-col items-center justify-center rounded-[28px] border border-dashed border-neutral-300 bg-white/40 px-6 text-center"
-    >
-      <div
-        className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-creator-pink/10 text-creator-pink"
-      >
-        {hasProducts ? <Search size={25} /> : <Package size={25} />}
-      </div>
+    <div className="flex min-h-[380px] flex-col items-center justify-center rounded-[28px] border border-dashed border-neutral-300 bg-white/40 px-6 text-center">
+      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-creator-pink/10 text-creator-pink">{hasProducts ? <Search size={25} /> : <Package size={25} />}</div>
 
-      <h3 className="font-serif text-xl font-semibold text-neutral-800">
-        {hasProducts ? "Nothing found." : "Your collection is empty."}
-      </h3>
+      <h3 className="font-serif text-xl font-semibold text-neutral-800">{hasProducts ? "Nothing found." : "Your collection is empty."}</h3>
 
-      <p className="mt-2 max-w-sm text-xs leading-5 text-neutral-400">
-        {hasProducts
-          ? "Try another search term or category."
-          : "Add your first product and start building your little storefront."}
-      </p>
+      <p className="mt-2 max-w-sm text-xs leading-5 text-neutral-400">{hasProducts ? "Try another search term or category." : "Add your first product and start building your little storefront."}</p>
 
       <div className="mt-5 flex gap-2">
         {hasProducts && (
-          <button
-            onClick={onClear}
-            className="rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold transition hover:bg-neutral-50"
-          >
+          <button onClick={onClear} className="rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold transition hover:bg-neutral-50">
             Clear filters
           </button>
         )}
 
-        <button
-          onClick={onAdd}
-          className="rounded-full bg-[#1A2E26] px-5 py-2.5 text-[11px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800"
-        >
+        <button onClick={onAdd} className="rounded-full bg-[#1A2E26] px-5 py-2.5 text-[11px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800">
           Add Product
         </button>
       </div>
@@ -620,9 +553,7 @@ function EmptyProducts({ hasProducts, onAdd, onClear }) {
 
 function ProductSkeleton() {
   return (
-    <div
-      className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-    >
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {[1, 2, 3, 4].map((item) => (
         <div key={item} className="animate-pulse">
           <div className="aspect-[4/4.4] rounded-[22px] bg-neutral-200/70" />
@@ -644,17 +575,9 @@ function ProductSkeleton() {
    ADD PRODUCT FORM
 ============================================================= */
 
-function AddProductForm({
-  formData,
-  handleInputChange,
-  handleFormSubmit,
-  onCancel,
-}) {
+function AddProductForm({ formData, images, isSaving, handleInputChange, handleImageChange, removeImage, handleFormSubmit, onCancel }) {
   return (
-    <form
-      onSubmit={handleFormSubmit}
-      className="overflow-hidden rounded-[28px] border border-neutral-200/70 bg-white/70 shadow-sm"
-    >
+    <form onSubmit={handleFormSubmit} className="overflow-hidden rounded-[28px] border border-neutral-200/70 bg-white/70 shadow-sm">
       {/* Form Header */}
       <div className="border-b border-neutral-200/70 px-5 py-6 sm:px-8">
         <div className="flex items-start justify-between gap-4">
@@ -662,41 +585,27 @@ function AddProductForm({
             <div className="mb-2 flex items-center gap-2">
               <span className="h-px w-6 bg-creator-pink" />
 
-              <span className="font-caveat text-base text-creator-pink">
-                add something new
-              </span>
+              <span className="font-caveat text-base text-creator-pink">add something new</span>
             </div>
 
             <h2 className="font-serif text-2xl font-semibold text-neutral-800">
               Create a product<span className="text-creator-pink">.</span>
             </h2>
 
-            <p className="mt-1 text-xs text-neutral-400">
-              Give your creation a little space to shine.
-            </p>
+            <p className="mt-1 text-xs text-neutral-400">Give your creation a little space to shine.</p>
           </div>
 
-          <div
-            className="hidden h-11 w-11 items-center justify-center rounded-full bg-creator-pink/10 text-creator-pink sm:flex"
-          >
+          <div className="hidden h-11 w-11 items-center justify-center rounded-full bg-creator-pink/10 text-creator-pink sm:flex">
             <Sparkles size={18} />
           </div>
         </div>
       </div>
 
       {/* Fields */}
-      <div className="grid grid-cols-1 gap-5 p-5 sm:p-8 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 p-5 sm:p-8 md:grid-cols-2 font-caveat">
         {/* Name */}
-        <Field label="Product Name" required className="md:col-span-2">
-          <input
-            required
-            type="text"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-            placeholder="Beautiful Clay Turtle"
-            className="creator-input"
-          />
+        <Field label="Product Name" required className="md:col-span-2 text-creator-text">
+          <input required type="text" name="productName" value={formData.productName} onChange={handleInputChange} placeholder="Beautiful Clay Turtle" className="creator-input" />
         </Field>
 
         {/* Description */}
@@ -715,43 +624,20 @@ function AddProductForm({
         {/* Price */}
         <Field label="Price" required>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
-              ₹
-            </span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">₹</span>
 
-            <input
-              required
-              type="number"
-              name="productPrice"
-              value={formData.productPrice}
-              onChange={handleInputChange}
-              placeholder="499"
-              className="creator-input pl-8"
-            />
+            <input required type="number" name="productPrice" value={formData.productPrice} onChange={handleInputChange} placeholder="499" className="creator-input pl-8" />
           </div>
         </Field>
 
         {/* Stock */}
         <Field label="Available Stock" required>
-          <input
-            required
-            type="number"
-            name="stocks"
-            value={formData.stocks}
-            onChange={handleInputChange}
-            placeholder="20"
-            className="creator-input"
-          />
+          <input required type="number" name="stocks" value={formData.stocks} onChange={handleInputChange} placeholder="20" className="creator-input" />
         </Field>
 
         {/* Category */}
         <Field label="Category">
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            className="creator-input capitalize"
-          >
+          <select name="category" value={formData.category} onChange={handleInputChange} className="creator-input capitalize">
             <option value="clay">Clay</option>
             <option value="resin">Resin</option>
             <option value="wood">Wood</option>
@@ -767,62 +653,89 @@ function AddProductForm({
 
         {/* Color */}
         <Field label="Color">
-          <input
-            type="text"
-            name="color"
-            value={formData.color}
-            onChange={handleInputChange}
-            placeholder="Green / Earthy Brown"
-            className="creator-input"
-          />
+          <input type="text" name="color" value={formData.color} onChange={handleInputChange} placeholder="Green / Earthy Brown" className="creator-input" />
         </Field>
 
         {/* Size */}
         <Field label="Size">
-          <input
-            type="text"
-            name="size"
-            value={formData.size}
+          <input type="text" name="size" value={formData.size} onChange={handleInputChange} placeholder="10cm × 12cm" className="creator-input" />
+        </Field>
+
+        {/* Extra Details */}
+        <Field label="Extra Details" className="md:col-span-2">
+          <textarea
+            rows="3"
+            name="extraDetails"
+            value={formData.extraDetails}
             onChange={handleInputChange}
-            placeholder="10cm × 12cm"
-            className="creator-input"
+            placeholder="Materials, care instructions, or anything customers should know..."
+            className="creator-input resize-none"
           />
         </Field>
 
+        {/* Images */}
+        <div className="md:col-span-2 rounded-3xl border border-neutral-200/80 bg-neutral-50/70 p-4 sm:p-5">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-neutral-600">Product images</p>
+              <p className="mt-1 text-xs leading-5 text-neutral-400">Add one main image and up to three additional views.</p>
+            </div>
+
+            <span className="w-fit rounded-full bg-creator-pink/10 px-3 py-1 text-[10px] font-semibold text-creator-pink">Main image required</span>
+          </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {["productImage1", "productImage2", "productImage3", "productImage4"].map((imageField, index) => {
+              const file = images[imageField];
+
+              return (
+                <div key={imageField} className={`relative rounded-2xl border border-dashed p-4 transition-colors ${file ? "border-creator-pink/50 bg-white" : "border-neutral-300 bg-white/60 hover:border-creator-pink/50"}`}>
+                  <label className="flex cursor-pointer items-center gap-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-creator-pink/10 text-creator-pink">
+                      <ImagePlus size={18} />
+                    </span>
+
+                    <span className="min-w-0">
+                      <span className="block text-xs font-semibold text-neutral-700">{index === 0 ? "Main image" : `Image ${index + 1}`}</span>
+                      <span className="mt-1 block truncate text-[10px] text-neutral-400">{file ? `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)` : "JPG, PNG, WEBP"}</span>
+                    </span>
+
+                    <input type="file" accept="image/*" required={index === 0} onChange={(e) => handleImageChange(e, imageField)} className="sr-only" />
+                  </label>
+
+                  {file && (
+                    <button type="button" onClick={() => removeImage(imageField)} className="absolute right-3 top-3 rounded-full p-1 text-neutral-400 transition hover:bg-red-50 hover:text-red-500" aria-label={`Remove ${index === 0 ? "main image" : `image ${index + 1}`}`}>
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-[10px] leading-4 text-amber-800">
+            ImageKit free tier note: each image must be 5 MB or smaller. Please upload only up to 4 optimized product images to keep storage and bandwidth under control.
+          </p>
+        </div>
+
         {/* Customization */}
-        <label
-          className="md:col-span-2 group flex cursor-pointer items-center gap-4 rounded-2xl border border-neutral-200 bg-creator-bg-butter/60 p-4 transition-all duration-300 hover:border-creator-pink/40 hover:bg-creator-pink/5"
-        >
-          <div
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-creator-pink shadow-sm transition-transform duration-300 group-hover:scale-110"
-          >
+        <label className="md:col-span-2 group flex cursor-pointer items-center gap-4 rounded-2xl border border-neutral-200 bg-creator-bg-butter/60 p-4 transition-all duration-300 hover:border-creator-pink/40 hover:bg-creator-pink/5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-creator-pink shadow-sm transition-transform duration-300 group-hover:scale-110">
             <Palette size={17} />
           </div>
 
           <div className="flex-1">
-            <p className="text-xs font-semibold text-neutral-700">
-              Accept custom requests
-            </p>
+            <p className="text-xs font-semibold text-neutral-700">Accept custom requests</p>
 
-            <p className="mt-0.5 text-[10px] leading-4 text-neutral-400">
-              Let customers request names, colours, notes or other changes.
-            </p>
+            <p className="mt-0.5 text-[10px] leading-4 text-neutral-400">Let customers request names, colours, notes or other changes.</p>
           </div>
 
-          <input
-            type="checkbox"
-            name="customization"
-            checked={formData.customization}
-            onChange={handleInputChange}
-            className="h-4 w-4 accent-creator-pink"
-          />
+          <input type="checkbox" name="customization" checked={formData.customization} onChange={handleInputChange} className="h-4 w-4 accent-creator-pink" />
         </label>
       </div>
 
       {/* Footer */}
-      <div
-        className="flex flex-col-reverse gap-3 border-t border-neutral-200/70 px-5 py-5 sm:flex-row sm:justify-end sm:px-8"
-      >
+      <div className="flex flex-col-reverse gap-3 border-t border-neutral-200/70 px-5 py-5 sm:flex-row sm:justify-end sm:px-8">
         <button
           type="button"
           onClick={onCancel}
@@ -833,13 +746,11 @@ function AddProductForm({
 
         <button
           type="submit"
-          className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1A2E26] px-6 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg active:scale-95"
+          disabled={isSaving}
+          className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1A2E26] px-6 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Save Product
-          <ArrowUpRight
-            size={14}
-            className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
+          {isSaving ? "Saving..." : "Save Product"}
+          {isSaving ? <Loader2 size={14} className="animate-spin" /> : <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />}
         </button>
       </div>
     </form>

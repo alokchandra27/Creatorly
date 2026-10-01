@@ -1,13 +1,14 @@
+import LeftDiv from "./Auth/LeftDiv";
 import { useState } from "react";
-import { ArrowRight, LineSquiggle, MoveRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { toast } from "react-toastify";
-import API from "../components/API/API"; // Adjust the import path based on your project structure
+import API from "../components/API/API"; 
 import { useNavigate } from "react-router-dom";
 
 const Auth = ({ setIsLoggedIn }) => {
-  const [isLogin, setIsLogin] = useState(false); // false for register, true for login
-  const [isLoading, setIsLoading] = useState(false); // For handling loading state
-  const [showPassword, setShowPassword] = useState(false); // For toggling password visibility
+  const [isLogin, setIsLogin] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -55,12 +56,12 @@ const Auth = ({ setIsLoggedIn }) => {
         }
 
         setIsLoggedIn(true);
-        navigate("/dashboard");
+        navigate("/products");
       }
 
       toast.update(toastId, {
         render: isLogin
-          ? `Welcome back, ${response?.data?.user?.name || "User"} 👋`
+          ? `Welcome back, ${response?.data?.user?.storeName || "Seller"} 👋`
           : "Account created successfully 🎉",
         type: "success",
         isLoading: false,
@@ -68,13 +69,12 @@ const Auth = ({ setIsLoggedIn }) => {
       });
 
       e.target.reset();
-      // navigate("/");
     } catch (error) {
       toast.dismiss();
 
       const message =
         error?.response?.data?.message === "Invalid credentials"
-          ? "That doesn’t look right. Try again."
+          ? "Incorrect email or password. Try again."
           : error?.response?.data?.message ||
             "Something went wrong. Please try again.";
 
@@ -88,127 +88,16 @@ const Auth = ({ setIsLoggedIn }) => {
     <div className="h-screen w-full overflow-hidden bg-creator-bg text-creator-text lg:-mt-10">
       <section className="flex h-full w-full flex-col lg:flex-row">
 
-        {/* ================= LEFT ================= */}
-        <div className="relative hidden h-full min-h-0 w-full overflow-hidden px-8 py-10 sm:px-12 md:px-16 lg:flex lg:w-1/2 lg:px-20 xl:px-24">
-          {/* Soft decorative background shapes */}
-          <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-creator-pink/10 blur-3xl" />
+        {/*  LEFT  */}
+        <LeftDiv/>
 
-          <div className="absolute bottom-[-120px] left-[20%] w-80 h-80 rounded-full bg-amber-100/40 blur-3xl" />
-
-          {/* Main Content */}
-          <div className="relative z-10 mx-auto flex h-full w-full max-w-xl flex-col justify-center pb-10">
-            {/* Small label */}
-            <div className="mb-4 flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-creator-pink" />
-
-              <p className="font-caveat text-xl text-creator-pink">
-                A home for creative work
-              </p>
-            </div>
-
-            {/* Main Heading */}
-            <div className="flex flex-col gap-3">
-              <div>
-                <h1 className="font-caveat text-5xl font-normal leading-[0.82] -rotate-2 text-neutral-800 xl:text-5xl">
-                Make
-              </h1>
-
-              <h2 className="font-caveat text-5xl font-normal leading-[0.82] -rotate-2 text-neutral-800 xl:text-5xl">
-                it Creatorly.
-              </h2>
-              </div>
-
-              <h2 className="mt-2 font-caveat text-5xl font-normal leading-[0.82] -rotate-1 text-creator-pink xl:text-5xl">
-                Share your story.
-              </h2>
-            </div>
-
-            {/* Description */}
-            <div className="mt-6 max-w-md">
-              <p className="text-sm leading-6 text-neutral-500 xl:text-sm">
-                Your work, your space, your people. Creatorly helps you put it
-                all in one place.
-              </p>
-
-              <LineSquiggle
-                size={40}
-                strokeWidth={1.5}
-                className="text-creator-pink"
-              />
-            </div>
-
-            {/* Creator Features */}
-            <div className="mt-2 flex flex-wrap gap-2">
-              <div className="border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
-                ✦ Your own storefront
-              </div>
-
-              <div className="border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
-                ♡ Showcase your work
-              </div>
-
-              <div className="border border-neutral-200 bg-white px-3 py-1.5 text-[11px] text-neutral-600 shadow-sm">
-                ↗ Share anywhere
-              </div>
-            </div>
-
-            {/* Mini CTA */}
-            <div className="mt-5">
-              <div className="inline-flex items-center gap-2 text-sm font-medium text-neutral-700">
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-creator-pink text-white">
-                  <MoveRight size={15} />
-                </span>
-
-                <span>Your creator journey starts here.</span>
-              </div>
-            </div>
-          </div>
-
-          {/* ================= DECORATIVE ARTWORK ================= */}
-
-          {/* Main artwork */}
-          <div className="absolute bottom-[16%] right-[5%] aspect-square w-[150px] rotate-6 border-[7px] border-creator-bg bg-white shadow-[0_15px_40px_rgba(0,0,0,0.15)] xl:right-[6%] xl:w-[190px]">
-            <img
-              src="/src/assets/yarnKaGola.jpg"
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* clay artwork */}
-          <div className="absolute bottom-[15%] right-[28%] aspect-square w-[90px] -rotate-12 border-[6px] border-creator-bg bg-white shadow-[0_12px_30px_rgba(0,0,0,0.12)] xl:right-[30%] xl:w-[110px]">
-            <img
-              src="/src/assets/clay.jpg"
-              alt=""
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          {/* palette decoration */}
-          <div className="absolute bottom-[10%] right-[1%] xl:right-[5%] opacity-90">
-            <img src="/src/assets/palette.png" alt="" className="w-12 xl:w-16" />
-          </div>
-
-          {/* Daisy */}
-          <div className="absolute bottom-[12%] left-[7%] opacity-70">
-            <img
-              src="/src/assets/redcolor.png"
-              alt=""
-              className="w-12 xl:w-16"
-            />
-          </div>
-        </div>
-
-        {/* ================= RIGHT (SELLER REGISTER PANEL)================= */}
+        {/*RIGHT (SELLER REGISTER PANEL) */}
         <div className="w-full lg:w-1/2 h-screen lg:h-screen flex items-center justify-center px-4 sm:px-8 py-6 lg:py-0 border-t-0 lg:border-t-0 lg:border-l-[1px] border-creator-accent relative bg-creator-bg overflow-hidden">
           {/* Form Main Container */}
           <div className="w-full max-w-[440px] bg-white rounded-2xl px-5 py-0 sm:p-7 shadow-sm border border-neutral-100/80 flex flex-col relative">
-            {/* Header / Logo Style */}
+    
             <div className="text-center mb-4">
               <div className="flex items-center justify-center gap-1 mb-0.5">
-                <span className="font-bold text-lg tracking-tight text-neutral-800">
-                  C
-                </span>
                 <span className="font-serif font-bold text-lg tracking-tight text-neutral-800">
                   Creatorly
                 </span>
@@ -253,7 +142,7 @@ const Auth = ({ setIsLoggedIn }) => {
                 </div>
               )}
 
-              {/* Email (Full Width) */}
+ 
               <div>
                 <label className="block text-[11px] font-semibold text-neutral-600 mb-1">
                   Email
@@ -266,7 +155,6 @@ const Auth = ({ setIsLoggedIn }) => {
                 />
               </div>
 
-              {/* Username & Store Name (Side by Side) */}
               {!isLogin && (
                 <div>
                   <label className="block text-[11px] font-semibold text-neutral-600 mb-1">
@@ -281,7 +169,6 @@ const Auth = ({ setIsLoggedIn }) => {
                 </div>
               )}
 
-              {/* Store Name Custom Handle (Full Width) */}
               {!isLogin && (
                 <div>
                   <label className="block text-[11px] font-semibold text-neutral-600 mb-1">
@@ -301,7 +188,7 @@ const Auth = ({ setIsLoggedIn }) => {
                 </div>
               )}
 
-              {/* Password (Full Width) */}
+
               <div>
                 <label className="block text-[11px] font-semibold text-neutral-600 mb-1">
                   Password
@@ -314,7 +201,7 @@ const Auth = ({ setIsLoggedIn }) => {
                     className="w-full px-3 py-2 bg-neutral-50/50 border border-neutral-200 rounded-xl text-xs focus:outline-none focus:border-creator-pink transition-colors placeholder:text-neutral-300 pr-8"
                   />
 
-                  {/* Click hone par state ko toggle */}
+  
                   <span
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 text-xs cursor-pointer select-none"
@@ -324,7 +211,7 @@ const Auth = ({ setIsLoggedIn }) => {
                 </div>
               </div>
 
-              {/* Custom Info Alert for Password Safety (Only shows on Register mode) */}
+
               {!isLogin && (
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2.5 animate-pulse-slow">
                   {/* Alert Icon */}
@@ -345,14 +232,14 @@ const Auth = ({ setIsLoggedIn }) => {
                 </div>
               )}
 
-              {/* Submit Action Button */}
+
               <div className="pt-1">
                 <button
                   type="submit"
-                  disabled={isLoading} // React handles disabling here cleanly
+                  disabled={isLoading} 
                   className={`w-full py-2.5 rounded-xl text-xs font-medium transition-all duration-300 tracking-wide text-white flex items-center justify-center gap-2 ${ isLoading ? "bg-neutral-400 cursor-not-allowed opacity-80" : "bg-[#1A2E26] hover:bg-neutral-800 cursor-pointer" }`}
                 >
-                  {/* Corrected Text Logic Hierarchy */}
+       
                   {isLoading
                     ? isLogin
                       ? "Signing in..."
@@ -374,7 +261,7 @@ const Auth = ({ setIsLoggedIn }) => {
                   <span
                     onClick={() => {
                       setIsLogin(!isLogin);
-                      setShowPassword(false); // Reset password visibility when switching views
+                      setShowPassword(false); 
                     }}
                     className="font-semibold text-neutral-800 hover:underline cursor-pointer ml-1"
                   >

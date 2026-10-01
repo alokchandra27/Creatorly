@@ -1,11 +1,7 @@
-import React from 'react'
 
 const ExploreByCraft = () => {
 
 
-     // =======================================================
-  // CRAFTS
-  // =======================================================
 
   const crafts = [
     {
@@ -60,8 +56,8 @@ const ExploreByCraft = () => {
   return (
        <section className="relative w-full bg-white px-6 py-20 sm:px-10 md:py-24">
         <div className="mx-auto max-w-6xl text-center">
-          <p className="font-caveat text-lg tracking-wide text-creator-pink sm:text-xl">
-            Different hands. Different crafts. Same heart.
+          <p className="font-caveat text-lg tracking-wide text-creator-pink sm:text-xl -rotate-3">
+            Different hands. Different trades. Same heart.
           </p>
 
           <h2
@@ -71,7 +67,7 @@ const ExploreByCraft = () => {
           </h2>
 
           <p className="mx-auto mt-3 max-w-lg text-sm text-neutral-500">
-            A world of handmade ideas, waiting to be discovered.
+           A world of independent brands, waiting to be discovered."  
           </p>
 
           {/* CRAFT GRID */}

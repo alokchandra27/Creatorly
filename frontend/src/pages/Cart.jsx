@@ -1,246 +1,452 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, Check, ChevronDown, ChevronUp, MessageCircle, Minus, Plus, ShoppingBag, Trash2, User, X } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function CartPage() {
+import { getCart, removeFromCart, updateCartQuantity, clearCart } from "../utils/storeStorage";
+
+const getImageUrl = (image, fallback = "") => {
+  if (!image) return fallback;
+
+  if (typeof image === "string") {
+    return image;
+  }
+
+  return image?.url || fallback;
+};
+
+const Cart = () => {
   const navigate = useNavigate();
+  const { storeName } = useParams();
 
-  // Customer ke custom query note ki state
-  const [customerNote, setCustomerNote] = useState("");
+  const [cart, setCart] = useState([]);
+  const [showOrderForm, setShowOrderForm] = useState(false);
 
-  // Live API format ke mutabik dummy data (Ise aap baad me backend state ya context se replace kar lena)
-  const [cartItems, setCartItems] = useState([
-    {
-      _id: "6aa95e53019a91838c3cf5e8",
-      productName: "Clay Turtle",
-      productPrice: 499,
-      quantity: 2,
-      color: "green",
-      size: "10cm",
-      imageUrl: "https://imagekit.io",
-      storeName: "BalbeerAndSons",
-      whatsappNumber: "919876543210", 
-      instagramUsername: "balbeer_handicrafts"
-    }
-  ]);
+  const [customer, setCustomer] = useState({
+    name: "",
+    street: "",
+    address: "",
+    mobile: "",
+    alternateMobile: "",
+  });
 
-  // Quantity control karne ka logic (+ / -)
-  const handleQuantity = (id, type) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) => {
-        if (item._id === id) {
-          const newQty = type === "plus" ? item.quantity + 1 : item.quantity - 1;
-          return { ...item, quantity: newQty < 1 ? 1 : newQty };
-        }
-        return item;
+  useEffect(() => {
+    setCart(getCart(storeName));
+  }, [storeName]);
+
+  // ==========================================================
+  // TOTALS
+  // ==========================================================
+
+  const totalItems = useMemo(() => {
+    return cart.reduce((total, item) => total + Number(item.quantity || 0), 0);
+  }, [cart]);
+
+  const subtotal = useMemo(() => {
+    return cart.reduce((total, item) => total + Number(item.productPrice || 0) * Number(item.quantity || 0), 0);
+  }, [cart]);
+
+  // ==========================================================
+  // QUANTITY
+  // ==========================================================
+
+  const changeQuantity = (productId, quantity) => {
+    const updated = updateCartQuantity(storeName, productId, quantity);
+
+    setCart(updated);
+  };
+
+  const removeItem = (productId) => {
+    const updated = removeFromCart(storeName, productId);
+
+    setCart(updated);
+  };
+
+  // ==========================================================
+  // CUSTOMER FORM
+  // ==========================================================
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    setCustomer((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // ==========================================================
+  // WHATSAPP QUERY
+  // ==========================================================
+
+  const getWhatsAppNumber = () => {
+    const firstProduct = cart[0];
+
+    // We don't have store API here.
+    // Product has seller/store data but not WhatsApp number.
+    // Therefore we pass it through location state later.
+    return firstProduct?.whatsappNumber || "";
+  };
+
+  // ==========================================================
+  // ORDER MESSAGE
+  // ==========================================================
+
+  const createOrderMessage = () => {
+    const productsText = cart
+      .map((item, index) => {
+        const itemTotal = Number(item.productPrice || 0) * Number(item.quantity || 0);
+
+        return `${index + 1}. ${item.productName}
+   Qty: ${item.quantity}
+   Price: ₹${Number(item.productPrice || 0).toLocaleString("en-IN")}
+   Total: ₹${itemTotal.toLocaleString("en-IN")}`;
       })
-    );
+      .join("\n\n");
+
+    return `Hi! I found ${cart[0]?.storeName || "your store"} on Creatorly and I'd like to place an order. ✨
+
+ORDER DETAILS
+--------------------
+${productsText}
+
+ORDER TOTAL
+₹${subtotal.toLocaleString("en-IN")}
+
+CUSTOMER DETAILS
+--------------------
+Name: ${customer.name}
+Mobile: ${customer.mobile}
+${customer.alternateMobile ? `Alternative Mobile: ${customer.alternateMobile}` : ""}
+Street: ${customer.street}
+Address: ${customer.address}
+
+Please confirm the order, availability and delivery details.
+
+Thank you!`;
   };
 
-  // Item cart se delete karne ka logic
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter((item) => item._id !== id));
-  };
+  // ==========================================================
+  // PLACE ORDER
+  // ==========================================================
 
-  // Total Items aur Total Amount calculate karne ka math
-  const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-  const subTotal = cartItems.reduce((acc, item) => acc + item.productPrice * item.quantity, 0);
-
-  // Common Text Message Builder function jo WhatsApp aur Insta dono me use hoga
-  const buildOrderMessage = (storeName) => {
-    let message = `Hello *${storeName}*, Mujhe Creatorly se aapka product pasand aaya hai aur main order confirm karna chahta hu:\n\n`;
-    
-    cartItems.forEach((item, index) => {
-      message += `*${index + 1}. ${item.productName}*\n`;
-      message += `   Qty: ${item.quantity}x\n`;
-      message += `   Specs: Color: ${item.color}, Size: ${item.size}\n`;
-      message += `   Price: ₹${item.productPrice} x ${item.quantity} = ₹${item.productPrice * item.quantity}\n\n`;
-    });
-
-    message += `-------------------------\n`;
-    message += `*Total Order Value:* ₹${subTotal}\n-------------------------\n`;
-    
-    // Agar user ne koi text note dala h toh message me inject hoga
-    if (customerNote.trim()) {
-      message += `📝 *My Custom Note/Query:* "${customerNote}"\n\n`;
+  const placeOrder = () => {
+    if (!customer.name.trim()) {
+      alert("Please enter your name.");
+      return;
     }
 
-    message += `Pls share your UPI details for payment! ✨`;
-    return message;
+    if (!customer.mobile.trim()) {
+      alert("Please enter your mobile number.");
+      return;
+    }
+
+    if (!customer.street.trim()) {
+      alert("Please enter your street/locality.");
+      return;
+    }
+
+    if (!customer.address.trim()) {
+      alert("Please enter your complete address.");
+      return;
+    }
+
+    const number = cart[0]?.whatsappNumber;
+
+    if (!number) {
+      alert("This creator has not added WhatsApp ordering yet.");
+      return;
+    }
+
+    const cleanNumber = String(number).replace(/\D/g, "");
+
+    const message = encodeURIComponent(createOrderMessage());
+
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${message}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+
+    // Keep cart until seller confirms?
+    // For MVP, clear after sending.
+    clearCart(storeName);
+    setCart([]);
   };
 
-  // 1. WhatsApp Checkout Trigger Action
-  const handleWhatsAppCheckout = () => {
-    if (cartItems.length === 0) return;
-    const currentStore = cartItems[0];
-    const message = buildOrderMessage(currentStore.storeName);
-    const whatsappUrl = `https://wa.me{currentStore.whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-  };
+  // ==========================================================
+  // EMPTY CART
+  // ==========================================================
 
-  // 2. Instagram Redirection with Intelligent Clipboard Fallback
-  const handleInstagramCheckout = () => {
-    if (cartItems.length === 0) return;
-    const currentStore = cartItems[0];
-    
-    // Insta DM me dynamic custom text send nahi ho sakta direct URL se, isliye dynamic copy script fallback h
-    const rawMessage = buildOrderMessage(currentStore.storeName).replaceAll('*', ''); 
-    navigator.clipboard.writeText(rawMessage);
-    
-    alert("📋 Aapka calculated bill aur text copy ho gaya hai! Instagram open hone par seedhe creator ke DM me paste kar dein.");
-    
-    const instagramUrl = `https://instagram.com{currentStore.instagramUsername}/`;
-    window.open(instagramUrl, "_blank");
-  };
+  if (cart.length === 0) {
+    return (
+      <div className="min-h-screen bg-creator-bg-butter px-4 py-10">
+        <div className="mx-auto flex min-h-[70vh] max-w-2xl items-center justify-center">
+          <div className="w-full rounded-[28px] border border-creator-text/10 bg-white/80 px-6 py-14 text-center shadow-[0_18px_50px_rgba(60,50,40,0.06)]">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-creator-accent/40">
+              <ShoppingBag size={30} strokeWidth={1.6} />
+            </div>
 
-  return (
-    <div className="min-h-screen bg-creator-bg-butter font-sans text-creator-text antialiased selection:bg-creator-accent/20">
-      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        
-        {/* Page Main Heading */}
-        <h1 className="font-serif text-3xl font-black mb-8 tracking-tight text-creator-text">
-          Aapki Shopping Cart 🛒
-        </h1>
+            <p className="mt-6 font-caveat text-xl text-creator-pink">nothing here yet ♡</p>
 
-        {/* Conditional Layout: Empty state vs Active items */}
-        {cartItems.length === 0 ? (
-          <div className="text-center py-20 bg-creator-bg rounded-3xl border border-creator-text/5 max-w-xl mx-auto shadow-sm">
-            <p className="font-serif text-xl text-creator-text/60 mb-6">Aapki cart khali hai.</p>
-            <button 
-              onClick={() => navigate("/")} 
-              className="rounded-full bg-creator-primary px-8 py-3 text-sm font-semibold text-white shadow-md hover:bg-opacity-95 transition active:scale-95"
+            <h1 className="mt-1 font-serif text-3xl font-semibold">Your cart is empty</h1>
+
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-creator-text/50">Add something you love from this creator's collection and it'll appear here.</p>
+
+            <button
+              onClick={() => navigate(`/publicStore/${encodeURIComponent(storeName)}`)}
+              className="mt-7 inline-flex items-center gap-2 rounded-full bg-creator-text px-6 py-3 text-xs font-semibold text-white transition hover:-translate-y-1 hover:bg-creator-primary"
             >
-              Explore Products
+              <ArrowLeft size={15} />
+              Continue shopping
             </button>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-x-8 gap-y-8 lg:grid-cols-12">
-            
-            {/* LEFT SIDE PANEL (8 Columns on Desktop) - Item List & Large Custom Note */}
-            <div className="lg:col-span-8 space-y-6">
-              
-              {/* Cart Items Mapping Container */}
-              <div className="space-y-4">
-                {cartItems.map((item) => (
-                  <div 
-                    key={item._id} 
-                    className="flex flex-col sm:flex-row gap-4 rounded-2xl border border-creator-text/5 bg-creator-bg p-4 shadow-sm transition-all"
-                  >
-                    {/* Item Image */}
-                    <div className="h-24 w-24 mx-auto sm:mx-0 shrink-0 overflow-hidden rounded-xl bg-creator-bg-butter border border-creator-text/5">
-                      <img src={item.imageUrl} alt={item.productName} className="h-full w-full object-cover" />
-                    </div>
+        </div>
+      </div>
+    );
+  }
 
-                    {/* Metadata Content */}
-                    <div className="flex flex-1 flex-col justify-between">
+  // ==========================================================
+  // MAIN
+  // ==========================================================
+
+  return (
+    <div className="min-h-screen bg-creator-bg-butter text-creator-text">
+      <main className="mx-auto w-[calc(100%-24px)] max-w-6xl px-1 pb-20 pt-8 sm:w-[calc(100%-48px)]">
+        {/* HEADER */}
+
+        <div className="mb-8 flex items-center justify-between">
+          <button onClick={() => navigate(`/publicStore/${encodeURIComponent(storeName)}`)} className="flex items-center gap-2 text-xs text-creator-text/60 transition hover:text-creator-text">
+            <ArrowLeft size={16} />
+            Continue shopping
+          </button>
+
+          <div className="text-right">
+            <p className="font-caveat text-lg text-creator-pink">your little collection</p>
+
+            <h1 className="font-serif text-3xl font-semibold">Your Cart</h1>
+          </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[1fr_350px]">
+          {/* ================================================= */}
+          {/* PRODUCTS */}
+          {/* ================================================= */}
+
+          <section className="space-y-3">
+            {cart.map((item) => (
+              <article key={item._id} className="rounded-[22px] border border-creator-text/10 bg-white/85 p-3 shadow-sm">
+                <div className="flex gap-4">
+                  {/* IMAGE */}
+
+                  <div className="h-28 w-24 shrink-0 overflow-hidden rounded-[16px] bg-creator-bg">
+                    <img src={getImageUrl(item.productImage1)} alt={item.productName} className="h-full w-full object-cover" />
+                  </div>
+
+                  {/* CONTENT */}
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex justify-between gap-2">
                       <div>
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-serif font-bold text-base capitalize text-creator-text">{item.productName}</h3>
-                            <p className="text-xs text-creator-accent font-medium">By {item.storeName}</p>
-                          </div>
-                          <span className="font-serif font-bold text-sm text-creator-text">₹{item.productPrice * item.quantity}</span>
-                        </div>
-                        
-                        <div className="mt-1 flex gap-4 text-xs text-creator-text/50 font-medium">
-                          <span className="capitalize">Color: {item.color}</span>
-                          <span>Size: {item.size}</span>
-                        </div>
+                        <span className="rounded-full bg-creator-accent/40 px-2 py-1 text-[8px] uppercase tracking-wider text-creator-text/60">{item.category || "Handmade"}</span>
+
+                        <h2 className="mt-2 font-serif text-base font-semibold">{item.productName}</h2>
+
+                        {item.size && <p className="mt-1 text-[10px] text-creator-text/40">Size: {item.size}</p>}
                       </div>
 
-                      {/* Controls Box (Stepper counter & Hatao trigger button) */}
-                      <div className="flex justify-between items-center mt-4 border-t border-creator-text/5 pt-2 sm:pt-0 sm:border-0">
-                        <div className="flex items-center rounded-lg border border-creator-text/10 bg-creator-bg-butter p-1">
-                          <button 
-                            onClick={() => handleQuantity(item._id, "minus")} 
-                            className="h-6 w-6 font-bold hover:bg-creator-bg rounded flex items-center justify-center transition active:scale-95"
-                          >
-                            —
-                          </button>
-                          <span className="w-8 text-center font-serif text-sm font-bold text-creator-text">
-                            {item.quantity}
-                          </span>
-                          <button 
-                            onClick={() => handleQuantity(item._id, "plus")} 
-                            className="h-6 w-6 font-bold hover:bg-creator-bg rounded flex items-center justify-center transition active:scale-95"
-                          >
-                            +
-                          </button>
-                        </div>
+                      <button
+                        onClick={() => removeItem(item._id)}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-creator-text/35 transition hover:bg-red-50 hover:text-red-500"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
 
-                        <button 
-                          onClick={() => removeItem(item._id)} 
-                          className="text-xs font-semibold text-red-500 hover:text-red-600 transition flex items-center gap-1"
-                        >
-                          Hatao 🗑️
+                    <div className="mt-4 flex items-center justify-between">
+                      <strong className="font-serif text-lg">₹{Number(item.productPrice).toLocaleString("en-IN")}</strong>
+
+                      {/* QUANTITY */}
+
+                      <div className="flex items-center gap-2 rounded-full border border-creator-text/10 bg-creator-bg px-2 py-1">
+                        <button onClick={() => changeQuantity(item._id, item.quantity - 1)} className="flex h-7 w-7 items-center justify-center rounded-full transition hover:bg-white">
+                          <Minus size={12} />
+                        </button>
+
+                        <span className="w-5 text-center text-xs font-semibold">{item.quantity}</span>
+
+                        <button onClick={() => changeQuantity(item._id, item.quantity + 1)} className="flex h-7 w-7 items-center justify-center rounded-full transition hover:bg-white">
+                          <Plus size={12} />
                         </button>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
 
-              {/* ✨ BADA CUSTOM NOTE / QUERY TEXTAREA BLOCK */}
-              <div className="rounded-2xl border border-creator-text/5 bg-creator-bg p-5 sm:p-6 shadow-sm">
-                <label htmlFor="customer-note" className="block font-serif font-black text-lg text-creator-text mb-1">
-                  ✏️ Add Customization Note / Query
-                </label>
-                <p className="text-xs text-creator-text/50 mb-4 leading-relaxed">
-                  Agar aapko koi custom design edit chahiye, ya product se judi koi query hai toh yahan khul kar likhein (e.g. "Mujhe name customization chahiye", "Kya blue tone available h?"). Yeh note calculated bill ke sath automatic creator ko send ho jayega.
-                </p>
-                <textarea
-                  id="customer-note"
-                  rows="4"
-                  value={customerNote}
-                  onChange={(e) => setCustomerNote(e.target.value)}
-                  placeholder="Apna message ya customization specifications yahan type karein..."
-                  className="w-full rounded-xl border border-creator-text/10 bg-creator-bg-butter p-4 text-sm focus:border-creator-accent focus:ring-1 focus:ring-creator-accent outline-none transition duration-150 resize-none font-medium text-creator-text"
-                />
-              </div>
-
-            </div>
-
-            {/* RIGHT SIDE PANEL (4 Columns on Desktop) - Final Pricing Invoice Grid & Dual CTAs */}
-            <div className="lg:col-span-4">
-              <div className="sticky top-20 space-y-6">
-                {/* Final Pricing Invoice Box */}
-                <div className="rounded-2xl border border-creator-text/5 bg-creator-bg p-6 shadow-sm">
-                  <h2 className="font-serif font-black text-lg text-creator-text mb-4">Final Order Summary</h2>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm text-creator-text/70">
-                      <span>Total Items:</span>
-                      <span>{totalItems}</span>
-                    </div>  
-                    <div className="flex justify-between text-sm text-creator-text/70">
-                      <span>Subtotal:</span>
-                      <span>₹{subTotal}</span>
-                    </div>
-                    <div className="border-t border-creator-text/10 mt-2 pt-2 flex justify-between font-serif font-bold text-creator-text">
-                      <span>Total Payable:</span>
-                      <span>₹{subTotal}</span>
-                    </div>
+                    {item.customization && <p className="mt-2 text-[9px] text-creator-pink">Customization available</p>}
                   </div>
                 </div>
+              </article>
+            ))}
+          </section>
 
-                {/* Dual Checkout Buttons */}
-                <div className="space-y-4">
-                  <button
-                    onClick={handleWhatsAppCheckout}
-                    className="w-full rounded-full bg-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-emerald-600 transition active:scale-95"
-                  >   
-                    WhatsApp Checkout
-                  </button>
-                  <button
-                    onClick={handleInstagramCheckout}
-                    className="w-full rounded-full border border-emerald-500 px-6 py-3 text-sm font-semibold text-emerald-500 hover:bg-emerald-50 transition active:scale-95"
-                  > 
-                    Instagram Checkout
-                  </button>
-                </div>
+          {/* ================================================= */}
+          {/* SUMMARY */}
+          {/* ================================================= */}
+
+          <aside className="h-fit rounded-[25px] border border-creator-text/10 bg-white/90 p-5 shadow-sm lg:sticky lg:top-24">
+            <p className="font-caveat text-lg text-creator-pink">almost yours ♡</p>
+
+            <h2 className="mt-1 font-serif text-2xl font-semibold">Order Summary</h2>
+
+            <div className="my-5 space-y-3 border-y border-creator-text/10 py-5">
+              <div className="flex justify-between text-xs text-creator-text/55">
+                <span>Items ({totalItems})</span>
+
+                <span>₹{subtotal.toLocaleString("en-IN")}</span>
+              </div>
+
+              <div className="flex justify-between text-xs text-creator-text/55">
+                <span>Delivery</span>
+                <span>To be confirmed</span>
               </div>
             </div>
-          </div>
-        )}
-      </main>   
-  </div>
+
+            <div className="flex items-center justify-between">
+              <span className="font-serif text-lg">Total</span>
+
+              <strong className="font-serif text-2xl">₹{subtotal.toLocaleString("en-IN")}</strong>
+            </div>
+
+            <button
+              onClick={() => setShowOrderForm(!showOrderForm)}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-creator-text py-3.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:bg-creator-primary"
+            >
+              Place Order
+              {showOrderForm ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+            </button>
+
+            {/* QUERY OPTIONS */}
+
+            <div className="mt-4 rounded-[18px] bg-creator-bg p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-creator-text/50">Just have a question?</p>
+
+              <p className="mt-1 text-xs leading-5 text-creator-text/45">Ask the creator about availability, customization or delivery before ordering.</p>
+
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => {
+                    const number = cart[0]?.whatsappNumber;
+
+                    if (!number) {
+                      alert("WhatsApp is not available for this store.");
+                      return;
+                    }
+
+                    const cleanNumber = String(number).replace(/\D/g, "");
+
+                    const message = encodeURIComponent(
+                      `Hi! I found ${cart[0]?.storeName || "your store"} on Creatorly and I have a question about these products:\n\n${cart
+                        .map((item) => `• ${item.productName} × ${item.quantity}`)
+                        .join("\n")}\n\nCould you please help me?`,
+                    );
+
+                    window.open(`https://wa.me/${cleanNumber}?text=${message}`, "_blank", "noopener,noreferrer");
+                  }}
+                  className="flex items-center justify-center gap-1.5 rounded-full bg-white px-3 py-2.5 text-[10px] font-semibold transition hover:-translate-y-0.5 hover:shadow-sm"
+                >
+                  <MessageCircle size={13} />
+                  WhatsApp
+                </button>
+
+                <button
+                  onClick={() => {
+                    const username = cart[0]?.instagramUsername;
+
+                    if (username) {
+                      window.open(`https://instagram.com/${username.replace("@", "")}`, "_blank", "noopener,noreferrer");
+                    } else {
+                      alert("Instagram is not available for this store.");
+                    }
+                  }}
+                  className="flex items-center justify-center gap-1.5 rounded-full bg-white px-3 py-2.5 text-[10px] font-semibold transition hover:-translate-y-0.5 hover:shadow-sm"
+                >
+                  {/* <Instagram size={13} /> */}
+                  Instagram
+                </button>
+              </div>
+            </div>
+
+            {/* ================================================= */}
+            {/* ORDER FORM */}
+            {/* ================================================= */}
+
+            {showOrderForm && (
+              <div className="mt-5 border-t border-creator-text/10 pt-5">
+                <div className="mb-5">
+                  <p className="font-caveat text-lg text-creator-pink">delivery details</p>
+
+                  <h3 className="font-serif text-xl font-semibold">Where should we send it?</h3>
+                </div>
+
+                <div className="space-y-3">
+                  <input
+                    name="name"
+                    value={customer.name}
+                    onChange={handleInputChange}
+                    placeholder="Full name *"
+                    className="w-full rounded-xl border border-creator-text/10 bg-creator-bg px-4 py-3 text-xs outline-none transition focus:border-creator-pink"
+                  />
+
+                  <input
+                    name="mobile"
+                    value={customer.mobile}
+                    onChange={handleInputChange}
+                    placeholder="Mobile number *"
+                    inputMode="numeric"
+                    className="w-full rounded-xl border border-creator-text/10 bg-creator-bg px-4 py-3 text-xs outline-none transition focus:border-creator-pink"
+                  />
+
+                  <input
+                    name="alternateMobile"
+                    value={customer.alternateMobile}
+                    onChange={handleInputChange}
+                    placeholder="Alternative mobile number"
+                    inputMode="numeric"
+                    className="w-full rounded-xl border border-creator-text/10 bg-creator-bg px-4 py-3 text-xs outline-none transition focus:border-creator-pink"
+                  />
+
+                  <input
+                    name="street"
+                    value={customer.street}
+                    onChange={handleInputChange}
+                    placeholder="Street / locality *"
+                    className="w-full rounded-xl border border-creator-text/10 bg-creator-bg px-4 py-3 text-xs outline-none transition focus:border-creator-pink"
+                  />
+
+                  <textarea
+                    name="address"
+                    value={customer.address}
+                    onChange={handleInputChange}
+                    placeholder="Complete address *"
+                    rows={3}
+                    className="w-full resize-none rounded-xl border border-creator-text/10 bg-creator-bg px-4 py-3 text-xs outline-none transition focus:border-creator-pink"
+                  />
+                </div>
+
+                <div className="mt-4 rounded-xl bg-creator-accent/30 p-3 text-[9px] leading-4 text-creator-text/55">
+                  Your details will be sent directly to the creator through WhatsApp. Creatorly does not process the payment here.
+                </div>
+
+                <button
+                  onClick={placeOrder}
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] py-3.5 text-xs font-bold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <MessageCircle size={16} />
+                  Place Order via WhatsApp
+                </button>
+              </div>
+            )}
+          </aside>
+        </div>
+      </main>
+    </div>
   );
-}
+};
+
+export default Cart;

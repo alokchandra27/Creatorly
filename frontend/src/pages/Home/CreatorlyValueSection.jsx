@@ -1,4 +1,3 @@
-import React from "react";
 import { ArrowRight, Check, Link2, ShoppingBag, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,26 +7,29 @@ const CreatorlyValueSection = () => {
   const features = [
     {
       icon: ShoppingBag,
+      bgImage:"/src/assets/bg1.jpg",
       title: "Your products",
-      text: "Show everything you create in one beautiful place.",
+      text: "Showcase everything you sell in one beautiful, organized space.",
     },
     {
       icon: UserRound,
+      bgImage:"/src/assets/bg2.jpg",
       title: "Your story",
-      text: "Tell people who you are and what makes your work special.",
+      text: "Tell customers who you are, what you stand for, and what makes your business special.",
     },
     {
       icon: Link2,
+      bgImage:"/src/assets/bg3.jpg",
       title: "Your way to order",
-      text: "Let customers reach you directly through WhatsApp or Instagram.",
+      text: "Let customers place orders directly or connect with you seamlessly via WhatsApp or Instagram.",
     },
   ];
 
   const benefits = [
-    "No website building",
-    "No customer login",
+    "No website building required",
+    "No customer login friction ",
     "No complicated setup",
-    "Share your store anywhere",
+    "Share your link anywhere",
   ];
 
   return (
@@ -38,15 +40,15 @@ const CreatorlyValueSection = () => {
 
       <div className="relative mx-auto max-w-6xl">
 
-        {/* ================= HERO ================= */}
+        {/*  upper page content  */}
         <div className="mx-auto max-w-3xl text-center">
 
           <p className="mb-5 text-sm font-medium uppercase tracking-[0.25em] text-neutral-500">
-            Built for small creators
+            Built for small businesses
           </p>
 
           <h2 className="text-4xl font-semibold leading-[1.08] tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
-            Your work deserves
+            Your brand deserves
             <span className="block font-serif italic font-normal">
               its own space.
             </span>
@@ -62,7 +64,7 @@ const CreatorlyValueSection = () => {
 
             <button
               onClick={() => navigate("/auth")}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-neutral-900 px-7 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 sm:w-auto"
+              className="group inline-flex w-full items-center justify-center gap-2  bg-neutral-900 px-7 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 sm:w-auto"
             >
               Create your store
               <ArrowRight
@@ -77,7 +79,7 @@ const CreatorlyValueSection = () => {
                   .getElementById("creatorly-how-it-works")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="inline-flex w-full items-center justify-center rounded-full border border-neutral-300 bg-white/70 px-7 py-3.5 text-sm font-medium text-neutral-800 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-md active:scale-95 sm:w-auto"
+              className="inline-flex w-full items-center justify-center border border-neutral-300 bg-white/70 px-7 py-3.5 text-sm font-medium text-neutral-800 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-md active:scale-95 sm:w-auto"
             >
               See how it works
             </button>
@@ -86,7 +88,7 @@ const CreatorlyValueSection = () => {
         </div>
 
 
-        {/* ================= ONE LINK ================= */}
+  
         <div className="mt-24 sm:mt-32">
 
           <div className="mb-10 text-center">
@@ -99,8 +101,7 @@ const CreatorlyValueSection = () => {
             </h3>
 
             <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-neutral-500 sm:text-base">
-              Everything your customer needs, without sending them through
-              endless DMs.
+              Everything your customer needs to buy from you, without the headache of endless DMs.
             </p>
           </div>
 
@@ -113,10 +114,17 @@ const CreatorlyValueSection = () => {
               return (
                 <div
                   key={feature.title}
-                  className="group rounded-3xl border border-neutral-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
                   style={{
-                    transitionDelay: `${index * 70}ms`,
+                    backgroundImage: `url(${feature.bgImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    tranitionDelay: `${index * 70}ms`,
                   }}
+                  className="group rounded-3xl border border-neutral-200 p-7 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+                  // style={{
+                  //   transitionDelay: `${index * 70}ms`,
+                  // }}
                 >
                   <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-100 transition-all duration-300 group-hover:scale-110 group-hover:bg-neutral-900 group-hover:text-white">
                     <Icon size={21} />
@@ -137,7 +145,7 @@ const CreatorlyValueSection = () => {
         </div>
 
 
-        {/* ================= MADE FOR SMALL CREATORS ================= */}
+
         <div
           id="creatorly-how-it-works"
           className="mt-24 overflow-hidden rounded-[2rem] bg-neutral-900 px-7 py-12 text-white sm:px-12 lg:mt-32 lg:px-16 lg:py-16"
@@ -151,13 +159,11 @@ const CreatorlyValueSection = () => {
               </p>
 
               <h3 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
-                Made for small creators.
+                Made for independent small businesses.
               </h3>
 
               <p className="mt-5 max-w-lg text-sm leading-7 text-neutral-400 sm:text-base">
-                You don't need to become a website designer or learn
-                complicated e-commerce tools. Creatorly keeps the setup
-                simple so you can focus on what you actually create.
+               You don't need to hire a developer, learn how to code, or struggle with complicated e-commerce platforms. Creatorly handles the tech so you can focus entirely on running your business and serving your customers.
               </p>
             </div>
 

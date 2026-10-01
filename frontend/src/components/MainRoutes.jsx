@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // Pages aur Components ke Imports
 import Home from "../pages/Home"; 
@@ -12,16 +12,16 @@ import Intro from "./Intro";
 import Auth from "../pages/Auth";
 
 // Seller Sections
-import SellerDashboard from "./Seller/SellerDashboard";
 import ProductsManagement from "./Seller/ProductManagement";
 import StoreSettings from "./Seller/StoreSettings";
 import EditProduct from "./Seller/EditProduct";
+import Wishlist from "../pages/Wishlist";
 
 const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <Routes>
       {/* =====================================================
-          1. UNIVERSAL CUSTOMER / VISITOR PATHS (No Navbars Here!)
+          1. UNIVERSAL CUSTOMER / VISITOR PATHS
           ===================================================== */}
       <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
       <Route path="/explore" element={<Explore />} />
@@ -34,17 +34,26 @@ const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
       {/* =====================================================
           2. PERSONAL ISOLATED SELLER STOREFRONT PATHS
           ===================================================== */}
-      {/* publicStore ke dono pages plain render honge, App.jsx automatically ispar CreatorNavbar lagayega */}
+      {/* App.jsx checks .startsWith("/publicStore") and automatically injects CreatorNavbar */}
+      <Route path="/publicStore" element={<Navigate to="/" replace />} />
       <Route path="/publicStore/:storeName" element={<PublicStore />} />
       <Route path="/publicStore/:storeName/product/:id" element={<ProductDetails />} /> 
 
       {/* =====================================================
           3. FLAT SELLER DASHBOARD CONTROL PATHS
           ===================================================== */}
-      {/* <Route path="/dashboard" element={<SellerDashboard />} /> */}
       <Route path="/products" element={<ProductsManagement />} />
       <Route path="/store/settings" element={<StoreSettings />} />
       <Route path="/products/edit/:productId" element={<EditProduct />} />
+      <Route
+  path="/publicStore/:storeName/cart"
+  element={<Cart />}
+/>
+
+<Route
+  path="/publicStore/:storeName/wishlist"
+  element={<Wishlist />}
+/>
     </Routes>
   );
 };

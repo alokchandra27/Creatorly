@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import {ArrowRight, CheckCircle2, ChevronLeft, ChevronRight, Heart, Home, MessageCircle, Package, Share2, ShoppingCart, Sparkles, Users, X} from "lucide-react";
+import { ArrowRight, CheckCircle2, ChevronLeft, ChevronRight, Heart, Home, MessageCircle, Package, Share2, ShoppingCart, Sparkles, Users, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import API from "../components/API/API";
 
+import { addToCartStorage, getCart, getWishlist, toggleWishlistStorage } from "../utils/storeStorage";
 
 // ============================================================
 // IMAGE HELPER
@@ -18,22 +19,12 @@ const getImageUrl = (image, fallback = "") => {
   return image?.url || fallback;
 };
 
-
 // ============================================================
 // PRODUCT CARD
 // ============================================================
 
-const ProductCard = ({
-  product,
-  navigate,
-  addToCart,
-}) => {
-  const images = [
-    getImageUrl(product?.productImage1),
-    getImageUrl(product?.productImage2),
-    getImageUrl(product?.productImage3),
-    getImageUrl(product?.productImage4),
-  ].filter(Boolean);
+const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishlisted }) => {
+  const images = [getImageUrl(product?.productImage1), getImageUrl(product?.productImage2), getImageUrl(product?.productImage3), getImageUrl(product?.productImage4)].filter(Boolean);
 
   const [activeImage, setActiveImage] = useState(0);
 
@@ -45,9 +36,7 @@ const ProductCard = ({
 
     if (images.length <= 1) return;
 
-    setActiveImage((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1,
-    );
+    setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
   const previousImage = (event) => {
@@ -55,9 +44,7 @@ const ProductCard = ({
 
     if (images.length <= 1) return;
 
-    setActiveImage((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1,
-    );
+    setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const handleTouchStart = (event) => {
@@ -70,9 +57,7 @@ const ProductCard = ({
   const handleTouchMove = (event) => {
     const currentX = event.touches[0].clientX;
 
-    if (
-      Math.abs(currentX - touchStartX.current) > 12
-    ) {
+    if (Math.abs(currentX - touchStartX.current) > 12) {
       isSwiping.current = true;
     }
   };
@@ -88,13 +73,9 @@ const ProductCard = ({
     }
 
     if (difference > 0) {
-      setActiveImage((prev) =>
-        prev === images.length - 1 ? 0 : prev + 1,
-      );
+      setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     } else {
-      setActiveImage((prev) =>
-        prev === 0 ? images.length - 1 : prev - 1,
-      );
+      setActiveImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     }
   };
 
@@ -107,28 +88,18 @@ const ProductCard = ({
     navigate(`/productDetails/${product._id}`);
   };
 
-  const isOutOfStock =
-    product?.stocks !== undefined &&
-    product?.stocks !== null &&
-    Number(product.stocks) <= 0;
+  const isOutOfStock = product?.stocks !== undefined && product?.stocks !== null && Number(product.stocks) <= 0;
 
   return (
     <article
       onClick={openProduct}
       className="group relative cursor-pointer overflow-hidden rounded-[18px] border border-creator-text/10 bg-white transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_18px_35px_rgba(60,50,40,0.10)]"
     >
-
       {/* ================================================== */}
       {/* PRODUCT IMAGE */}
       {/* ================================================== */}
 
-      <div
-        className="relative aspect-[0.92] overflow-hidden bg-creator-bg touch-pan-y"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-
+      <div className="relative aspect-[0.92] overflow-hidden bg-creator-bg touch-pan-y" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
         {/* IMAGE SLIDER */}
 
         <div
@@ -137,18 +108,12 @@ const ProductCard = ({
             transform: `translateX(-${activeImage * 100}%)`,
           }}
         >
-
           {images.length > 0 ? (
             images.map((image, index) => (
-              <div
-                key={`${image}-${index}`}
-                className="h-full w-full shrink-0"
-              >
+              <div key={`${image}-${index}`} className="h-full w-full shrink-0">
                 <img
                   src={image}
-                  alt={`${product?.productName || "Product"} ${
-                    index + 1
-                  }`}
+                  alt={`${product?.productName || "Product"} ${index + 1}`}
                   draggable="false"
                   className="h-full w-full select-none object-cover transition-transform duration-700 group-hover:scale-[1.035]"
                 />
@@ -156,53 +121,43 @@ const ProductCard = ({
             ))
           ) : (
             <div className="flex h-full w-full shrink-0 items-center justify-center">
-              <Package
-                size={34}
-                className="text-creator-text/30"
-              />
+              <Package size={34} className="text-creator-text/30" />
             </div>
           )}
-
         </div>
-
 
         {/* SOFT IMAGE OVERLAY */}
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-
         {/* HEART */}
 
         <button
-          onClick={(event) => event.stopPropagation()}
-          aria-label="Save product"
+          onClick={(event) => {
+            event.stopPropagation();
+            toggleWishlist(product);
+          }}
+          aria-label={isWishlisted ? "Remove from wishlist" : "Save product"}
           className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-creator-text shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:-rotate-6 active:scale-90"
         >
-          <Heart size={15} />
+          <Heart size={15} fill={isWishlisted ? "currentColor" : "none"} className={isWishlisted ? "text-creator-pink" : "text-creator-text"} />
         </button>
-
 
         {/* CUSTOMIZABLE */}
 
         {product?.customization && (
-          <span
-            className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text shadow-sm backdrop-blur"
-          >
+          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text shadow-sm backdrop-blur">
             Customizable
           </span>
         )}
 
-
         {/* IMAGE NUMBER */}
 
         {images.length > 1 && (
-          <span
-            className="absolute bottom-3 left-3 rounded-full bg-black/50 px-2.5 py-1 text-[9px] font-medium text-white backdrop-blur"
-          >
+          <span className="absolute bottom-3 left-3 rounded-full bg-black/50 px-2.5 py-1 text-[9px] font-medium text-white backdrop-blur">
             {activeImage + 1}/{images.length}
           </span>
         )}
-
 
         {/* DESKTOP ARROWS */}
 
@@ -224,13 +179,10 @@ const ProductCard = ({
           </>
         )}
 
-
         {/* DOTS */}
 
         {images.length > 1 && (
-          <div
-            className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1"
-          >
+          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
             {images.map((_, index) => (
               <button
                 key={index}
@@ -238,66 +190,32 @@ const ProductCard = ({
                   event.stopPropagation();
                   setActiveImage(index);
                 }}
-                className={`h-1.5 rounded-full transition-all duration-300 ${ activeImage === index ? "w-4 bg-white" : "w-1.5 bg-white/60" }`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${activeImage === index ? "w-4 bg-white" : "w-1.5 bg-white/60"}`}
               />
             ))}
           </div>
         )}
-
       </div>
-
 
       {/* ================================================== */}
       {/* PRODUCT INFO */}
       {/* ================================================== */}
 
       <div className="p-3.5 sm:p-4">
-
         <div className="flex items-start justify-between gap-2">
+          <span className="rounded-full bg-creator-accent/30 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text/60">{product?.category || "Handmade"}</span>
 
-          <span
-            className="rounded-full bg-creator-accent/30 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text/60"
-          >
-            {product?.category || "Handmade"}
-          </span>
-
-          {product?.size && (
-            <span className="text-[9px] text-creator-text/40">
-              {product.size}
-            </span>
-          )}
-
+          {product?.size && <span className="text-[9px] text-creator-text/40">{product.size}</span>}
         </div>
 
+        <h3 className="mt-3 truncate font-serif text-[15px] font-semibold text-creator-text sm:text-lg">{product?.productName}</h3>
 
-        <h3
-          className="mt-3 truncate font-serif text-[15px] font-semibold text-creator-text sm:text-lg"
-        >
-          {product?.productName}
-        </h3>
-
-
-        <p
-          className="mt-1.5 line-clamp-2 text-[10px] leading-4 text-creator-text/45 sm:text-[11px]"
-        >
-          {product?.productDescription ||
-            "Handmade with care and love."}
-        </p>
-
+        <p className="mt-1.5 line-clamp-2 text-[10px] leading-4 text-creator-text/45 sm:text-[11px]">{product?.productDescription || "Handmade with care and love."}</p>
 
         {/* PRICE */}
 
         <div className="mt-4 flex items-center justify-between">
-
-          <strong
-            className="font-serif text-base text-creator-text sm:text-lg"
-          >
-            ₹
-            {Number(
-              product?.productPrice || 0,
-            ).toLocaleString("en-IN")}
-          </strong>
-
+          <strong className="font-serif text-base text-creator-text sm:text-lg">₹{Number(product?.productPrice || 0).toLocaleString("en-IN")}</strong>
 
           <button
             disabled={isOutOfStock}
@@ -305,71 +223,54 @@ const ProductCard = ({
               event.stopPropagation();
 
               if (!isOutOfStock) {
-                addToCart();
+                addToCart(product);
               }
             }}
-            className={`flex h-9 w-9 items-center justify-center rounded-full text-white transition-all duration-300 ${ isOutOfStock ? "cursor-not-allowed bg-neutral-300" : "bg-creator-text hover:scale-110 hover:rotate-6 hover:bg-creator-primary active:scale-90" }`}
+            className={`flex h-9 w-9 items-center justify-center rounded-full text-white transition-all duration-300 ${isOutOfStock ? "cursor-not-allowed bg-neutral-300" : "bg-creator-text hover:scale-110 hover:rotate-6 hover:bg-creator-primary active:scale-90"}`}
           >
             <ShoppingCart size={15} />
           </button>
-
         </div>
-
 
         {/* STOCK */}
 
-        {product?.stocks !== undefined &&
-          product?.stocks !== null && (
-            <div className="mt-3 flex items-center gap-1.5">
+        {product?.stocks !== undefined && product?.stocks !== null && (
+          <div className="mt-3 flex items-center gap-1.5">
+            {isOutOfStock ? (
+              <>
+                <X size={11} className="text-red-500" />
 
-              {isOutOfStock ? (
-                <>
-                  <X
-                    size={11}
-                    className="text-red-500"
-                  />
+                <span className="text-[9px] text-red-500">Out of stock</span>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 size={11} className="text-green-600" />
 
-                  <span className="text-[9px] text-red-500">
-                    Out of stock
-                  </span>
-                </>
-              ) : (
-                <>
-                  <CheckCircle2
-                    size={11}
-                    className="text-green-600"
-                  />
-
-                  <span className="text-[9px] text-creator-text/45">
-                    {product.stocks} available
-                  </span>
-                </>
-              )}
-
-            </div>
-          )}
-
+                <span className="text-[9px] text-creator-text/45">{product.stocks} available</span>
+              </>
+            )}
+          </div>
+        )}
       </div>
-
     </article>
   );
 };
-
 
 // ============================================================
 // MAIN COMPONENT
 // ============================================================
 
 const PublicStore = () => {
-
   const { storeName } = useParams();
+  const validStoreName = typeof storeName === "string" && storeName.trim() && storeName !== "undefined" && storeName !== "null" ? storeName.trim() : null;
+
+  console.log("Store Name from URL:", validStoreName);
   const navigate = useNavigate();
 
-  const [activeCategory, setActiveCategory] =
-    useState("All");
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  // PRESERVED FROM YOUR OLD CODE
-  const [cartCount, setCartCount] = useState(2);
+  const [cartCount, setCartCount] = useState(0);
+  const [wishlistIds, setWishlistIds] = useState([]);
 
   const [store, setStore] = useState(null);
   const [products, setProducts] = useState([]);
@@ -377,590 +278,351 @@ const PublicStore = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-
   // ==========================================================
   // CATEGORIES
   // Keep all categories because user can click and see
   // "No Resin products available"
   // ==========================================================
 
-  const categories = [
-    "All",
-    "Clay",
-    "Resin",
-    "Wood",
-    "Metal",
-    "Fabric",
-    "Crochet",
-    "3D Printing",
-    "Handmade",
-    "Other",
-  ];
-
+  const categories = ["All", "Clay", "Resin", "Wood", "Metal", "Fabric", "Crochet", "3D Printing", "Handmade", "Other"];
 
   // ==========================================================
   // FILTER
   // ==========================================================
 
-  const filteredProducts =
-    activeCategory === "All"
-      ? products
-      : products.filter(
-          (product) =>
-            product.category?.toLowerCase() ===
-            activeCategory.toLowerCase(),
-        );
-
+  const filteredProducts = activeCategory === "All" ? products : products.filter((product) => product.category?.toLowerCase() === activeCategory.toLowerCase());
 
   // ==========================================================
   // CART
   // ==========================================================
 
-  const addToCart = () => {
-    setCartCount((prev) => prev + 1);
+  // const addToCart = () => {
+  //   setCartCount((prev) => prev + 1);
+  // };
+
+  const addToCart = (product) => {
+    const cart = addToCartStorage(validStoreName, {
+      ...product,
+
+      whatsappNumber: store?.whatsappNumber || "",
+
+      instagramUsername: store?.instagramUsername || "",
+
+      instagramLink: store?.instagramLink || "",
+    });
+
+    setCartCount(cart.reduce((total, item) => total + Number(item.quantity || 0), 0));
+    window.dispatchEvent(new Event("creatorly-shopping-updated"));
   };
 
-
+  const toggleWishlist = (product) => {
+    const wishlist = toggleWishlistStorage(validStoreName, product);
+    setWishlistIds(wishlist.map((item) => item.productId || item._id));
+    window.dispatchEvent(new Event("creatorly-shopping-updated"));
+  };
   // ==========================================================
   // FETCH STORE
   // ==========================================================
 
   const fetchStoreData = async () => {
+    console.log("Fetching store data for:", validStoreName);
 
-    if (!storeName) return;
+    if (!validStoreName) {
+      setLoading(false);
+      setError("This store link is invalid.");
+      return;
+    }
 
     try {
-
       setLoading(true);
       setError("");
 
       // SAME API AS YOUR OLD CODE
-      const response = await API.get(
-        `/api/shop/${storeName}`,
-      );
+      const response = await API.get(`/api/shop/${encodeURIComponent(validStoreName)}`);
 
-      console.log(
-        "Fetched store data:",
-        response.data,
-      );
+      console.log("Fetched store data:", response.data);
 
       setStore(response.data.store);
       setProducts(response.data.products || []);
-
     } catch (error) {
+      console.error("Error fetching store data:", error);
 
-      console.error(
-        "Error fetching store data:",
-        error,
-      );
-
-      setError(
-        error?.response?.data?.message ||
-          "This store could not be loaded.",
-      );
-
+      setError(error?.response?.data?.message || "This store could not be loaded.");
     } finally {
-
       setLoading(false);
-
     }
   };
 
-
   useEffect(() => {
     fetchStoreData();
-  }, [storeName]);
+  }, [validStoreName]);
 
+  useEffect(() => {
+    if (!validStoreName) return;
 
+    const syncShopping = () => {
+      const cart = getCart(validStoreName);
+      const wishlist = getWishlist(validStoreName);
+
+      setCartCount(cart.reduce((total, item) => total + Number(item.quantity || 0), 0));
+      setWishlistIds(wishlist.map((item) => item.productId || item._id));
+    };
+
+    syncShopping();
+
+    window.addEventListener("creatorly-shopping-updated", syncShopping);
+
+    return () => {
+      window.removeEventListener("creatorly-shopping-updated", syncShopping);
+    };
+  }, [validStoreName]);
   // ==========================================================
   // SOCIAL
   // ==========================================================
 
   const openInstagram = () => {
-
     if (!store?.instagramLink) return;
 
-    window.open(
-      store.instagramLink,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    window.open(store.instagramLink, "_blank", "noopener,noreferrer");
   };
-
 
   const openWhatsApp = () => {
-
     if (!store?.whatsappNumber) return;
 
-    const number = String(
-      store.whatsappNumber,
-    ).replace(/\D/g, "");
+    const number = String(store.whatsappNumber).replace(/\D/g, "");
 
-    const message = encodeURIComponent(
-      `Hi! I found ${store?.storeName || "your store"} on Creatorly and would love to know more about your products. ✨`,
-    );
+    const message = encodeURIComponent(`Hi! I found ${store?.storeName || "your store"} on Creatorly and would love to know more about your products. ✨`);
 
-    window.open(
-      `https://wa.me/${number}?text=${message}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    window.open(`https://wa.me/${number}?text=${message}`, "_blank", "noopener,noreferrer");
   };
-
 
   // ==========================================================
   // SHARE
   // ==========================================================
 
   const shareStore = async () => {
+    const currentUrl = window.location.href;
 
-    const currentUrl =
-      window.location.href;
-
-    const storeTitle = store?.storeName
-      ? `${store.storeName} on Creatorly`
-      : "Check out this store on Creatorly";
-
+    const storeTitle = store?.storeName ? `${store.storeName} on Creatorly` : "Check out this store on Creatorly";
 
     if (navigator.share) {
-
       try {
-
         await navigator.share({
           title: storeTitle,
           text: "Explore this creator store on Creatorly ✨",
           url: currentUrl,
         });
-
       } catch (error) {
-
-        console.log(
-          "Sharing cancelled.",
-        );
-
+        console.log("Sharing cancelled.");
       }
-
     } else {
-
       try {
+        await navigator.clipboard.writeText(currentUrl);
 
-        await navigator.clipboard.writeText(
-          currentUrl,
-        );
-
-        alert(
-          "Store link copied to clipboard!",
-        );
-
+        alert("Store link copied to clipboard!");
       } catch (error) {
-
-        console.error(
-          "Failed to copy link:",
-          error,
-        );
-
+        console.error("Failed to copy link:", error);
       }
-
     }
   };
-
 
   // ==========================================================
   // LOADING
   // ==========================================================
 
   if (loading) {
-
     return (
-      <div
-        className="min-h-screen bg-creator-bg-butter px-4 py-8"
-      >
-
+      <div className="min-h-screen bg-creator-bg-butter px-4 py-8">
         <div className="mx-auto max-w-6xl animate-pulse">
-
           <div className="h-[390px] rounded-[28px] bg-white/60" />
 
           <div className="mt-8 flex gap-5">
-
             <div className="h-28 w-28 rounded-full bg-white/60" />
 
             <div className="flex-1 pt-3">
-
               <div className="h-7 w-48 rounded bg-white/60" />
 
               <div className="mt-4 h-4 max-w-md rounded bg-white/60" />
 
               <div className="mt-3 h-4 max-w-sm rounded bg-white/60" />
-
             </div>
-
           </div>
 
           <div className="mt-12 h-8 w-60 rounded bg-white/60" />
 
           <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-
             {[1, 2, 3, 4].map((item) => (
-
-              <div
-                key={item}
-                className="overflow-hidden rounded-2xl bg-white/60"
-              >
+              <div key={item} className="overflow-hidden rounded-2xl bg-white/60">
                 <div className="aspect-square bg-white/50" />
 
                 <div className="p-4">
-
                   <div className="h-4 rounded bg-white/50" />
 
                   <div className="mt-3 h-4 w-2/3 rounded bg-white/50" />
-
                 </div>
               </div>
-
             ))}
-
           </div>
-
         </div>
-
       </div>
     );
   }
-
 
   // ==========================================================
   // ERROR
   // ==========================================================
 
   if (error) {
-
     return (
-      <div
-        className="flex min-h-screen items-center justify-center bg-creator-bg-butter px-5"
-      >
-
-        <div
-          className="w-full max-w-md rounded-[28px] bg-white p-8 text-center shadow-sm"
-        >
-
-          <div
-            className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500"
-          >
+      <div className="flex min-h-screen items-center justify-center bg-creator-bg-butter px-5">
+        <div className="w-full max-w-md rounded-[28px] bg-white p-8 text-center shadow-sm">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-500">
             <X size={24} />
           </div>
 
-          <h1
-            className="mt-5 font-serif text-2xl font-semibold"
-          >
-            Store unavailable
-          </h1>
+          <h1 className="mt-5 font-serif text-2xl font-semibold">Store unavailable</h1>
 
-          <p
-            className="mt-3 text-sm leading-6 text-creator-text/55"
-          >
-            {error}
-          </p>
+          <p className="mt-3 text-sm leading-6 text-creator-text/55">{error}</p>
 
-          <button
-            onClick={() => navigate("/")}
-            className="mt-7 rounded-full bg-creator-text px-6 py-3 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg"
-          >
+          <button onClick={() => navigate("/")} className="mt-7 rounded-full bg-creator-text px-6 py-3 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:shadow-lg">
             Back to Creatorly
           </button>
-
         </div>
-
       </div>
     );
   }
-
 
   // ==========================================================
   // MAIN
   // ==========================================================
 
   return (
-    <div
-      className="min-h-screen overflow-x-hidden bg-creator-bg-butter text-creator-text mt-10"
-    >
-
+    <div className="min-h-screen overflow-x-hidden bg-creator-bg-butter text-creator-text mt-10">
       {/* ===================================================== */}
       {/* MAIN */}
       {/* ===================================================== */}
 
-      <main
-        className="mx-auto w-[calc(100%-24px)] max-w-6xl px-1 pb-20 sm:w-[calc(100%-48px)] lg:px-0"
-      >
-
-
+      <main className="mx-auto w-[calc(100%-24px)] max-w-6xl px-1 pb-20 sm:w-[calc(100%-48px)] lg:px-0">
         {/* ================================================= */}
         {/* HERO */}
         {/* ================================================= */}
 
-        <section
-          className="relative grid overflow-hidden rounded-[28px] bg-creator-bg shadow-[0_18px_55px_rgba(82,60,42,0.08)] lg:grid-cols-[0.86fr_1.14fr]"
-        >
-
+        <section className="relative grid overflow-hidden rounded-[28px] bg-creator-bg shadow-[0_18px_55px_rgba(82,60,42,0.08)] lg:grid-cols-[0.86fr_1.14fr]">
           {/* DECORATIVE BRUSH */}
 
-          <div
-            className="pointer-events-none absolute -left-7 top-16 h-10 w-28 rotate-[-12deg] rounded-full bg-creator-pink/20 blur-[1px]"
-          />
-
+          <div className="pointer-events-none absolute -left-7 top-16 h-10 w-28 rotate-[-12deg] rounded-full bg-creator-pink/20 blur-[1px]" />
 
           {/* HERO TEXT */}
 
-          <div
-            className="relative z-10 flex min-h-[350px] flex-col justify-center gap-2 px-7 py-10 sm:px-12 lg:min-h-[440px] lg:px-14"
-          >
-
+          <div className="relative z-10 flex min-h-[350px] flex-col justify-center gap-2 px-7 py-10 sm:px-12 lg:min-h-[440px] lg:px-14">
             {/* handwritten mini label */}
 
             <div className="mb-4 flex items-center gap-2">
+              <Sparkles size={14} className="text-creator-pink" />
 
-              <Sparkles
-                size={14}
-                className="text-creator-pink"
-              />
-
-              <span
-                className="font-caveat text-lg text-creator-text/70"
-              >
-                a little handmade world
-              </span>
-
+              <span className="font-caveat text-lg text-creator-text/70">a little handmade world</span>
             </div>
 
-
-            <h1
-              className="max-w-md font-caveat text-5xl font-normal leading-[0.9] text-creator-text sm:text-7xl"
-            >
+            <h1 className="max-w-md font-caveat text-5xl font-normal leading-[0.9] text-creator-text sm:text-7xl">
               Made by hand,
-
-              <span className="block text-creator-pink">
-                made for you.
-              </span>
+              <span className="block text-creator-pink">made for you.</span>
             </h1>
 
-
-            <p
-              className="mt-5 max-w-sm text-sm leading-6 text-creator-text/60 sm:text-base"
-            >
-              Discover thoughtful pieces from{" "}
-              <span
-                className="font-semibold underline decoration-creator-pink decoration-2 underline-offset-4"
-              >
-                {store?.storeName ||
-                  "a small creator"}
-              </span>
-              , made slowly and shared with love.
+            <p className="mt-5 max-w-sm text-sm leading-6 text-creator-text/60 sm:text-base">
+              Discover thoughtful pieces from <span className="font-semibold underline decoration-creator-pink decoration-2 underline-offset-4">{store?.storeName || "a small creator"}</span>, made
+              slowly and shared with love.
             </p>
-
 
             <a
               href="#collection"
               className="group mt-7 flex w-fit items-center gap-2 rounded-full bg-creator-pink px-5 py-3 text-xs font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg active:scale-95"
             >
               Explore the collection
-
-              <ArrowRight
-                size={15}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
+              <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
             </a>
-
-
-            {/* little handwritten detail */}
-
-            <span
-              className="absolute bottom-7 right-8 hidden rotate-[-5deg] font-caveat text-lg text-creator-text/60 sm:block"
-            >
-              made with love ♡
-            </span>
-
           </div>
-
 
           {/* HERO IMAGE */}
 
-          <div
-            className="relative min-h-[270px] overflow-hidden lg:min-h-[440px]"
-          >
+          <div className="relative min-h-[270px] overflow-hidden lg:min-h-[440px]">
+            <img src={getImageUrl(store?.bannerImage, "/src/assets/banner.jpg")} alt="Store banner" className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]" />
 
-            <img
-              src={getImageUrl(
-                store?.bannerImage,
-                "/src/assets/banner.jpg",
-              )}
-              alt="Store banner"
-              className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]"
-            />
-
-
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
-            />
-
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 
             {/* taped-note feeling */}
 
-            <div
-              className="absolute bottom-7 left-7 rotate-[-4deg] bg-white/90 px-4 py-2 font-caveat text-sm shadow-sm backdrop-blur transition-transform duration-300 hover:rotate-2"
-            >
+            <div className="absolute bottom-7 left-7 rotate-[-4deg] bg-white/90 px-4 py-2 font-caveat text-sm shadow-sm backdrop-blur transition-transform duration-300 hover:rotate-2">
               handmade
               <br />
               with love ♡
             </div>
 
-
-            <span
-              className="absolute bottom-5 right-5 rotate-[2deg] rounded-full bg-white/90 px-3 py-2 font-caveat text-sm font-semibold text-creator-text shadow-sm transition-all duration-300 hover:-rotate-3 hover:scale-105"
-            >
+            <span className="absolute bottom-5 right-5 rotate-[2deg] rounded-full bg-white/90 px-3 py-2 font-caveat text-sm font-semibold text-creator-text shadow-sm transition-all duration-300 hover:-rotate-3 hover:scale-105">
               small business · big heart
             </span>
-
           </div>
-
         </section>
-
 
         {/* ================================================= */}
         {/* STORE PROFILE */}
         {/* ================================================= */}
 
-        <section
-          className="relative flex flex-col gap-5 border-b border-creator-text/10 px-2 py-8 md:flex-row md:gap-7 md:py-10"
-        >
-
+        <section className="relative flex flex-col gap-5 border-b border-creator-text/10 px-2 py-8 md:flex-row md:gap-7 md:py-10">
           {/* small decorative heart */}
 
-          <span
-            className="absolute right-2 top-4 rotate-12 font-caveat text-xl text-creator-pink md:right-5"
-          >
-            ♡
-          </span>
-
+          <span className="absolute right-2 top-4 rotate-12 font-caveat text-xl text-creator-pink md:right-5">♡</span>
 
           {/* LOGO */}
 
-          <div
-            className="mx-auto h-[115px] w-[115px] shrink-0 rotate-[-2deg] overflow-hidden rounded-full border-[6px] border-white bg-creator-accent shadow-sm transition-all duration-500 hover:rotate-3 hover:scale-105 sm:h-[135px] sm:w-[135px] md:mx-0 md:h-[145px] md:w-[145px]"
-          >
-
+          <div className="mx-auto h-[115px] w-[115px] shrink-0 rotate-[-2deg] overflow-hidden rounded-full border-[6px] border-white bg-creator-accent shadow-sm transition-all duration-500 hover:rotate-3 hover:scale-105 sm:h-[135px] sm:w-[135px] md:mx-0 md:h-[145px] md:w-[145px]">
             <img
-              src={getImageUrl(
-                store?.storeLogo,
-                "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=300",
-              )}
+              src={getImageUrl(store?.storeLogo, "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=300")}
               alt={store?.storeName || "Store"}
               className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.12]"
             />
-
           </div>
-
 
           {/* PROFILE CONTENT */}
 
-          <div
-            className="flex flex-1 flex-col justify-between gap-5 md:flex-row"
-          >
-
+          <div className="flex flex-1 flex-col justify-between gap-5 md:flex-row">
             <div className="text-center md:text-left">
+              <h2 className="flex items-center justify-center gap-1.5 font-serif text-3xl font-semibold text-creator-text md:justify-start">{store?.storeName || "Your handmade store"}</h2>
 
-              <h2
-                className="flex items-center justify-center gap-1.5 font-serif text-3xl font-semibold text-creator-text md:justify-start"
-              >
-                {store?.storeName ||
-                  "Your handmade store"}
-              </h2>
+              <p className="mb-2 mt-1 font-caveat text-xl text-creator-pink">Handcrafted with love ✨</p>
 
-
-              <p
-                className="mb-2 mt-1 font-caveat text-xl text-creator-pink"
-              >
-                Handcrafted with love ✨
-              </p>
-
-
-              <p
-                className="max-w-[500px] text-sm leading-6 text-creator-text/60"
-              >
-                {store?.bio ||
-                  "Thoughtful handmade pieces for everyday joy."}
-              </p>
-
+              <p className="max-w-[500px] text-sm leading-6 text-creator-text/60">{store?.bio || "Thoughtful handmade pieces for everyday joy."}</p>
 
               {/* SOCIAL PNGS — PRESERVED */}
 
-              <div
-                className="mt-3 flex items-center justify-center gap-4 rounded-full bg-creator-bg/50 py-2 md:justify-start"
-              >
-
+              <div className="mt-3 flex items-center justify-center gap-4 rounded-full bg-creator-bg/50 py-2 md:justify-start">
                 {/* INSTAGRAM */}
 
-                <div
-                  onClick={openInstagram}
-                  className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:-rotate-2"
-                >
+                <div onClick={openInstagram} className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:-rotate-2">
+                  <img src="/src/assets/instagram.png" alt="Instagram" className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6" />
 
-                  <img
-                    src="/src/assets/instagram.png"
-                    alt="Instagram"
-                    className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6"
-                  />
-
-                  <p
-                    className="font-sans text-xs font-semibold text-creator-text"
-                  >
-                    {store?.instagramUsername ||
-                      "@yourhandle"}
-                  </p>
-
+                  <p className="font-sans text-xs font-semibold text-creator-text">{store?.instagramUsername || "@yourhandle"}</p>
                 </div>
-
 
                 {/* WHATSAPP */}
 
-                <div
-                  onClick={openWhatsApp}
-                  className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:rotate-2"
-                >
+                <div onClick={openWhatsApp} className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:rotate-2">
+                  <img src="/src/assets/whatsapp.png" alt="WhatsApp" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
 
-                  <img
-                    src="/src/assets/whatsapp.png"
-                    alt="WhatsApp"
-                    className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6"
-                  />
-
-                  <p
-                    className="font-sans text-xs font-semibold text-creator-text"
-                  >
-                    {store?.whatsappNumber ||
-                      "not available"}
-                  </p>
-
+                  <p className="font-sans text-xs font-semibold text-creator-text">{store?.whatsappNumber || "not available"}</p>
                 </div>
-
               </div>
-
             </div>
-
 
             {/* RIGHT */}
 
-            <div
-              className="flex flex-col items-center md:items-end"
-            >
-
+            <div className="flex flex-col items-center md:items-end">
               <div className="flex gap-2">
-
                 <button
                   onClick={openInstagram}
                   className="rounded-full bg-creator-text px-7 py-2.5 text-xs text-white transition-all duration-300 hover:-translate-y-0.5 hover:rotate-[-1deg] hover:bg-creator-primary hover:shadow-lg active:scale-95"
                 >
                   Follow My Store
                 </button>
-
 
                 <button
                   onClick={shareStore}
@@ -969,473 +631,226 @@ const PublicStore = () => {
                 >
                   <Share2 size={17} />
                 </button>
-
               </div>
-
 
               {/* ================================================= */}
               {/* YOUR ORIGINAL MORE STATS STICKER */}
               {/* ================================================= */}
 
-              <div
-                className="relative mt-3 h-32 w-32 cursor-pointer transition-all duration-500 hover:rotate-[-5deg] hover:scale-105"
-              >
+              <div className="relative mt-3 h-32 w-32 cursor-pointer transition-all duration-500 hover:rotate-[-5deg] hover:scale-105">
+                <img src="/src/assets/redcolor.png" alt="" className="h-32 w-32 object-contain transition-transform duration-500 hover:rotate-3" />
 
-                <img
-                  src="/src/assets/redcolor.png"
-                  alt=""
-                  className="h-32 w-32 object-contain transition-transform duration-500 hover:rotate-3"
-                />
-
-                <p
-                  className="absolute inset-0 flex items-center justify-center px-5 text-center font-caveat text-sm font-semibold leading-4 text-creator-text"
-                >
+                <p className="absolute inset-0 flex items-center justify-center px-5 text-center font-caveat text-sm font-semibold leading-4 text-creator-text">
                   More stats
                   <br />
                   coming soon!
                 </p>
-
               </div>
-
             </div>
-
           </div>
-
         </section>
-
 
         {/* ================================================= */}
         {/* COLLECTION HEADER */}
         {/* ================================================= */}
 
-        <section
-          id="collection"
-          className="relative scroll-mt-10 pt-12"
-        >
-
+        <section id="collection" className="relative scroll-mt-10 pt-12">
           {/* handwritten decoration */}
 
-          <div
-            className="absolute -right-1 top-10 hidden rotate-[-8deg] font-caveat text-lg text-creator-text/60 sm:block"
-          >
+          <div className="absolute -right-1 top-10 hidden rotate-[-8deg] font-caveat text-lg text-creator-text/60 sm:block">
             little things.
             <br />
             big joy ♡
           </div>
 
+          <p className="font-caveat text-lg text-creator-pink">the little collection</p>
 
-          <p
-            className="font-caveat text-lg text-creator-pink"
-          >
-            the little collection
-          </p>
-
-
-          <h2
-            className="mt-1 font-serif text-3xl font-semibold text-creator-text sm:text-4xl"
-          >
+          <h2 className="mt-1 font-serif text-3xl font-semibold text-creator-text sm:text-4xl">
             Made with intention
-            <span className="text-creator-pink">
-              .
-            </span>
+            <span className="text-creator-pink">.</span>
           </h2>
 
-
-          <p
-            className="mt-2 max-w-xl text-sm leading-6 text-creator-text/50"
-          >
-            A few things made by hand, one piece at
-            a time.
-          </p>
-
+          <p className="mt-2 max-w-xl text-sm leading-6 text-creator-text/50">A few things made by hand, one piece at a time.</p>
 
           {/* CATEGORY */}
 
-          <div
-            className="scrollbar-hide flex gap-2 overflow-x-auto py-6"
-          >
-
+          <div className="scrollbar-hide flex gap-2 overflow-x-auto py-6">
             {categories.map((category) => (
-
               <button
                 key={category}
-                onClick={() =>
-                  setActiveCategory(category)
-                }
-                className={`shrink-0 rounded-full px-5 py-2.5 text-[11px] transition-all duration-300 hover:-translate-y-0.5 ${ activeCategory === category ? "bg-creator-pink text-white shadow-sm" : "bg-white/75 text-creator-text/60 hover:bg-white hover:shadow-sm" }`}
+                onClick={() => setActiveCategory(category)}
+                className={`shrink-0 rounded-full px-5 py-2.5 text-[11px] transition-all duration-300 hover:-translate-y-0.5 ${activeCategory === category ? "bg-creator-pink text-white shadow-sm" : "bg-white/75 text-creator-text/60 hover:bg-white hover:shadow-sm"}`}
               >
                 {category}
               </button>
-
             ))}
-
           </div>
-
         </section>
-
 
         {/* ================================================= */}
         {/* EMPTY CATEGORY */}
         {/* ================================================= */}
 
-        {products.length > 0 &&
-          filteredProducts.length === 0 && (
+        {products.length > 0 && filteredProducts.length === 0 && (
+          <section className="relative mb-14 overflow-hidden rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center">
+            {/* decoration */}
 
-            <section
-              className="relative mb-14 overflow-hidden rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center"
+            <span className="absolute left-6 top-5 rotate-[-10deg] font-caveat text-xl text-creator-pink/60">♡</span>
+
+            <span className="absolute right-7 bottom-6 rotate-6 font-caveat text-lg text-creator-text/40">maybe soon...</span>
+
+            <div className="mx-auto flex h-16 w-16 rotate-[-4deg] items-center justify-center rounded-full bg-creator-accent/50 transition-transform duration-500 hover:rotate-6">
+              <Package size={25} />
+            </div>
+
+            <h3 className="mt-5 font-serif text-2xl font-semibold">No {activeCategory} products</h3>
+
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-creator-text/50">There are currently no {activeCategory.toLowerCase()} products available in this store.</p>
+
+            <button
+              onClick={() => setActiveCategory("All")}
+              className="mt-6 rounded-full bg-creator-text px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg"
             >
-
-              {/* decoration */}
-
-              <span
-                className="absolute left-6 top-5 rotate-[-10deg] font-caveat text-xl text-creator-pink/60"
-              >
-                ♡
-              </span>
-
-              <span
-                className="absolute right-7 bottom-6 rotate-6 font-caveat text-lg text-creator-text/40"
-              >
-                maybe soon...
-              </span>
-
-
-              <div
-                className="mx-auto flex h-16 w-16 rotate-[-4deg] items-center justify-center rounded-full bg-creator-accent/50 transition-transform duration-500 hover:rotate-6"
-              >
-                <Package size={25} />
-              </div>
-
-
-              <h3
-                className="mt-5 font-serif text-2xl font-semibold"
-              >
-                No {activeCategory} products
-              </h3>
-
-
-              <p
-                className="mx-auto mt-3 max-w-md text-sm leading-6 text-creator-text/50"
-              >
-                There are currently no{" "}
-                {activeCategory.toLowerCase()} products
-                available in this store.
-              </p>
-
-
-              <button
-                onClick={() =>
-                  setActiveCategory("All")
-                }
-                className="mt-6 rounded-full bg-creator-text px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg"
-              >
-                View all products
-              </button>
-
-            </section>
-          )}
-
+              View all products
+            </button>
+          </section>
+        )}
 
         {/* ================================================= */}
         {/* NO PRODUCTS */}
         {/* ================================================= */}
 
         {products.length === 0 && (
-
-          <section
-            className="mb-14 rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center"
-          >
-
-            <div
-              className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-creator-accent/40"
-            >
+          <section className="mb-14 rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-creator-accent/40">
               <Package size={25} />
             </div>
 
-            <h3
-              className="mt-5 font-serif text-2xl font-semibold"
-            >
-              Products are coming soon.
-            </h3>
+            <h3 className="mt-5 font-serif text-2xl font-semibold">Products are coming soon.</h3>
 
-            <p
-              className="mx-auto mt-3 max-w-md text-sm leading-6 text-creator-text/50"
-            >
-              This creator is still preparing the
-              collection. Check back soon.
-            </p>
-
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-creator-text/50">This creator is still preparing the collection. Check back soon.</p>
           </section>
         )}
-
 
         {/* ================================================= */}
         {/* PRODUCTS */}
         {/* ================================================= */}
 
         {filteredProducts.length > 0 && (
-
-          <section className="relative pb-16 pt-1">
-
+          <section id="products-grid-section" className="relative scroll-mt-24 pb-16 pt-1">
             {/* small decorative line */}
 
-            <div
-              className="pointer-events-none absolute -left-5 top-0 hidden rotate-[-8deg] font-caveat text-sm text-creator-text/40 lg:block"
-            >
-              made slowly ♡
+            <div className="pointer-events-none absolute -left-5 top-0 hidden rotate-[-8deg] font-caveat text-sm text-creator-text/40 lg:block">made slowly ♡</div>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-5">
+              {filteredProducts.map((product, index) => (
+                <ProductCard key={product._id} product={product} navigate={navigate} addToCart={addToCart} toggleWishlist={toggleWishlist} isWishlisted={wishlistIds.includes(product._id)} />
+              ))}
             </div>
-
-
-            <div
-              className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-5"
-            >
-
-              {filteredProducts.map(
-                (product, index) => (
-                  <ProductCard
-                    key={product._id}
-                    product={product}
-                    navigate={navigate}
-                    addToCart={addToCart}
-                  />
-                ),
-              )}
-
-            </div>
-
           </section>
         )}
-
 
         {/* ================================================= */}
         {/* CREATOR STORY */}
         {/* ================================================= */}
 
-        <section
-          id="about"
-          className="relative mb-16 overflow-hidden rounded-[26px] border border-creator-text/10 bg-white/70 p-3 md:grid md:grid-cols-[1fr_1.2fr] md:gap-7"
-        >
-
+        <section id="about-store-section" className="relative mb-16 overflow-hidden rounded-[26px] border border-creator-text/10 bg-white/70 p-3 md:grid md:grid-cols-[1fr_1.2fr] md:gap-7">
           {/* decorative */}
 
-          <span
-            className="absolute right-5 top-3 z-20 rotate-12 font-caveat text-xl text-creator-pink"
-          >
-            made with ♡
-          </span>
-
+          <span className="absolute right-5 top-3 z-20 rotate-12 font-caveat text-xl text-creator-pink">made with ♡</span>
 
           {/* IMAGE */}
 
-          <div
-            className="relative min-h-[240px] overflow-hidden rounded-[18px]"
-          >
-
+          <div className="relative min-h-[240px] overflow-hidden rounded-[18px]">
             <img
-              src={getImageUrl(
-                store?.profileImage,
-                getImageUrl(
-                  store?.storeLogo,
-                  getImageUrl(
-                    store?.bannerImage,
-                    "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=1000",
-                  ),
-                ),
-              )}
+              src={getImageUrl(store?.profileImage, getImageUrl(store?.storeLogo, getImageUrl(store?.bannerImage, "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=1000")))}
               alt="About store"
               className="h-full min-h-[240px] w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
             />
 
-
-            <div
-              className="absolute bottom-5 left-5 rotate-[-5deg] rounded-sm bg-white/90 px-4 py-2 font-caveat text-xl leading-5 text-creator-text shadow-sm transition-transform duration-300 hover:rotate-[-1deg]"
-            >
+            <div className="absolute bottom-5 left-5 rotate-[-5deg] rounded-sm bg-white/90 px-4 py-2 font-caveat text-xl leading-5 text-creator-text shadow-sm transition-transform duration-300 hover:rotate-[-1deg]">
               Crafting
               <br />
               Dreams
               <br />
               into Reality
             </div>
-
           </div>
-
 
           {/* STORY */}
 
           <div className="px-2 py-6 md:py-5">
+            <p className="font-caveat text-lg text-creator-pink">the story behind the work</p>
 
-            <p
-              className="font-caveat text-lg text-creator-pink"
-            >
-              the story behind the work
+            <h2 className="mt-1 font-serif text-2xl font-semibold text-creator-text sm:text-3xl">About {store?.storeName || "this creator"}</h2>
+
+            <p className="mt-3 max-w-[500px] text-sm leading-6 text-creator-text/55">
+              {store?.bio || "A small handmade business passionate about creating unique and meaningful products. Every piece is made with love, patience and care."}
             </p>
-
-
-            <h2
-              className="mt-1 font-serif text-2xl font-semibold text-creator-text sm:text-3xl"
-            >
-              About{" "}
-              {store?.storeName ||
-                "this creator"}
-            </h2>
-
-
-            <p
-              className="mt-3 max-w-[500px] text-sm leading-6 text-creator-text/55"
-            >
-              {store?.bio ||
-                "A small handmade business passionate about creating unique and meaningful products. Every piece is made with love, patience and care."}
-            </p>
-
 
             {/* FEATURES */}
 
-            <div
-              className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-4"
-            >
+            <div className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-4">
+              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
+                <Heart size={19} className="text-creator-pink" />
 
-              <div
-                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
-              >
-
-                <Heart size={19} />
-
-                <span
-                  className="text-[9px] text-creator-text/70"
-                >
+                <span className="text-[9px] text-creator-text/70">
                   Handmade
-
-                  <small
-                    className="block text-creator-text/40"
-                  >
-                    with Love
-                  </small>
+                  <small className="block text-creator-text/40">with Love</small>
                 </span>
-
               </div>
 
-
-              <div
-                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
-              >
-
+              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
                 <Package size={19} />
 
-                <span
-                  className="text-[9px] text-creator-text/70"
-                >
+                <span className="text-[9px] text-creator-text/70">
                   Small
-
-                  <small
-                    className="block text-creator-text/40"
-                  >
-                    batches
-                  </small>
+                  <small className="block text-creator-text/40">batches</small>
                 </span>
-
               </div>
 
-
-              <div
-                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
-              >
-
+              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
                 <Sparkles size={19} />
 
-                <span
-                  className="text-[9px] text-creator-text/70"
-                >
+                <span className="text-[9px] text-creator-text/70">
                   Unique
-
-                  <small
-                    className="block text-creator-text/40"
-                  >
-                    creations
-                  </small>
+                  <small className="block text-creator-text/40">creations</small>
                 </span>
-
               </div>
 
-
-              <div
-                className="flex items-center gap-2 transition-transform hover:-translate-y-1"
-              >
-
+              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
                 <MessageCircle size={19} />
 
-                <span
-                  className="text-[9px] text-creator-text/70"
-                >
+                <span className="text-[9px] text-creator-text/70">
                   Direct
-
-                  <small
-                    className="block text-creator-text/40"
-                  >
-                    creator contact
-                  </small>
+                  <small className="block text-creator-text/40">creator contact</small>
                 </span>
-
               </div>
-
             </div>
-
           </div>
-
         </section>
-
 
         {/* ================================================= */}
         {/* CONTACT / ORDER CTA */}
         {/* ================================================= */}
 
-        {(store?.whatsappNumber ||
-          store?.instagramLink) && (
-
-          <section
-            className="relative mb-16 overflow-hidden rounded-[28px] bg-creator-accent px-7 py-10 sm:px-12"
-          >
-
+        {(store?.whatsappNumber || store?.instagramLink) && (
+          <section className="relative mb-16 overflow-hidden rounded-[28px] bg-creator-accent px-7 py-10 sm:px-12">
             {/* decorative */}
 
-            <div
-              className="absolute -right-8 -top-8 h-32 w-32 rotate-12 rounded-full border-[18px] border-white/30"
-            />
+            <div className="absolute -right-8 -top-8 h-32 w-32 rotate-12 rounded-full border-[18px] border-white/30" />
 
-
-            <div
-              className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
-            >
-
+            <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
+                <p className="font-caveat text-xl text-creator-pink">found something you love?</p>
 
-                <p
-                  className="font-caveat text-xl text-creator-pink"
-                >
-                  found something you love?
-                </p>
+                <h2 className="mt-1 font-serif text-2xl font-semibold sm:text-3xl">Talk directly to the creator.</h2>
 
-
-                <h2
-                  className="mt-1 font-serif text-2xl font-semibold sm:text-3xl"
-                >
-                  Talk directly to the creator.
-                </h2>
-
-
-                <p
-                  className="mt-2 max-w-lg text-sm leading-6 text-creator-text/55"
-                >
-                  Ask about availability, customization,
-                  or anything else before placing your order.
-                </p>
-
+                <p className="mt-2 max-w-lg text-sm leading-6 text-creator-text/55">Ask about availability, customization, or anything else before placing your order.</p>
               </div>
 
-
               <div className="flex shrink-0 flex-wrap gap-2">
-
                 {store?.whatsappNumber && (
-
                   <button
                     onClick={openWhatsApp}
                     className="flex items-center gap-2 rounded-full bg-creator-text px-5 py-3 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg"
@@ -1443,31 +858,34 @@ const PublicStore = () => {
                     <MessageCircle size={15} />
                     WhatsApp
                   </button>
-
                 )}
 
-
                 {store?.instagramLink && (
-
                   <button
                     onClick={openInstagram}
                     className="flex items-center gap-2 rounded-full border border-creator-text/20 bg-white/60 px-5 py-3 text-xs font-semibold text-creator-text transition-all duration-300 hover:-translate-y-1 hover:rotate-1 hover:bg-white"
                   >
                     Instagram
                   </button>
-
                 )}
-
               </div>
-
             </div>
-
           </section>
-
         )}
-
       </main>
 
+      {/* ===================================================== */}
+      {/* FLOATING WISHLIST */}
+      {/* ===================================================== */}
+
+      <button
+        aria-label="Open wishlist"
+        onClick={() => navigate(`/publicStore/${encodeURIComponent(validStoreName)}/wishlist`)}
+        className="fixed bottom-[88px] right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-white bg-white text-creator-text shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 hover:scale-110 hover:-rotate-6 hover:shadow-xl active:scale-90"
+      >
+        <Heart size={20} fill={wishlistIds.length > 0 ? "currentColor" : "none"} className={wishlistIds.length > 0 ? "text-creator-pink" : "text-creator-text"} />
+        <span className="absolute -right-1 -top-1 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-creator-pink px-1 text-[9px] font-bold text-white">{wishlistIds.length}</span>
+      </button>
 
       {/* ===================================================== */}
       {/* FLOATING CART */}
@@ -1475,34 +893,22 @@ const PublicStore = () => {
 
       <button
         aria-label="Open cart"
-        onClick={() => navigate("/cart")}
+        onClick={() => navigate(`/publicStore/${encodeURIComponent(validStoreName)}/cart`)}
         className="fixed bottom-6 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-white bg-creator-text text-white shadow-[0_8px_30px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-xl active:scale-90"
       >
-
         <ShoppingCart size={23} />
 
-        <span
-          className="absolute -right-1 -top-1 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-creator-pink px-1 text-[9px] font-bold text-white"
-        >
-          {cartCount}
-        </span>
-
+        <span className="absolute -right-1 -top-1 flex h-[19px] min-w-[19px] items-center justify-center rounded-full bg-creator-pink px-1 text-[9px] font-bold text-white">{cartCount}</span>
       </button>
-
 
       {/* ===================================================== */}
       {/* FOOTER */}
       {/* ===================================================== */}
 
-      <footer
-        className="relative overflow-hidden border-t border-creator-text/10 bg-creator-text px-7 py-10 text-white"
-      >
-
+      <footer className="relative overflow-hidden border-t border-creator-text/10 bg-creator-text px-7 py-10 text-white">
         {/* decorative handwritten */}
 
-        <span
-          className="pointer-events-none absolute right-5 top-5 rotate-[-8deg] font-caveat text-lg text-white/35"
-        >
+        <span className="pointer-events-none absolute right-5 top-5 rotate-[-8deg] font-caveat text-lg text-white/35">
           Support
           <br />
           small
@@ -1510,61 +916,31 @@ const PublicStore = () => {
           creators ♡
         </span>
 
-
-        <div
-          className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between"
-        >
-
+        <div className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
           {/* BRAND */}
 
           <div>
-
-            <h2
-              className="font-serif text-2xl"
-            >
+            <h2 className="font-serif text-2xl">
               Creatorly
-              <span className="ml-1 text-xs">
-                ✦
-              </span>
+              <span className="ml-1 text-xs">✦</span>
             </h2>
 
-
-            <p
-              className="mt-1 text-[10px] text-white/50"
-            >
-              Support creators · Shop handmade
-            </p>
-
+            <p className="mt-1 text-[10px] text-white/50">Support creators · Shop handmade</p>
           </div>
-
 
           {/* CENTER */}
 
-          <div
-            className="flex items-center gap-4"
-          >
-
-            <div
-              className="text-right font-caveat text-base leading-4 text-white/65"
-            >
+          <div className="flex items-center gap-4">
+            <div className="text-right font-caveat text-base leading-4 text-white/65">
               Small creators.
               <br />
               Big stories.
             </div>
 
+            <ArrowRight size={25} className="text-white/50" />
 
-            <ArrowRight
-              size={25}
-              className="text-white/50"
-            />
-
-            <Sparkles
-              size={20}
-              className="text-creator-pink"
-            />
-
+            <Sparkles size={20} className="text-creator-pink" />
           </div>
-
 
           {/* HOME */}
 
@@ -1576,29 +952,16 @@ const PublicStore = () => {
             <Home size={15} />
             Back to Home
           </button>
-
         </div>
-
 
         {/* COPYRIGHT */}
 
-        <div
-          className="mx-auto mt-8 flex max-w-6xl flex-col gap-2 border-t border-white/10 pt-6 text-[9px] text-white/35 sm:flex-row sm:items-center sm:justify-between"
-        >
+        <div className="mx-auto mt-8 flex max-w-6xl flex-col gap-2 border-t border-white/10 pt-6 text-[9px] text-white/35 sm:flex-row sm:items-center sm:justify-between">
+          <span>© {new Date().getFullYear()} Creatorly</span>
 
-          <span>
-            © {new Date().getFullYear()}{" "}
-            Creatorly
-          </span>
-
-          <span>
-            Made for small creators.
-          </span>
-
+          <span>Made for small creators.</span>
         </div>
-
       </footer>
-
     </div>
   );
 };
