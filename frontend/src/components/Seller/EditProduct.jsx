@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Save, ImagePlus, X, Package, Palette, Ruler, Sparkles, Loader2, ReceiptText } from "lucide-react";
 import { toast } from "react-toastify";
 import API from "../API/API";
+import processAndCompressImage from "./ProcessAndCompressImage";
 
 const EditProduct = () => {
   const { productId } = useParams();
@@ -102,7 +103,7 @@ const EditProduct = () => {
   // IMAGE HANDLER
   // =========================
 
-  const handleImageChange = (e, imageField) => {
+  const handleImageChange = async (e, imageField) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
@@ -112,14 +113,16 @@ const EditProduct = () => {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    const compressedFile = await processAndCompressImage(file);
+
+    if (compressedFile.size > 5 * 1024 * 1024) {
       toast.error("Image size should be below 5MB.");
       return;
     }
 
     setImages((prev) => ({
       ...prev,
-      [imageField]: file,
+      [imageField]: compressedFile,
     }));
   };
 
@@ -422,7 +425,7 @@ const EditProduct = () => {
                       Extra Details
                     </label>
 
-                    <input type="text" name="extraDetails" value={formData.extraDetails} onChange={handleInputChange} placeholder="e.g. The item is made of sustainable materials" className="creator-input w-full border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink font-caveat" />
+                    <input type="text" name="extraDetails" value={formData.extraDetails} onChange={handleInputChange} placeholder="e.g. Bulk order available at 10+ units + pricing" className="creator-input w-full border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink font-caveat" />
                   </div>
                 </div>
 

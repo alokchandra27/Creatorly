@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import API from "../API/API";
 import { useNavigate } from "react-router-dom";
 import { Plus, Search, SlidersHorizontal, Package, Pencil, Trash2, ArrowUpRight, Sparkles, Palette, X, ChevronDown, ImagePlus, Loader2 } from "lucide-react";
+import processAndCompressImage from "./ProcessAndCompressImage";
 
 export default function ProductsManagement() {
   const [activeTab, setActiveTab] = useState("list");
@@ -10,7 +11,7 @@ export default function ProductsManagement() {
     productName: "",
     productDescription: "",
     productPrice: "",
-    category: "clay",
+    category: "Other",
     stocks: "",
     color: "",
     size: "",
@@ -46,7 +47,7 @@ export default function ProductsManagement() {
     });
   };
 
-  const handleImageChange = (e, imageField) => {
+  const handleImageChange = async (e, imageField) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
@@ -57,7 +58,9 @@ export default function ProductsManagement() {
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    const compressedFile = await processAndCompressImage(file);
+
+    if (compressedFile.size > 5 * 1024 * 1024) {
       alert("Each image must be 5 MB or smaller.");
       e.target.value = "";
       return;
@@ -65,7 +68,7 @@ export default function ProductsManagement() {
 
     setImages((previousImages) => ({
       ...previousImages,
-      [imageField]: file,
+      [imageField]: compressedFile,
     }));
   };
 
@@ -215,7 +218,7 @@ export default function ProductsManagement() {
   const customizable = mockProducts.filter((product) => product.customization === true).length;
 
   return (
-    <div className="min-h-screen bg-creator-bg-butter text-creator-text antialiased">
+    <div className="min-h-screen bg-creator-bg text-creator-text antialiased">
       {/* =====================================================
           MAIN
       ====================================================== */}
@@ -246,7 +249,7 @@ export default function ProductsManagement() {
             {/* Add Product */}
             <button
               onClick={() => setActiveTab("add")}
-              className="group inline-flex w-fit items-center gap-2 rounded-full bg-[#1A2E26] px-5 py-3 text-xs font-semibold tracking-wide text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-neutral-800 hover:shadow-lg active:scale-95"
+              className="group inline-flex w-fit items-center gap-2 bg-creator-text px-5 py-3 text-xs font-semibold tracking-wide text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-neutral-800 hover:shadow-lg active:scale-95 cursor-pointer"
             >
               <Plus size={16} className="transition-transform duration-300 group-hover:rotate-90" />
               Add Product
@@ -419,7 +422,7 @@ function StatCard({ icon, number, label }) {
 ============================================================= */
 
 function ProductCard({ product, index, onEdit, onDelete }) {
-  const image = product?.productImage1?.url || "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=700";
+  const image = product?.productImage1?.url || "/src/assets/bluecolor.jpg";
 
   const stock = Number(product?.stocks || 0);
 
@@ -434,7 +437,7 @@ function ProductCard({ product, index, onEdit, onDelete }) {
       }}
     >
       {/* Image */}
-      <div className="relative aspect-[4/4.4] overflow-hidden rounded-[22px] bg-neutral-100 shadow-sm transition-all duration-500 group-hover:shadow-xl">
+      <div className="relative aspect-[4/4.4] overflow-hidden rounded-[10px] bg-neutral-100 shadow-sm transition-all duration-500 group-hover:shadow-xl ">
         <img src={image} alt={product.productName} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
 
         {/* Soft image overlay */}
@@ -467,24 +470,24 @@ function ProductCard({ product, index, onEdit, onDelete }) {
           className="absolute bottom-3 right-3 flex h-9 w-9 translate-y-3 items-center justify-center rounded-full bg-white text-neutral-700 opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:scale-110"
           title="View product"
         >
-          <ArrowUpRight onClick={() => onEdit(product._id)} size={15} />
+          <ArrowUpRight onClick={() => onEdit(product._id)} size={15} className="cursor-pointer" />
         </button>
       </div>
 
       {/* Content */}
-      <div className="px-1 pt-3">
+      <div className="px-1 pt-3 font-caveat">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h3 className="truncate font-serif text-base font-semibold capitalize text-neutral-800">{product.productName}</h3>
+            <h3 className="truncate font-sans text-base font-semibold capitalize text-neutral-800">{product.productName}</h3>
 
-            <p className="mt-1 line-clamp-1 text-[11px] text-neutral-400">{product.productDescription || "Handmade with care."}</p>
+            <p className="mt-1 line-clamp-1 text-[13px] text-neutral-400">{product.productDescription || "Handmade with care."}</p>
           </div>
 
           <p className="shrink-0 font-serif text-base font-semibold text-neutral-800">₹{Number(product.productPrice || 0).toLocaleString("en-IN")}</p>
         </div>
 
         {/* Details */}
-        <div className="mt-3 flex items-center gap-2 text-[10px] text-neutral-400">
+        <div className="mt-3 flex items-center gap-2 text-[12px] text-neutral-400">
           {product.color && (
             <>
               <span>{product.color}</span>
@@ -500,16 +503,21 @@ function ProductCard({ product, index, onEdit, onDelete }) {
           )}
 
           <span>{stock} stock</span>
+          
         </div>
+
+        <span className="mt-3 block text-[11px] text-neutral-400 text-red-500">
+          {product.extraDetails?.trim() || "No extra details"}
+        </span>
 
         {/* Actions */}
         <div className="mt-3 flex items-center gap-4 border-t border-neutral-200/70 pt-3">
-          <button onClick={() => onEdit(product._id)} className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-600 transition-colors hover:text-creator-pink">
+          <button onClick={() => onEdit(product._id)} className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-600 transition-colors hover:text-creator-pink cursor-pointer">
             <Pencil size={12} />
             Edit
           </button>
 
-          <button onClick={() => onDelete(product._id)} className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-400 transition-colors hover:text-red-500">
+          <button onClick={() => onDelete(product._id)} className="flex items-center gap-1.5 text-[10px] font-semibold text-neutral-400 transition-colors hover:text-red-500 active:scale-95 cursor-pointer">
             <Trash2 size={12} />
             Delete
           </button>
@@ -534,12 +542,12 @@ function EmptyProducts({ hasProducts, onAdd, onClear }) {
 
       <div className="mt-5 flex gap-2">
         {hasProducts && (
-          <button onClick={onClear} className="rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold transition hover:bg-neutral-50">
+          <button onClick={onClear} className=" border border-neutral-200 bg-white px-4 py-2.5 text-[11px] font-semibold transition hover:bg-neutral-50 cursor-pointer">
             Clear filters
           </button>
         )}
 
-        <button onClick={onAdd} className="rounded-full bg-[#1A2E26] px-5 py-2.5 text-[11px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800">
+        <button onClick={onAdd} className=" bg-creator-text px-5 py-2.5 text-[11px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800 cursor-pointer">
           Add Product
         </button>
       </div>
@@ -592,7 +600,7 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
               Create a product<span className="text-creator-pink">.</span>
             </h2>
 
-            <p className="mt-1 text-xs text-neutral-400">Give your creation a little space to shine.</p>
+            <p className="mt-1 text-xs text-neutral-400 font-caveat">Give your creation a little space to shine.</p>
           </div>
 
           <div className="hidden h-11 w-11 items-center justify-center rounded-full bg-creator-pink/10 text-creator-pink sm:flex">
@@ -605,7 +613,7 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
       <div className="grid grid-cols-1 gap-5 p-5 sm:p-8 md:grid-cols-2 font-caveat">
         {/* Name */}
         <Field label="Product Name" required className="md:col-span-2 text-creator-text">
-          <input required type="text" name="productName" value={formData.productName} onChange={handleInputChange} placeholder="Beautiful Clay Turtle" className="creator-input" />
+          <input required type="text" name="productName" value={formData.productName} onChange={handleInputChange} placeholder="Beautiful Clay Turtle" className="creator-input border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink" />
         </Field>
 
         {/* Description */}
@@ -617,7 +625,7 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
             value={formData.productDescription}
             onChange={handleInputChange}
             placeholder="Tell people what makes this creation special..."
-            className="creator-input resize-none"
+            className="creator-input resize-none border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink"
           />
         </Field>
 
@@ -626,18 +634,18 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">₹</span>
 
-            <input required type="number" name="productPrice" value={formData.productPrice} onChange={handleInputChange} placeholder="499" className="creator-input pl-8" />
+            <input required type="number" name="productPrice" value={formData.productPrice} onChange={handleInputChange} placeholder="499" className="creator-input pl-8 border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink" />
           </div>
         </Field>
 
         {/* Stock */}
         <Field label="Available Stock" required>
-          <input required type="number" name="stocks" value={formData.stocks} onChange={handleInputChange} placeholder="20" className="creator-input" />
+          <input required type="number" name="stocks" value={formData.stocks} onChange={handleInputChange} placeholder="20" className="creator-input border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink" />
         </Field>
 
         {/* Category */}
         <Field label="Category">
-          <select name="category" value={formData.category} onChange={handleInputChange} className="creator-input capitalize">
+          <select name="category" value={formData.category} onChange={handleInputChange} className="creator-input capitalize border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink">
             <option value="clay">Clay</option>
             <option value="resin">Resin</option>
             <option value="wood">Wood</option>
@@ -653,12 +661,12 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
 
         {/* Color */}
         <Field label="Color">
-          <input type="text" name="color" value={formData.color} onChange={handleInputChange} placeholder="Green / Earthy Brown" className="creator-input" />
+          <input type="text" name="color" value={formData.color} onChange={handleInputChange} placeholder="Green / Earthy Brown" className="creator-input border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink" />
         </Field>
 
         {/* Size */}
         <Field label="Size">
-          <input type="text" name="size" value={formData.size} onChange={handleInputChange} placeholder="10cm × 12cm" className="creator-input" />
+          <input type="text" name="size" value={formData.size} onChange={handleInputChange} placeholder="10cm × 12cm" className="creator-input border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink" />
         </Field>
 
         {/* Extra Details */}
@@ -668,8 +676,8 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
             name="extraDetails"
             value={formData.extraDetails}
             onChange={handleInputChange}
-            placeholder="Materials, care instructions, or anything customers should know..."
-            className="creator-input resize-none"
+            placeholder="Bulk order available at 10+ units + pricing. Materials, care instructions, or anything customers should know..."
+            className="creator-input resize-none border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink"
           />
         </Field>
 
@@ -696,9 +704,25 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
                     </span>
 
                     <span className="min-w-0">
-                      <span className="block text-xs font-semibold text-neutral-700">{index === 0 ? "Main image" : `Image ${index + 1}`}</span>
-                      <span className="mt-1 block truncate text-[10px] text-neutral-400">{file ? `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)` : "JPG, PNG, WEBP"}</span>
-                    </span>
+  {/* Label: Main image or Sub images */}
+  <span className="block text-xs font-semibold text-neutral-700">
+    {index === 0 ? "Main image" : `Image ${index + 1}`}
+  </span>
+  
+  {/* Subtext: Dynamic Size handler + Acceptable Formats */}
+  <span className="mt-1 block truncate text-[10px] text-neutral-400">
+    {file ? (
+      // 🚀 DYNAMIC SIZE: Agar file 1MB se choti hai toh KB dikhayega, badi hai toh MB dikhayega
+      file.size < 1024 * 1024 
+        ? `${file.name} (${(file.size / 1024).toFixed(0)} KB)` 
+        : `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`
+    ) : (
+      // Format text standard placeholder
+      "JPG, PNG, or WEBP"
+    )}
+  </span>
+</span>
+
 
                     <input type="file" accept="image/*" required={index === 0} onChange={(e) => handleImageChange(e, imageField)} className="sr-only" />
                   </label>
@@ -713,9 +737,9 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
             })}
           </div>
 
-          <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-[10px] leading-4 text-amber-800">
+          {/* <p className="mt-4 rounded-xl bg-amber-50 px-3 py-2 text-[10px] leading-4 text-amber-800">
             ImageKit free tier note: each image must be 5 MB or smaller. Please upload only up to 4 optimized product images to keep storage and bandwidth under control.
-          </p>
+          </p> */}
         </div>
 
         {/* Customization */}
@@ -739,7 +763,7 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-full border border-neutral-200 bg-white px-5 py-2.5 text-xs font-semibold text-neutral-600 transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-50"
+          className=" border border-neutral-200 bg-white px-5 py-2.5 text-xs font-semibold text-neutral-600 transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-50 cursor-pointer"
         >
           Cancel
         </button>
@@ -747,7 +771,7 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
         <button
           type="submit"
           disabled={isSaving}
-          className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1A2E26] px-6 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+          className="group inline-flex items-center justify-center gap-2 bg-creator-text cursor-pointer px-6 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSaving ? "Saving..." : "Save Product"}
           {isSaving ? <Loader2 size={14} className="animate-spin" /> : <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />}
