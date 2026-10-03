@@ -678,18 +678,18 @@ I found this product on your Creatorly store.
             </div>
 
             {/* Extra Details */}
-            {product.extraDetails &&
-              product.extraDetails !== "none" && (
-                <div className="mt-5 rounded-2xl bg-creator-accent/20 px-4 py-3">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-creator-text/45">
-                    A little more about it
-                  </p>
+            <div className="mt-5 rounded-2xl bg-creator-accent/20 px-4 py-3">
+              <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-creator-text/45">
+                A little more about it
+              </p>
 
-                  <p className="mt-1 text-xs leading-5 text-creator-text/65">
-                    {product.extraDetails}
-                  </p>
-                </div>
-              )}
+              <p className="mt-1 text-xs leading-5 text-creator-text/65">
+                {product.extraDetails?.trim() &&
+                product.extraDetails.trim().toLowerCase() !== "none"
+                  ? product.extraDetails
+                  : "No extra details"}
+              </p>
+            </div>
 
             {/* Quantity */}
             {!isOutOfStock && (

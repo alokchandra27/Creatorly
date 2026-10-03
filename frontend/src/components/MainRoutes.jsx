@@ -16,6 +16,7 @@ import ProductsManagement from "./Seller/ProductManagement";
 import StoreSettings from "./Seller/StoreSettings";
 import EditProduct from "./Seller/EditProduct";
 import Wishlist from "../pages/Wishlist";
+import OurStory from "../pages/OurStory";
 
 const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
@@ -30,6 +31,7 @@ const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
       <Route path="/loader" element={<VibeLoader />} />
       <Route path="/intro" element={<Intro />} />
       <Route path="/auth" element={<Auth setIsLoggedIn={setIsLoggedIn} />} />
+      <Route path="/our-story" element={<OurStory/>} />
 
       {/* =====================================================
           2. PERSONAL ISOLATED SELLER STOREFRONT PATHS

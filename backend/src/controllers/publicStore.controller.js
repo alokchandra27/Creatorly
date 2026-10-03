@@ -34,11 +34,17 @@ async function getSellerStoreByStoreName(req, res) {
         instagramUsername: storeProfile.instagramUsername || "",
         instagramLink: storeProfile.instagramLink || "",
         whatsappNumber: storeProfile.whatsappNumber || "",
+        facebookUsername: storeProfile.facebookUsername || "",
+        facebookLink: storeProfile.facebookLink || "",
+        address: storeProfile.address || "",
+        ourStory: storeProfile.ourStory || "",
       };
+
+      
     } else {
-      // 🌟 BACKUP FLOW: Agar store table khali hai, toh pehle check karo kya kisi product mein yeh storeName save hai!
+      // 🌟
       console.log(
-        "Store Table mein data nahi mila, Products table se fallback dynamic lookup ho raha hai...",
+        "Store profile is not found in storeModel, checking productModel for any product with this storeName...",
       );
 
       const sampleProduct = await productModel.findOne({

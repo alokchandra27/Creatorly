@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import API from "./API/API";
 
 export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const lastScrollY = useRef(0);
   const [cartCount, setCartCount] = useState(2);
 
   const navigate = useNavigate();
@@ -16,11 +17,15 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 20 || currentScrollY < lastScrollY.current) {
+        setIsNavbarVisible(true);
+      } else if (currentScrollY > lastScrollY.current) {
+        setIsNavbarVisible(false);
       }
+
+      lastScrollY.current = currentScrollY;
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -68,12 +73,10 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
 
   return (
     <nav
-      className={`sticky top-0 z-50 bg-creator-bg hover:bg-creator-bg-butter backdrop-blur-md transition-all duration-500 ease-in-out ${ isScrolled ? "border-b border-creator-text/10 shadow-sm" : "border-b border-transparent" }`}
+      className={`sticky top-0 z-50 bg-creator-bg hover:bg-creator-bg-butter backdrop-blur-md transition-transform duration-500 ease-in-out ${isNavbarVisible || isOpen ? "translate-y-0" : "-translate-y-full"} border-b border-transparent`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div
-          className={`flex items-center justify-between transition-all duration-500 ease-in-out ${ isScrolled ? "h-14" : "h-20" }`}
-        >
+        <div className="flex h-20 items-center justify-between">
           {/* LEFT: Dynamic Branding mapped to URL */}
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -104,7 +107,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
             >
               About Store
             </span>
-
+{/* 
             {isLoggedIn && (
               <button
                 onClick={() => navigate("/dashboard")}
@@ -112,7 +115,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
               >
                 🎛️ Dashboard
               </button>
-            )}
+            )} */}
           </div>
 
           {/* RIGHT: Context Utilities */}

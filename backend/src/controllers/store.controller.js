@@ -23,14 +23,16 @@ async function getSellerStore(req, res) {
         bio: seller.bio || "",
         profileImage: seller.profileImage || "",
         sellerId: sellerId,
-        instagramUsername: "@abcStore" || "",
-        instagramLink: "https://www.instagram.com/" || "",
+        storeName: seller.username || "",
+        instagramUsername: "" || "",
+        instagramLink:  "",
         facebookUsername: "",
         facebookLink: "",
         whatsappNumber: "",
         address: "",
         storeLogo: "",
         bannerImage: "",
+        ourStory:seller.ourStory || "",
       });
 
       console.log(
@@ -104,7 +106,7 @@ async function updateSellerStore(req, res) {
     const updatedStoreProfile = await storeModel.findOneAndUpdate(
       { sellerId },
       updatePayload,
-      { returnDocument: "after", runValidators: true },
+      { new: true, runValidators: true },
     );
 
     res.status(200).json({
@@ -113,7 +115,17 @@ async function updateSellerStore(req, res) {
     });
   } catch (error) {
     console.error("Error updating seller store profile:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    if (error.name === "ValidationError" || error.name === "CastError") {
+      return res.status(400).json({
+        message: "Invalid store data",
+        error: error.message,
+      });
+    }
+
+    return res.status(500).json({
+      message: "Store update failed",
+      error: error.message,
+    });
   }
 }
 

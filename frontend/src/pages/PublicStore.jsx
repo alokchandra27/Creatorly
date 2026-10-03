@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowRight, CheckCircle2, ChevronLeft, ChevronRight, Heart, Home, MessageCircle, Package, Share2, ShoppingCart, Sparkles, Users, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import API from "../components/API/API";
 
 import { addToCartStorage, getCart, getWishlist, toggleWishlistStorage } from "../utils/storeStorage";
+import AboutStore from "./AboutStore";
 
 // ============================================================
 // IMAGE HELPER
@@ -93,13 +95,13 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
   return (
     <article
       onClick={openProduct}
-      className="group relative cursor-pointer overflow-hidden rounded-[18px] border border-creator-text/10 bg-white transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_18px_35px_rgba(60,50,40,0.10)]"
+      className="group relative cursor-pointer overflow-hidden rounded-[5px] border border-creator-primary/15 bg-white shadow-[0_4px_16px_rgba(95,111,101,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-creator-accent/60 hover:shadow-[0_14px_28px_rgba(95,111,101,0.16)]"
     >
       {/* ================================================== */}
       {/* PRODUCT IMAGE */}
       {/* ================================================== */}
 
-      <div className="relative aspect-[0.92] overflow-hidden bg-creator-bg touch-pan-y" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+      <div className="relative aspect-square overflow-hidden bg-creator-bg-butter touch-pan-y" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
         {/* IMAGE SLIDER */}
 
         <div
@@ -115,7 +117,7 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
                   src={image}
                   alt={`${product?.productName || "Product"} ${index + 1}`}
                   draggable="false"
-                  className="h-full w-full select-none object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                  className="h-full w-full select-none object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
               </div>
             ))
@@ -138,7 +140,7 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
             toggleWishlist(product);
           }}
           aria-label={isWishlisted ? "Remove from wishlist" : "Save product"}
-          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-creator-text shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:-rotate-6 active:scale-90"
+          className="absolute right-2.5 top-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-creator-text shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:-rotate-6 active:scale-90 cursor-pointer"
         >
           <Heart size={15} fill={isWishlisted ? "currentColor" : "none"} className={isWishlisted ? "text-creator-pink" : "text-creator-text"} />
         </button>
@@ -146,7 +148,7 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
         {/* CUSTOMIZABLE */}
 
         {product?.customization && (
-          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text shadow-sm backdrop-blur">
+          <span className="absolute left-2.5 top-2.5 rounded-full bg-creator-accent/85 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text shadow-sm backdrop-blur">
             Customizable
           </span>
         )}
@@ -201,20 +203,20 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
       {/* PRODUCT INFO */}
       {/* ================================================== */}
 
-      <div className="p-3.5 sm:p-4">
+      <div className="px-3  sm:p-3.5">
         <div className="flex items-start justify-between gap-2">
-          <span className="rounded-full bg-creator-accent/30 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-text/60">{product?.category || "Handmade"}</span>
+          <span className="truncate rounded-full bg-creator-bg px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.08em] text-creator-primary">{product?.category || "Handmade"}</span>
 
-          {product?.size && <span className="text-[9px] text-creator-text/40">{product.size}</span>}
+          {product?.size && <span className="text-[10px] text-creator-text/40">{product.size}</span>}
         </div>
 
-        <h3 className="mt-3 truncate font-serif text-[15px] font-semibold text-creator-text sm:text-lg">{product?.productName}</h3>
+        <h3 className="mt-0.5 truncate font-caveat text-[10px] font-semibold text-creator-text sm:text-sm uppercase">{product?.productName}</h3>
 
-        <p className="mt-1.5 line-clamp-2 text-[10px] leading-4 text-creator-text/45 sm:text-[11px]">{product?.productDescription || "Handmade with care and love."}</p>
+        <p className="mt-0.5 line-clamp-2 min-h-8 text-[10px] leading-4 text-creator-text/50">{product?.productDescription || "Handmade with care and love."}</p>
 
         {/* PRICE */}
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="-mt-3">
           <strong className="font-serif text-base text-creator-text sm:text-lg">₹{Number(product?.productPrice || 0).toLocaleString("en-IN")}</strong>
 
           <button
@@ -226,16 +228,17 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
                 addToCart(product);
               }
             }}
-            className={`flex h-9 w-9 items-center justify-center rounded-full text-white transition-all duration-300 ${isOutOfStock ? "cursor-not-allowed bg-neutral-300" : "bg-creator-text hover:scale-110 hover:rotate-6 hover:bg-creator-primary active:scale-90"}`}
+            className={`flex h-9 cursor-pointer w-full items-center justify-center gap-1.5 rounded-lg text-[10px] font-semibold text-white transition-all duration-300 ${isOutOfStock ? "cursor-not-allowed bg-neutral-300" : "bg-creator-primary hover:bg-creator-text active:scale-[0.98]"}`}
           >
             <ShoppingCart size={15} />
+            {isOutOfStock ? "Out of stock" : "Add to cart"}
           </button>
         </div>
 
         {/* STOCK */}
 
         {product?.stocks !== undefined && product?.stocks !== null && (
-          <div className="mt-3 flex items-center gap-1.5">
+          <div className="mt-2 flex items-center gap-1.5">
             {isOutOfStock ? (
               <>
                 <X size={11} className="text-red-500" />
@@ -313,12 +316,19 @@ const PublicStore = () => {
 
     setCartCount(cart.reduce((total, item) => total + Number(item.quantity || 0), 0));
     window.dispatchEvent(new Event("creatorly-shopping-updated"));
+    toast.success(`${product?.productName || "Product"} added to cart`, {
+      autoClose: 1800,
+    });
   };
 
   const toggleWishlist = (product) => {
+    const wasWishlisted = wishlistIds.includes(product._id);
     const wishlist = toggleWishlistStorage(validStoreName, product);
     setWishlistIds(wishlist.map((item) => item.productId || item._id));
     window.dispatchEvent(new Event("creatorly-shopping-updated"));
+    toast.success(wasWishlisted ? "Removed from wishlist" : "Added to wishlist", {
+      autoClose: 1800,
+    });
   };
   // ==========================================================
   // FETCH STORE
@@ -384,6 +394,12 @@ const PublicStore = () => {
     if (!store?.instagramLink) return;
 
     window.open(store.instagramLink, "_blank", "noopener,noreferrer");
+  };
+
+  const openFacebook = () => {
+    if (!store?.facebookLink) return;
+
+    window.open(store.facebookLink, "_blank", "noopener,noreferrer");
   };
 
   const openWhatsApp = () => {
@@ -597,10 +613,24 @@ const PublicStore = () => {
               <div className="mt-3 flex items-center justify-center gap-4 rounded-full bg-creator-bg/50 py-2 md:justify-start">
                 {/* INSTAGRAM */}
 
-                <div onClick={openInstagram} className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:-rotate-2">
+                <div
+                  onClick={openInstagram}
+                  className={`flex items-center gap-1.5 text-creator-primary transition-all duration-300 ${store?.instagramLink ? "cursor-pointer hover:scale-105 hover:-rotate-2" : ""}`}
+                >
                   <img src="/src/assets/instagram.png" alt="Instagram" className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6" />
 
-                  <p className="font-sans text-xs font-semibold text-creator-text">{store?.instagramUsername || "@yourhandle"}</p>
+                  <p className="font-sans text-xs font-semibold text-creator-text">{store?.instagramUsername || "Not attached"}</p>
+                </div>
+
+                {/* FACEBOOK */}
+
+                <div
+                  onClick={openFacebook}
+                  className={`flex items-center gap-1.5 text-creator-primary transition-all duration-300 ${store?.facebookLink ? "cursor-pointer hover:scale-105 hover:rotate-2" : ""}`}
+                >
+                  <img src="/src/assets/facebook.png" alt="Facebook" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
+
+                  <p className="font-sans text-xs font-semibold text-creator-text">{store?.facebookLink ? "Facebook" : "Not attached"}</p>
                 </div>
 
                 {/* WHATSAPP */}
@@ -706,13 +736,6 @@ const PublicStore = () => {
             <h3 className="mt-5 font-serif text-2xl font-semibold">No {activeCategory} products</h3>
 
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-creator-text/50">There are currently no {activeCategory.toLowerCase()} products available in this store.</p>
-
-            <button
-              onClick={() => setActiveCategory("All")}
-              className="mt-6 rounded-full bg-creator-text px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:rotate-[-1deg] hover:shadow-lg"
-            >
-              View all products
-            </button>
           </section>
         )}
 
@@ -740,9 +763,9 @@ const PublicStore = () => {
           <section id="products-grid-section" className="relative scroll-mt-24 pb-16 pt-1">
             {/* small decorative line */}
 
-            <div className="pointer-events-none absolute -left-5 top-0 hidden rotate-[-8deg] font-caveat text-sm text-creator-text/40 lg:block">made slowly ♡</div>
+            {/* <div className="pointer-events-none absolute -left-5 top-0 hidden rotate-[-8deg] font-caveat text-sm text-creator-text/40 lg:block">made slowly ♡</div> */}
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-3">
               {filteredProducts.map((product, index) => (
                 <ProductCard key={product._id} product={product} navigate={navigate} addToCart={addToCart} toggleWishlist={toggleWishlist} isWishlisted={wishlistIds.includes(product._id)} />
               ))}
@@ -754,82 +777,7 @@ const PublicStore = () => {
         {/* CREATOR STORY */}
         {/* ================================================= */}
 
-        <section id="about-store-section" className="relative mb-16 overflow-hidden rounded-[26px] border border-creator-text/10 bg-white/70 p-3 md:grid md:grid-cols-[1fr_1.2fr] md:gap-7">
-          {/* decorative */}
-
-          <span className="absolute right-5 top-3 z-20 rotate-12 font-caveat text-xl text-creator-pink">made with ♡</span>
-
-          {/* IMAGE */}
-
-          <div className="relative min-h-[240px] overflow-hidden rounded-[18px]">
-            <img
-              src={getImageUrl(store?.profileImage, getImageUrl(store?.storeLogo, getImageUrl(store?.bannerImage, "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=1000")))}
-              alt="About store"
-              className="h-full min-h-[240px] w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
-            />
-
-            <div className="absolute bottom-5 left-5 rotate-[-5deg] rounded-sm bg-white/90 px-4 py-2 font-caveat text-xl leading-5 text-creator-text shadow-sm transition-transform duration-300 hover:rotate-[-1deg]">
-              Crafting
-              <br />
-              Dreams
-              <br />
-              into Reality
-            </div>
-          </div>
-
-          {/* STORY */}
-
-          <div className="px-2 py-6 md:py-5">
-            <p className="font-caveat text-lg text-creator-pink">the story behind the work</p>
-
-            <h2 className="mt-1 font-serif text-2xl font-semibold text-creator-text sm:text-3xl">About {store?.storeName || "this creator"}</h2>
-
-            <p className="mt-3 max-w-[500px] text-sm leading-6 text-creator-text/55">
-              {store?.bio || "A small handmade business passionate about creating unique and meaningful products. Every piece is made with love, patience and care."}
-            </p>
-
-            {/* FEATURES */}
-
-            <div className="mt-7 grid grid-cols-2 gap-5 sm:grid-cols-4">
-              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
-                <Heart size={19} className="text-creator-pink" />
-
-                <span className="text-[9px] text-creator-text/70">
-                  Handmade
-                  <small className="block text-creator-text/40">with Love</small>
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
-                <Package size={19} />
-
-                <span className="text-[9px] text-creator-text/70">
-                  Small
-                  <small className="block text-creator-text/40">batches</small>
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
-                <Sparkles size={19} />
-
-                <span className="text-[9px] text-creator-text/70">
-                  Unique
-                  <small className="block text-creator-text/40">creations</small>
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 transition-transform hover:-translate-y-1">
-                <MessageCircle size={19} />
-
-                <span className="text-[9px] text-creator-text/70">
-                  Direct
-                  <small className="block text-creator-text/40">creator contact</small>
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        <AboutStore store={store} getImageUrl={getImageUrl}  />
         {/* ================================================= */}
         {/* CONTACT / ORDER CTA */}
         {/* ================================================= */}

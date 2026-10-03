@@ -35,13 +35,12 @@ const storeSchema = new mongoose.Schema({
   },
 
   instagramUsername: {
-    type: String,
-    required: true,
+    type: String
+
   },
 
   instagramLink: {
     type: String,
-    required: true,
   },
 
   facebookUsername: {
@@ -54,9 +53,13 @@ const storeSchema = new mongoose.Schema({
 
   whatsappNumber: {
     type: String,
+    trim: true,
   },
 
   address: {
+    type: String,
+  },
+  ourStory: {
     type: String,
   },
 });
