@@ -11,7 +11,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const storeName = pathname.startsWith("/publicStore/")
+  const storeName = pathname.startsWith("/publicstore/")
     ? decodeURIComponent(pathname.split("/")[2] || "")
     : "";
 
@@ -38,7 +38,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
   // ⚡ SMART SCROLL ENGINE FUNCTION
   const scrollToSection = (elementId) => {
     const storePath = storeName
-      ? `/publicStore/${encodeURIComponent(storeName)}`
+      ? `/publicstore/${encodeURIComponent(storeName)}`
       : "/";
 
     if (pathname === storePath) {
@@ -80,7 +80,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
           {/* LEFT: Dynamic Branding mapped to URL */}
           <div
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() => navigate(`/publicStore/${storeName}`)}
+            onClick={() => navigate(`/publicstore/${storeName}`)}
           >
             <span className="font-serif text-2xl font-black tracking-tight text-creator-text capitalize">
               {storeName ? storeName.replace(/-/g, " ") : "Creator Store"}
@@ -121,7 +121,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
           {/* RIGHT: Context Utilities */}
           <div className="hidden md:flex items-center space-x-5">
             <button
-              onClick={() => navigate(`/publicStore/${storeName}/cart`)}
+              onClick={() => navigate(`/publicstore/${storeName}/cart`)}
               className="relative rounded-full border border-creator-text/10 p-2 text-creator-text hover:bg-creator-bg transition-all active:scale-95 cursor-pointer"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -145,7 +145,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
           {/* MOBILE TOGGLE TRIGGER ROW */}
           <div className="flex items-center gap-4 md:hidden">
             <button
-              onClick={() => navigate(`/publicStore/${storeName}/cart`)}
+              onClick={() => navigate(`/publicstore/${storeName}/cart`)}
               className="relative rounded-full border border-creator-text/10 p-2 text-creator-text"
             >
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

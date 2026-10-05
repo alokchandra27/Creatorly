@@ -396,7 +396,7 @@ Thank you!`;
             <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-creator-text/50">Add something you love from this creator's collection and it'll appear here.</p>
 
             <button
-              onClick={() => navigate(`/publicStore/${encodeURIComponent(storeName)}`)}
+              onClick={() => navigate(`/publicstore/${encodeURIComponent(storeName)}`)}
               className="mt-7 inline-flex items-center gap-2 rounded-full bg-creator-text px-6 py-3 text-xs font-semibold text-white transition hover:-translate-y-1 hover:bg-creator-primary"
             >
               <ArrowLeft size={15} />
@@ -420,7 +420,7 @@ Thank you!`;
         ===================================================== */}
 
         <div className="mb-8">
-          <button onClick={() => navigate(`/publicStore/${encodeURIComponent(storeName)}`)} className="mb-6 flex items-center gap-2 text-xs text-creator-text/55 transition hover:text-creator-text">
+          <button onClick={() => navigate(`/publicstore/${encodeURIComponent(storeName)}`)} className="mb-6 flex items-center gap-2 text-xs text-creator-text/55 transition hover:text-creator-text">
             <ArrowLeft size={15} />
             Continue shopping
           </button>
@@ -644,7 +644,7 @@ Thank you!`;
                       }}
                       className="flex flex-col items-center gap-1.5 rounded-2xl bg-[#EAF9EF] px-2 py-3 text-[10px] font-semibold text-neutral-700 transition hover:-translate-y-1 cursor-pointer"
                     >
-                      <img src="/src/assets/whatsapp.png" alt="WhatsApp" className="h-10 w-10" />
+                      <img src="/src/assets/whatsapp.webp" alt="WhatsApp" className="h-10 w-10" />
                       WhatsApp
                     </button>
                   )}
@@ -657,7 +657,7 @@ Thank you!`;
                       }}
                       className="flex flex-col items-center gap-1.5 rounded-2xl bg-[#FCECF5] px-2 py-3 text-[10px] font-semibold text-neutral-700 transition hover:-translate-y-1 cursor-pointer"
                     >
-                      <img src="/src/assets/instagram.png" alt="Instagram" className="h-10 w-10" />
+                      <img src="/src/assets/instagram.webp" alt="Instagram" className="h-10 w-10" />
                       Instagram
                     </button>
                   )}
@@ -670,7 +670,7 @@ Thank you!`;
                       }}
                       className="flex flex-col items-center gap-1.5 rounded-2xl bg-[#EEF4FF] px-2 py-3 text-[10px] font-semibold text-neutral-700 transition hover:-translate-y-1 cursor-pointer"
                     >
-                      <img src="/src/assets/facebook.png" alt="Facebook" className="h-10 w-10" />
+                      <img src="/src/assets/facebook.webp" alt="Facebook" className="h-10 w-10" />
                       Facebook
                     </button>
                   )}
@@ -828,7 +828,7 @@ Thank you!`;
                         className="text-creator-pink"
                       /> */}
 
-                      <img src="/src/assets/instagram.png" alt="Instagram" className="h-5 w-5"></img>
+                      <img src="/src/assets/instagram.webp" alt="Instagram" className="h-5 w-5"></img>
 
                       <div>
                         <p className="text-sm font-semibold">Instagram</p>
@@ -850,7 +850,7 @@ Thank you!`;
                     className="flex items-center justify-between rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <div className="flex items-center gap-3">
-                     <img src="/src/assets/facebook.png" alt="Facebook" className="h-5 w-5"></img>
+                     <img src="/src/assets/facebook.webp" alt="Facebook" className="h-5 w-5"></img>
 
                       <div>
                         <p className="text-sm font-semibold">Facebook</p>

@@ -2,22 +2,23 @@ import React, { useLayoutEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 
-// import creator1 from "../assets/creator1.png";
-// import creator2 from "../assets/creator2.png";
-// import creator3 from "../assets/creator3.png";
-// import creator4 from "../assets/creator4.png";
 
-const Intro = () => {
-  const navigate = useNavigate();
+import creator1 from "../assets/bookMark.webp";
+import creator2 from "../assets/keychains.webp";
+import creator3 from "../assets/hanumanji.webp";
+import creator4 from "../assets/purse.webp";
+
+const Intro = ({ onIntroComplete }) => {
+  // const navigate = useNavigate();
   const introRef = useRef(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
+     const tl = gsap.timeline();
 
-      // -----------------------------------------
+
       // INITIAL STATES
-      // -----------------------------------------
+
 
       gsap.set(".intro-strip", {
         yPercent: -110,
@@ -56,9 +57,9 @@ const Intro = () => {
         y: 15,
       });
 
-      // -----------------------------------------
+   
       // 1. COLORFUL TOP STRIPS
-      // -----------------------------------------
+    
 
       tl.to(".intro-strip", {
         yPercent: 0,
@@ -67,9 +68,9 @@ const Intro = () => {
         ease: "power3.out",
       });
 
-      // -----------------------------------------
+      
       // 2. SMALL KICKER
-      // -----------------------------------------
+   
 
       tl.to(
         ".intro-kicker",
@@ -82,9 +83,9 @@ const Intro = () => {
         "-=0.05",
       );
 
-      // -----------------------------------------
+      
       // 3. CREATORLY LOGO
-      // -----------------------------------------
+
 
       tl.to(
         ".intro-logo",
@@ -98,10 +99,8 @@ const Intro = () => {
         "-=0.05",
       );
 
-      // -----------------------------------------
       // 4. TAGLINE
-      // -----------------------------------------
-
+     
       tl.to(
         ".intro-tagline",
         {
@@ -113,10 +112,9 @@ const Intro = () => {
         "-=0.25",
       );
 
-      // -----------------------------------------
+   
       // 5. PHOTOS ONE BY ONE
-      // -----------------------------------------
-
+   
       tl.to(
         ".intro-photo",
         {
@@ -130,9 +128,9 @@ const Intro = () => {
         "-=0.05",
       );
 
-      // -----------------------------------------
+
       // 6. DOODLES
-      // -----------------------------------------
+    
 
       tl.to(
         ".intro-doodle",
@@ -147,9 +145,9 @@ const Intro = () => {
         "-=0.2",
       );
 
-      // -----------------------------------------
+  
       // 7. BOTTOM TEXT
-      // -----------------------------------------
+
 
       tl.to(
         ".intro-bottom",
@@ -162,9 +160,8 @@ const Intro = () => {
         "-=0.15",
       );
 
-      // -----------------------------------------
       // 8. SMALL FLOATING ANIMATION
-      // -----------------------------------------
+      
 
       gsap.to(".floating-butterfly", {
         y: -10,
@@ -192,9 +189,8 @@ const Intro = () => {
         ease: "sine.inOut",
       });
 
-      // -----------------------------------------
       // 9. HOLD + EXIT
-      // -----------------------------------------
+
 
       tl.to({}, { duration: 0.35 });
 
@@ -215,23 +211,25 @@ const Intro = () => {
         "-=0.15",
       );
 
-      // -----------------------------------------
+
       // 10. GO HOME
-      // -----------------------------------------
+
 
       tl.call(() => {
-        navigate("/");
+        sessionStorage.setItem("creatorly-intro-seen", "true");
+        if (typeof onIntroComplete === "function") {
+          onIntroComplete();
+        }
+        // navigate("/", { replace: true });
       });
     }, introRef);
 
     return () => ctx.revert();
-  }, [navigate]);
+  }, [onIntroComplete]);
 
   return (
     <div ref={introRef} className="intro-page fixed inset-0 z-[99999] overflow-hidden bg-[#fffaf8]">
-      {/* =====================================================
-          MAIN CONTENT
-      ====================================================== */}
+      {/*          MAIN CONTENT */}
 
       <div className="intro-content relative flex h-full w-full items-center justify-center">
         {/* ===================================================
@@ -239,11 +237,11 @@ const Intro = () => {
         ==================================================== */}
 
         <div className="absolute left-0 top-0 flex h-[70px] w-full overflow-hidden sm:h-[85px]">
-          <div className="intro-strip h-full flex-1 bg-[#f65389]" />
-          <div className="intro-strip h-full flex-1 bg-[#ff9b9f]" />
+          <div className="intro-strip h-full flex-1 bg-creator-accent" />
+          <div className="intro-strip h-full flex-1 bg-creator-pink" />
           <div className="intro-strip h-full flex-1 bg-[#ffc96f]" />
           <div className="intro-strip h-full flex-1 bg-[#f65a8d]" />
-          <div className="intro-strip h-full flex-1 bg-[#ff9b9f]" />
+          <div className="intro-strip h-full flex-1 bg-creator-accent" />
         </div>
 
         {/* ===================================================
@@ -251,11 +249,11 @@ const Intro = () => {
         ==================================================== */}
 
         <div className="floating-butterfly absolute left-[5%] top-[38%] h-10 w-10 sm:left-[3.5%] sm:h-12 sm:w-12">
-          <div className="absolute left-0 top-2 h-7 w-5 rotate-[-25deg] rounded-[70%_35%_65%_40%] bg-[#ff4f88] sm:h-8 sm:w-6" />
-
-          <div className="absolute right-0 top-2 h-7 w-5 rotate-[25deg] rounded-[35%_70%_40%_65%] bg-[#d93679] sm:h-8 sm:w-6" />
-
-          <div className="absolute left-1/2 top-1 h-8 w-1.5 -translate-x-1/2 rounded-full bg-[#f1a629] sm:h-9" />
+          <img
+            src="/src/assets/palette.webp"
+            alt="palette"
+            className="h-full w-full object-contain"
+          />
         </div>
 
         {/* ===================================================
@@ -283,7 +281,7 @@ const Intro = () => {
 
               <span className="absolute -bottom-1 -right-6 text-sm text-[#78a989]">✧</span>
 
-              <h1 className="font-serif text-[50px] font-bold leading-none tracking-[-3px] text-[#e85c76] sm:text-[70px]">
+              <h1 className="font-caveat text-[50px] font-bold leading-none tracking-[-3px] text-[#e85c76] sm:text-[70px]">
                 Creator<span className="text-[#f19b72]">ly</span>
               </h1>
             </div>
@@ -299,7 +297,7 @@ const Intro = () => {
             {/* PHOTO 1 */}
 
             <div className="intro-photo absolute left-[5px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[-7deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:left-8 sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              {/* <img src={creator1} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" /> */}
+              <img src={creator1} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -307,7 +305,7 @@ const Intro = () => {
             {/* PHOTO 2 */}
 
             <div className="intro-photo absolute left-[78px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[4deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:left-[168px] sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              {/* <img src={creator2} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" /> */}
+              <img src={creator2} alt="Creator work" className="h-full w-full rounded-[7px] object-cover -rotate-360" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -315,7 +313,7 @@ const Intro = () => {
             {/* PHOTO 3 */}
 
             <div className="intro-photo absolute right-[78px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[-3deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:right-[168px] sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              {/* <img src={creator3} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" /> */}
+              <img src={creator3} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -323,7 +321,7 @@ const Intro = () => {
             {/* PHOTO 4 */}
 
             <div className="intro-photo absolute right-[5px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[7deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:right-8 sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              {/* <img src={creator4} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" /> */}
+              <img src={creator4} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -357,25 +355,21 @@ const Intro = () => {
         {/* Small paint dots */}
 
         <div className="absolute left-[15%] top-[20%] flex gap-2 sm:left-[19%]">
-          <span className="intro-doodle h-2 w-2 rounded-full bg-[#e85c76]" />
-
-          <span className="intro-doodle h-2 w-2 rounded-full bg-[#f2bd4d]" />
-
-          <span className="intro-doodle h-2 w-2 rounded-full bg-[#78a989]" />
+          <img src="/src/assets/yarn.webp" alt="" className="h-10 w-10 sm:h-15 sm:w-15" />
         </div>
 
         {/* Flower */}
 
         <div className="intro-doodle floating-flower absolute bottom-[15%] right-[5%] h-8 w-8 sm:bottom-[17%] sm:right-[6%] sm:h-9 sm:w-9">
-          <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 rounded-full bg-[#f3a06f]" />
+          
+          <img
+            src="/src/assets/sunflower.webp"
+            alt="daisy"
+            className="h-full w-full object-contain"
+          />
+       
 
-          <span className="absolute left-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-[#f6c84e]" />
 
-          <span className="absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-[#e85d80]" />
-
-          <span className="absolute bottom-0 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full bg-[#7daa8c]" />
-
-          <span className="absolute left-1/2 top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#fff2cc]" />
         </div>
 
         {/* Sun */}

@@ -15,9 +15,9 @@ const FinalCTA = () => {
     <section className="relative mx-4 mb-6 overflow-hidden rounded-[2.5rem] bg-[#FBE8EA] px-6 py-16 sm:mx-6 sm:px-10 md:py-20 lg:mx-10">
       {/* Decorative flower */}
 
-      <img src={"/src/assets/flowerDaisy.png"} alt="" className="absolute -bottom-4 left-3 w-20 rotate-[-15deg] opacity-80 sm:left-8 sm:w-28" />
+      <img src={"/src/assets/flowerDaisy.webp"} alt="" className="absolute -bottom-4 left-3 w-20 rotate-[-15deg] opacity-80 sm:left-8 sm:w-28" />
 
-      <img src={"/src/assets/sunflower.png"} alt="" className="absolute -right-3 bottom-0 w-20 rotate-12 opacity-80 sm:right-8 sm:w-28" />
+      <img src={"/src/assets/sunflower.webp"} alt="" className="absolute -right-3 bottom-0 w-20 rotate-12 opacity-80 sm:right-8 sm:w-28" />
 
       <div className="relative z-10 mx-auto max-w-3xl text-center">
         <p className="font-caveat text-lg text-creator-pink sm:text-xl">Your next favorite find is waiting to be discovered.</p>

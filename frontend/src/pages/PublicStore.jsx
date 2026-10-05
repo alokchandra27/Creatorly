@@ -6,6 +6,7 @@ import API from "../components/API/API";
 
 import { addToCartStorage, getCart, getWishlist, toggleWishlistStorage } from "../utils/storeStorage";
 import AboutStore from "./AboutStore";
+import Footer from "./Footer";
 
 // ============================================================
 // IMAGE HELPER
@@ -322,9 +323,13 @@ const PublicStore = () => {
   };
 
   const toggleWishlist = (product) => {
+    if (!validStoreName || !product?._id) return;
+
     const wasWishlisted = wishlistIds.includes(product._id);
-    const wishlist = toggleWishlistStorage(validStoreName, product);
-    setWishlistIds(wishlist.map((item) => item.productId || item._id));
+    const result = toggleWishlistStorage(validStoreName, product);
+    const nextWishlist = Array.isArray(result?.wishlist) ? result.wishlist : getWishlist(validStoreName);
+
+    setWishlistIds(nextWishlist.map((item) => item.productId || item._id));
     window.dispatchEvent(new Event("creatorly-shopping-updated"));
     toast.success(wasWishlisted ? "Removed from wishlist" : "Added to wishlist", {
       autoClose: 1800,
@@ -561,7 +566,7 @@ const PublicStore = () => {
           {/* HERO IMAGE */}
 
           <div className="relative min-h-[270px] overflow-hidden lg:min-h-[440px]">
-            <img src={getImageUrl(store?.bannerImage, "/src/assets/banner.jpg")} alt="Store banner" className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]" />
+            <img src={getImageUrl(store?.bannerImage, "/src/assets/banner.webp")} alt="Store banner" className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]" />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 
@@ -617,7 +622,7 @@ const PublicStore = () => {
                   onClick={openInstagram}
                   className={`flex items-center gap-1.5 text-creator-primary transition-all duration-300 ${store?.instagramLink ? "cursor-pointer hover:scale-105 hover:-rotate-2" : ""}`}
                 >
-                  <img src="/src/assets/instagram.png" alt="Instagram" className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6" />
+                  <img src="/src/assets/instagram.webp" alt="Instagram" className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6" />
 
                   <p className="font-sans text-xs font-semibold text-creator-text">{store?.instagramUsername || "Not attached"}</p>
                 </div>
@@ -628,7 +633,7 @@ const PublicStore = () => {
                   onClick={openFacebook}
                   className={`flex items-center gap-1.5 text-creator-primary transition-all duration-300 ${store?.facebookLink ? "cursor-pointer hover:scale-105 hover:rotate-2" : ""}`}
                 >
-                  <img src="/src/assets/facebook.png" alt="Facebook" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
+                  <img src="/src/assets/facebook.webp" alt="Facebook" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
 
                   <p className="font-sans text-xs font-semibold text-creator-text">{store?.facebookLink ? "Facebook" : "Not attached"}</p>
                 </div>
@@ -636,7 +641,7 @@ const PublicStore = () => {
                 {/* WHATSAPP */}
 
                 <div onClick={openWhatsApp} className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:rotate-2">
-                  <img src="/src/assets/whatsapp.png" alt="WhatsApp" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
+                  <img src="/src/assets/whatsapp.webp" alt="WhatsApp" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
 
                   <p className="font-sans text-xs font-semibold text-creator-text">{store?.whatsappNumber || "not available"}</p>
                 </div>
@@ -668,7 +673,7 @@ const PublicStore = () => {
               {/* ================================================= */}
 
               <div className="relative mt-3 h-32 w-32 cursor-pointer transition-all duration-500 hover:rotate-[-5deg] hover:scale-105">
-                <img src="/src/assets/redcolor.png" alt="" className="h-32 w-32 object-contain transition-transform duration-500 hover:rotate-3" />
+                <img src="/src/assets/redcolor.webp" alt="" className="h-32 w-32 object-contain transition-transform duration-500 hover:rotate-3" />
 
                 <p className="absolute inset-0 flex items-center justify-center px-5 text-center font-caveat text-sm font-semibold leading-4 text-creator-text">
                   More stats
@@ -777,7 +782,7 @@ const PublicStore = () => {
         {/* CREATOR STORY */}
         {/* ================================================= */}
 
-        <AboutStore store={store} getImageUrl={getImageUrl}  />
+        <AboutStore store={store} getImageUrl={getImageUrl} />
         {/* ================================================= */}
         {/* CONTACT / ORDER CTA */}
         {/* ================================================= */}
@@ -828,7 +833,7 @@ const PublicStore = () => {
 
       <button
         aria-label="Open wishlist"
-        onClick={() => navigate(`/publicStore/${encodeURIComponent(validStoreName)}/wishlist`)}
+        onClick={() => navigate(`/publicstore/${encodeURIComponent(validStoreName)}/wishlist`)}
         className="fixed bottom-[88px] right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-white bg-white text-creator-text shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 hover:scale-110 hover:-rotate-6 hover:shadow-xl active:scale-90"
       >
         <Heart size={20} fill={wishlistIds.length > 0 ? "currentColor" : "none"} className={wishlistIds.length > 0 ? "text-creator-pink" : "text-creator-text"} />
@@ -841,7 +846,7 @@ const PublicStore = () => {
 
       <button
         aria-label="Open cart"
-        onClick={() => navigate(`/publicStore/${encodeURIComponent(validStoreName)}/cart`)}
+        onClick={() => navigate(`/publicstore/${encodeURIComponent(validStoreName)}/cart`)}
         className="fixed bottom-6 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full border-[3px] border-white bg-creator-text text-white shadow-[0_8px_30px_rgba(0,0,0,0.15)] transition-all duration-300 hover:scale-110 hover:rotate-6 hover:shadow-xl active:scale-90"
       >
         <ShoppingCart size={23} />
@@ -910,6 +915,8 @@ const PublicStore = () => {
           <span>Made for small creators.</span>
         </div>
       </footer>
+      {/* End Footer */}
+      <Footer/>
     </div>
   );
 };

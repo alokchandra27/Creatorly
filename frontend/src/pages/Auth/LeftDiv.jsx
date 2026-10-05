@@ -78,7 +78,7 @@ const LeftDiv = () => {
 
           <div className="absolute bottom-[16%] right-[5%] aspect-square w-[150px] rotate-6 border-[7px] border-creator-bg bg-white shadow-[0_15px_40px_rgba(0,0,0,0.15)] xl:right-[6%] xl:w-[190px]">
             <img
-              src="/src/assets/yarnKaGola.jpg"
+              src="/src/assets/yarnKaGola.webp"
               alt=""
               className="w-full h-full object-cover"
             />
@@ -86,20 +86,20 @@ const LeftDiv = () => {
 
           <div className="absolute bottom-[15%] right-[28%] aspect-square w-[90px] -rotate-12 border-[6px] border-creator-bg bg-white shadow-[0_12px_30px_rgba(0,0,0,0.12)] xl:right-[30%] xl:w-[110px]">
             <img
-              src="/src/assets/clay.jpg"
+              src="/src/assets/clay.webp"
               alt=""
               className="w-full h-full object-cover"
             />
           </div>
 
           <div className="absolute bottom-[10%] right-[1%] xl:right-[5%] opacity-90">
-            <img src="/src/assets/palette.png" alt="" className="w-12 xl:w-16" />
+            <img src="/src/assets/palette.webp" alt="" className="w-12 xl:w-16" />
           </div>
 
 
           <div className="absolute bottom-[12%] left-[7%] opacity-70">
             <img
-              src="/src/assets/redcolor.png"
+              src="/src/assets/redcolor.webp"
               alt=""
               className="w-12 xl:w-16"
             />

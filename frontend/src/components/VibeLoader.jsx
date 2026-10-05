@@ -4,64 +4,104 @@ import { gsap } from "gsap";
 export default function VibeLoader({ onComplete }) {
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    const counterObj = { value: 0 };
-    let elementsRevealed = false;
+useEffect(() => {
+  const counterObj = { value: 0 };
+  let elementsRevealed = false;
 
-    // 1. Progress Counter Animation (0% to 100% in 2.5 seconds)
+  const ctx = gsap.context(() => {
+
+    // -----------------------------------------
+    // PROGRESS
+    // -----------------------------------------
+
     gsap.to(counterObj, {
       value: 100,
-      duration: 2.5,
+      duration: 1.8,
       ease: "power1.out",
+
       onUpdate: () => {
         const current = Math.floor(counterObj.value);
+
         setProgress(current);
 
-        // 🎯 MAGIC REVEAL: जैसे ही प्रोग्रेस 65%-70% पहुंचेगी, सारे क्राफ्ट एलिमेंट्स आ जाएंगे
+        // Reveal elements around 65%
         if (current >= 65 && !elementsRevealed) {
           elementsRevealed = true;
 
-          // Elements Pop-up (Second Image details)
-          gsap.fromTo(".aesthetic-element",
-            { scale: 0, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 0.6, stagger: 0.08, ease: "back.out(1.5)" }
+          gsap.fromTo(
+            ".aesthetic-element",
+            {
+              scale: 0,
+              opacity: 0,
+            },
+            {
+              scale: 1,
+              opacity: 1,
+              duration: 0.5,
+              stagger: 0.06,
+              ease: "back.out(1.5)",
+            }
           );
 
-          // Lines surrounding the 100% text (Second Image rays)
-          gsap.fromTo(".progress-rays",
-            { scale: 0, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 0.4 }
+          gsap.fromTo(
+            ".progress-rays",
+            {
+              scale: 0,
+              opacity: 0,
+            },
+            {
+              scale: 1,
+              opacity: 1,
+              duration: 0.35,
+            }
           );
         }
       },
+
       onComplete: () => {
-        // 🚀 THE BIG EXIT: 100% होने के 0.5s बाद पूरा लोडर ऊपर स्लाइड होकर गायब हो जाएगा
-        // gsap.to(".vibe-loader-screen", {
-        //   yPercent: -100,
-        //   duration: 0.8,
-        //   ease: "power3.inOut",
-        //   delay: 0.5,
-        //   onComplete: () => {
-        //     if (onComplete) onComplete();
-        //   }
-        // });
-      }
+
+        // -----------------------------------------
+        // EXIT LOADER
+        // -----------------------------------------
+
+        gsap.to(".vibe-loader-screen", {
+          yPercent: -100,
+          duration: 0.6,
+          ease: "power3.inOut",
+
+          onComplete: () => {
+            if (onComplete) {
+              onComplete();
+            }
+          },
+        });
+
+      },
     });
 
-    // 🔄 Soft Breathing Effect: जो एलिमेंट्स स्क्रीन पर आ चुके हैं वो हल्के से हवा में तैरते रहेंगे
+    // -----------------------------------------
+    // FLOATING ELEMENTS
+    // -----------------------------------------
+
     gsap.to(".floating-item", {
       y: "-=8",
       duration: 1.5,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
-      stagger: 0.2
+      stagger: 0.2,
     });
 
-  }, [onComplete]);
+  },);
+
+  return () => {
+    ctx.revert();
+  };
+
+}, [onComplete]);
 
   return (
-    <div className="vibe-loader-screen fixed inset-0 z-50 flex flex-col items-center justify-center bg-creator-bg-butter color-creator-text select-none overflow-hidden font-sans">
+    <div className="vibe-loader-screen fixed inset-0 z-50 flex flex-col items-center justify-center bg-creator-bg color-creator-text select-none overflow-hidden font-sans">
       {/* ─── BRAND NAME (TOP LEFT) ─── */}
       <div className="absolute font-caveat top-8 left-8 text-2xl font-bold tracking-wide">
         Creatorly
@@ -167,7 +207,7 @@ export default function VibeLoader({ onComplete }) {
       </div>
       <div className="floating-item absolute bottom-[10%] right-[10%]">
         <img
-          src="/src/assets/palette.png"
+          src="/src/assets/palette.webp"
           alt="palette"
           className="lg:h-30 md:h-20 h-20"
         />
@@ -223,7 +263,7 @@ export default function VibeLoader({ onComplete }) {
             </p>
             <span className="text-red-300 text-lg flex items-center justify-center gap-2">
               <img
-                src="/src/assets/flowerDaisy.png"
+                src="/src/assets/flowerDaisy.webp"
                 alt="My Icon"
                 className="w-10 h-10 transform -skew-y-3"
               />

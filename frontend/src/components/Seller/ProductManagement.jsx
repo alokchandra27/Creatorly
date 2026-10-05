@@ -422,7 +422,7 @@ function StatCard({ icon, number, label }) {
 ============================================================= */
 
 function ProductCard({ product, index, onEdit, onDelete }) {
-  const image = product?.productImage1?.url || "/src/assets/bluecolor.jpg";
+  const image = product?.productImage1?.url || "/src/assets/bluecolor.webp";
 
   const stock = Number(product?.stocks || 0);
 

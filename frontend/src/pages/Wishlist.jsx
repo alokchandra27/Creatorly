@@ -58,7 +58,7 @@ const Wishlist = () => {
     removeItem(product._id);
 
     navigate(
-      `/publicStore/${encodeURIComponent(
+      `/publicstore/${encodeURIComponent(
         storeName
       )}/cart`
     );
@@ -76,7 +76,7 @@ const Wishlist = () => {
           <button
             onClick={() =>
               navigate(
-                `/publicStore/${encodeURIComponent(
+                `/publicstore/${encodeURIComponent(
                   storeName
                 )}`
               )
@@ -130,7 +130,7 @@ const Wishlist = () => {
               <button
                 onClick={() =>
                   navigate(
-                    `/publicStore/${encodeURIComponent(
+                    `/publicstore/${encodeURIComponent(
                       storeName
                     )}`
                   )

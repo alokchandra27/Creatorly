@@ -11,6 +11,7 @@ import {
   ArrowDown,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 
 const OurStory = () => {
   const navigate = useNavigate();
@@ -45,13 +46,13 @@ const OurStory = () => {
         <div className="pointer-events-none absolute -left-32 bottom-10 h-80 w-80 rounded-full bg-pink-200/30 blur-3xl" />
 
         <img
-          src="/src/assets/flowerDaisy.png"
+          src="/src/assets/flowerDaisy.webp"
           alt=""
           className="pointer-events-none absolute left-[4%] top-[15%] w-16 rotate-[-18deg] opacity-70 sm:w-24"
         />
 
         <img
-          src="/src/assets/yarn.png"
+          src="/src/assets/yarn.webp"
           alt=""
           className="pointer-events-none absolute bottom-[8%] right-[5%] w-20 rotate-12 opacity-70 sm:w-28"
         />
@@ -182,7 +183,7 @@ const OurStory = () => {
               {/* Small decorative flower */}
 
               <img
-                src="/src/assets/flowerDaisy.png"
+                src="/src/assets/flowerDaisy.webp"
                 alt=""
                 className="absolute bottom-[18%] right-[1%] z-40 w-16 rotate-12 sm:w-20"
               />
@@ -267,7 +268,7 @@ const OurStory = () => {
       <section className="relative overflow-hidden bg-[#f8f3e8] px-6 py-20 sm:px-10 md:py-28 lg:px-16">
 
         <img
-          src="/src/assets/leafStem.png"
+          src="/src/assets/leafStem.webp"
           alt=""
           className="pointer-events-none absolute left-[2%] top-[10%] w-20 -rotate-45 opacity-50 sm:w-28"
         />
@@ -590,13 +591,13 @@ const OurStory = () => {
           <div className="relative overflow-hidden rounded-[2rem] bg-[#FBE8EA] px-7 py-12 sm:px-12 sm:py-16">
 
             <img
-              src="/src/assets/flowerDaisy.png"
+              src="/src/assets/flowerDaisy.webp"
               alt=""
               className="absolute -bottom-5 -left-3 w-24 rotate-[-15deg] opacity-70 sm:w-32"
             />
 
             <img
-              src="/src/assets/sunflower.png"
+              src="/src/assets/sunflower.webp"
               alt=""
               className="absolute -right-5 bottom-0 w-24 rotate-12 opacity-70 sm:w-32"
             />
@@ -640,13 +641,13 @@ const OurStory = () => {
       <section className="relative mx-4 mb-6 overflow-hidden rounded-[2.5rem] bg-neutral-900 px-6 py-16 text-white sm:mx-6 sm:px-10 md:py-20 lg:mx-10">
 
         <img
-          src="/src/assets/flowerDaisy.png"
+          src="/src/assets/flowerDaisy.webp"
           alt=""
           className="absolute -bottom-4 left-3 w-20 rotate-[-15deg] opacity-60 sm:left-8 sm:w-28"
         />
 
         <img
-          src="/src/assets/yarn.png"
+          src="/src/assets/yarn.webp"
           alt=""
           className="absolute -right-2 bottom-0 w-20 rotate-12 opacity-60 sm:right-8 sm:w-28"
         />
@@ -694,6 +695,9 @@ const OurStory = () => {
         </div>
 
       </section>
+
+      {/* Footer */}
+      <Footer/>
 
     </main>
   );
@@ -797,6 +801,8 @@ const MeaningCard = ({ number, title, text }) => {
 
     </div>
   );
+
+  
 };
 
 

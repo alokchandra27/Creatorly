@@ -25,7 +25,7 @@ const PeoplePassionPurpose = () => {
             className="absolute left-[8%] top-[12%] z-20 h-[65%] w-[55%] rotate-[-8deg] overflow-hidden border-[8px] border-white shadow-[0_15px_35px_rgba(0,0,0,0.15)] sm:border-[12px]"
           >
             <img
-              src="/src/assets/sunflowerKeychains.jpeg"
+              src="/src/assets/sunflowerKeychains.webp"
               alt="Creator working on handmade art"
               className="h-full w-full object-cover scale-120 transition-transform duration-300 hover:scale-110"
             />
@@ -36,7 +36,7 @@ const PeoplePassionPurpose = () => {
             className="absolute right-[8%] top-[5%] z-10 h-[48%] w-[38%] rotate-6 overflow-hidden border-[8px] border-white shadow-[0_15px_35px_rgba(0,0,0,0.12)] sm:border-[10px]"
           >
             <img
-              src="/src/assets/clayclay.jpg"
+              src="/src/assets/clayclay.webp"
               alt="Handmade products"
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
             />
@@ -47,7 +47,7 @@ const PeoplePassionPurpose = () => {
             className="absolute bottom-[3%] right-[12%] z-30 h-[42%] w-[40%] rotate-[-4deg] overflow-hidden border-[8px] border-white shadow-[0_15px_35px_rgba(0,0,0,0.15)] sm:border-[10px]"
           >
             <img
-              src="/src/assets/crochetproduct.jpg"
+              src="/src/assets/crochetproduct.webp"
               alt="Handmade crochet"
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
             />

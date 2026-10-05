@@ -66,10 +66,10 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
       className={`sticky top-0 z-50 bg-creator-bg hover:bg-creator-bg-butter backdrop-blur-md transition-transform duration-500 ease-in-out ${isNavbarVisible || isOpen ? "translate-y-0" : "-translate-y-full"} border-b border-transparent`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
+        <div className="flex h-15 items-center justify-between">
           {/* LEFT: Branding Section */}
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <span className="font-serif text-2xl font-black tracking-tight text-creator-text">Creatorly</span>
+            <span className="font-serif text-2xl font-black tracking-tight text-creator-text ">Creatorly</span>
           </div>
 
           {/* CENTER: Desktop Links Matrix */}
@@ -144,11 +144,11 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
 
             {/* Account CTA Conditional Switch */}
             {isLoggedIn ? (
-              <button onClick={logoutHandler} className="rounded-full bg-red-500 px-5 py-2 text-xs font-caveat text-white shadow-sm hover:bg-opacity-95 transition-all cursor-pointer active:scale-95">
+              <button onClick={logoutHandler} className="rounded-full bg-red-500 px-5 py-2 text-xs font-caveat text-white shadow-sm hover:bg-opacity-95 transition-all cursor-pointer active:scale-95 cursor-pointer">
                 Logout
               </button>
             ) : (
-              <button onClick={() => navigate("/auth")} className="rounded-full bg-creator-text px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-creator-primary transition-all">
+              <button onClick={() => navigate("/auth")} className="rounded-full bg-creator-text px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-creator-primary transition-all cursor-pointer">
                 Login / Register
               </button>
             )}
@@ -202,20 +202,20 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
               setIsOpen(false);
               navigate("/");
             }}
-            className="block rounded-xl px-3 py-2.5 text-base font-medium text-creator-text/80 hover:bg-creator-bg hover:text-creator-text transition-all"
+            className="block rounded-xl px-3 py-2.5 text-base font-medium text-creator-text/80 hover:bg-creator-bg hover:text-creator-text transition-all cursor-pointer"
           >
             Home
           </span>
-          {/* 
+         
           <span
             onClick={() => {
               setIsOpen(false);
-              navigate("/explore");
+              navigate("/our-story");
             }}
-            className="block rounded-xl px-3 py-2.5 text-base font-medium text-creator-text/80 hover:bg-creator-bg hover:text-creator-text transition-all"
+            className="block rounded-xl px-3 py-2.5 text-base font-medium text-creator-text/80 hover:bg-creator-bg hover:text-creator-text transition-all cursor-pointer"
           >
-            Explore
-          </span> */}
+            Our story
+          </span> 
 
           {isLoggedIn && (
             <>

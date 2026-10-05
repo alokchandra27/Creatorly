@@ -1,15 +1,17 @@
 import React, { useMemo, useState } from "react";
 import { ArrowRight, Heart, Search, Sparkles, ShoppingBag, MessageCircle, Store, Link as LinkIcon, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Footer from "./Footer";
 
 const Explore = () => {
   const navigate = useNavigate();
 
   const products = [
-    { id:"demo-1", name:"Handmade Clay Frame", category:"Clay", price:899, creator:"MystriiSpot", username:"mystriispot", image:"/src/assets/creator1.png", description:"A handmade clay piece created with care.", customizable:true },
-    { id:"demo-2", name:"Mini Crochet Bouquet", category:"Crochet", price:649, creator:"ThreadAndTales", username:"threadandtales", image:"/src/assets/creator3.png", description:"A tiny handmade bouquet that never fades.", customizable:false },
-    { id:"demo-3", name:"Clay Trinket Tray", category:"Clay", price:499, creator:"TheClayCorner", username:"theclaycorner", image:"/src/assets/creator2.png", description:"Small handmade tray for your everyday essentials.", customizable:true },
-    { id:"demo-4", name:"Wooden Name Plate", category:"Wood", price:799, creator:"WoodenWhimsy", username:"woodenwhimsy", image:"/src/assets/creator4.png", description:"Personalised wooden decor made for your space.", customizable:true },
+    { id:"demo-1", name:"Bookmark Made With Clay", category:"Clay", price:49, creator:"MystriSpot", username:"mystrispot", image:"/src/assets/bookMark.webp", description:"A handmade clay Bookmark created with care.", customizable:true },
+    { id:"demo-2", name:"Hanuman ji figurine keychain", category:"Clay", price:599, creator:"MystriSpot", username:"mystrispot", image:"/src/assets/hanumanji.webp", description:"Carry hanuman ji with you wherever you go.", customizable:false },
+    { id:"demo-3", name:"Sun Flower Keychain", category:"Clay", price:149, creator:"MystriSpot ", username:"mystrispot", image:"/src/assets/sunflowerKeychains.webp", description:"Keychain made from sunflowers that never fade.", customizable:true },
+    { id:"demo-4", name:"Bag Charm Made With Clay", category:"Clay", price:249, creator:"MystriSpot", username:"mystrispot", image:"/src/assets/purse.webp", description:"A light and airy addition to your bag , ready to be personalized.", customizable:true },
   ];
 
   const categories = ["All","Clay","Crochet","Wood"];
@@ -29,7 +31,7 @@ const Explore = () => {
     setFavorites((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
   };
 
-  const visitStore = (username) => navigate(`/publicStore/${username}`);
+  const visitStore = (username) => navigate(`/publicstore/${username}`);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#faf7f0] text-neutral-900">
@@ -39,13 +41,13 @@ const Explore = () => {
         <div className="pointer-events-none absolute -left-32 bottom-0 h-72 w-72 rounded-full bg-yellow-200/20 blur-3xl" />
 
         <div className="pointer-events-none absolute left-[4%] top-[18%] hidden rotate-[-35deg] sm:block">
-          <img src="/src/assets/leafStem.png" alt="" className="w-14 opacity-80 lg:w-20" />
+          <img src="/src/assets/leafStem.webp" alt="" className="w-14 opacity-80 lg:w-20" />
         </div>
         <div className="pointer-events-none absolute right-[5%] top-[23%] hidden rotate-[18deg] sm:block">
-          <img src="/src/assets/leafStem.png" alt="" className="w-14 opacity-70 lg:w-20" />
+          <img src="/src/assets/leafStem.webp" alt="" className="w-14 opacity-70 lg:w-20" />
         </div>
         <div className="pointer-events-none absolute bottom-[7%] right-[7%] hidden sm:block">
-          <img src="/src/assets/yarn.png" alt="" className="w-16 rotate-[-8deg] opacity-80 lg:w-24" />
+          <img src="/src/assets/sunflower.webp" alt="" className="w-16 rotate-[-8deg] z-50 lg:w-24" />
         </div>
 
         <div className="relative mx-auto max-w-6xl">
@@ -78,7 +80,7 @@ const Explore = () => {
               <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs text-neutral-500">
                 <span className="inline-flex items-center gap-2"><Store size={15}/> Discover</span>
                 <ArrowRight size={13} className="hidden text-neutral-300 sm:block"/>
-                <span className="inline-flex items-center gap-2"><LinkIcon size={15}/> Visit their store</span>
+                <span className="inline-flex items-center gap-2 cursor-pointer"><LinkIcon size={15}/> Visit their store</span>
                 <ArrowRight size={13} className="hidden text-neutral-300 sm:block"/>
                 <span className="inline-flex items-center gap-2"><MessageCircle size={15}/> Connect directly</span>
               </div>
@@ -87,22 +89,22 @@ const Explore = () => {
             {/* Visual collage */}
             <div className="relative mx-auto h-[25rem] w-full max-w-[31rem] sm:h-[31rem]">
               <div className="absolute left-[18%] top-[7%] z-10 h-[68%] w-[62%] rotate-6 overflow-hidden border-[9px] border-[#faf7f0] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.20)] sm:border-[12px]">
-                <img src="/src/assets/crochet.jpg" alt="Handmade crochet artwork" className="h-full w-full object-cover"/>
+                <img src="/src/assets/crochet.webp" alt="Handmade crochet artwork" className="h-full w-full object-cover"/>
               </div>
               <div className="absolute left-[1%] top-[28%] z-20 h-[36%] w-[36%] -rotate-12 overflow-hidden border-[7px] border-[#faf7f0] bg-white shadow-[0_18px_40px_rgba(0,0,0,0.18)] sm:border-[10px]">
-                <img src="/src/assets/paintsandall.jpg" alt="Handmade art" className="h-full w-full object-cover"/>
+                <img src="/src/assets/paintsandall.webp" alt="Handmade art" className="h-full w-full object-cover"/>
               </div>
               <div className="absolute bottom-[8%] right-[2%] z-30 h-[37%] w-[36%] rotate-12 overflow-hidden border-[7px] border-[#faf7f0] bg-white shadow-[0_18px_40px_rgba(0,0,0,0.18)] sm:border-[10px]">
-                <img src="/src/assets/keychains.jpg" alt="Handmade keychains" className="h-full w-full object-cover"/>
+                <img src="/src/assets/keychains.webp" alt="Handmade keychains" className="h-full w-full object-cover"/>
               </div>
               <div className="absolute left-[3%] top-[8%] z-40 rotate-[-75deg]">
-                <img src="/src/assets/leafStem.png" alt="" className="w-12 sm:w-16 lg:w-20"/>
+                <img src="/src/assets/leafStem.webp" alt="" className="w-12 sm:w-16 lg:w-20"/>
               </div>
               <div className="absolute bottom-[2%] right-[20%] z-40">
-                <img src="/src/assets/yarn.png" alt="" className="w-14 rotate-[-8deg] sm:w-20 lg:w-24"/>
+                <img src="/src/assets/yarn.webp" alt="" className="w-14 rotate-[-8deg] sm:w-20 lg:w-24 z-50"/>
               </div>
               <div className="absolute bottom-[17%] left-[12%] z-40">
-                <img src="/src/assets/flowerDaisy.png" alt="" className="w-12 rotate-[-8deg] sm:w-16 lg:w-20"/>
+                <img src="/src/assets/flowerDaisy.webp" alt="" className="w-12 rotate-[-8deg] sm:w-16 lg:w-20"/>
               </div>
               <div className="absolute right-[4%] top-[3%] z-40 rotate-6 rounded-full bg-white px-4 py-2 font-caveat text-sm text-neutral-700 shadow-md sm:text-base">
                 little things, made with love ♡
@@ -159,11 +161,11 @@ const Explore = () => {
               <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-orange-300/10 blur-3xl"/>
               <div className="relative flex flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium"><Sparkles size={13}/> DEMO CREATOR STORE</span>
-                  <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">MystriiSpot</h2>
+                  <span className="inline-flex items-center gap-2  border border-white/20 bg-red-500 px-3 py-1.5 text-xs font-medium"><Sparkles size={13}/> DEMO CREATOR STORE</span>
+                  <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">Mystrispot</h2>
                   <p className="mt-2 max-w-lg text-sm leading-6 text-neutral-300">Handmade with a little magic ✨</p>
                 </div>
-                <button onClick={() => visitStore("mystriispot")} className="group inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <button onClick={() => visitStore("mystrispot")} className="group inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-neutral-900 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
                   Open creator store <ArrowRight size={16} className="transition-transform group-hover:translate-x-1"/>
                 </button>
               </div>
@@ -173,9 +175,16 @@ const Explore = () => {
               {products.map((product) => (
                 <div key={product.id} className="group bg-white p-4 transition-all duration-300 hover:bg-[#fffdf8]">
                   <div className="relative aspect-square overflow-hidden rounded-2xl bg-neutral-100">
-                    <img src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"/>
+                    <img src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 "/>
                     <button onClick={() => toggleFavorite(product.id)} aria-label={`Favorite ${product.name}`} className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur transition-all duration-300 hover:scale-110 active:scale-95">
-                      <Heart size={17} className={favorites.includes(product.id) ? "fill-current text-red-500" : "text-neutral-700"}/>
+                      <Heart
+                      onClick={() => {
+                        toast.success(favorites.includes(product.id) ? "Removed from favorites" : "Added to favorites", {
+                          // position: "top-right",
+                          autoClose: 1500,
+                        });
+                      }}
+                      size={17} className={favorites.includes(product.id) ? "fill-current text-red-500" : "text-neutral-700"}/>
                     </button>
                   </div>
                   <div className="px-1 pb-2 pt-5">
@@ -200,8 +209,8 @@ const Explore = () => {
       <section id="discover-section" className="scroll-mt-20 px-5 pb-24 sm:px-8 lg:px-16">
         <div className="mx-auto max-w-6xl">
           <div className="relative overflow-hidden rounded-[2rem] border border-neutral-200 bg-white px-6 py-10 sm:px-10 lg:px-14 lg:py-12">
-            <div className="pointer-events-none absolute right-7 top-7 rotate-12 opacity-60"><img src="/src/assets/leafStem.png" alt="" className="w-12 lg:w-16"/></div>
-            <div className="pointer-events-none absolute bottom-5 right-12 opacity-60"><img src="/src/assets/yarn.png" alt="" className="w-14 rotate-[-10deg] lg:w-20"/></div>
+            <div className="pointer-events-none absolute right-7 top-7 rotate-12 opacity-60"><img src="/src/assets/leafStem.webp" alt="" className="w-12 lg:w-16"/></div>
+            <div className="pointer-events-none absolute bottom-5 right-12 z-50"><img src="/src/assets/sunflower.webp" alt="" className="w-14 rotate-[-10deg] lg:w-20"/></div>
 
             <div className="relative">
               <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -244,7 +253,7 @@ const Explore = () => {
                       <div className="mt-1 flex items-start justify-between gap-3"><h3 className="font-semibold">{product.name}</h3><span className="shrink-0 text-sm font-semibold">₹{product.price}</span></div>
                       <p className="mt-2 text-xs leading-5 text-neutral-500">{product.description}</p>
                       <div className="mt-4 flex items-center gap-2"><div className="flex h-7 w-7 items-center justify-center rounded-full bg-neutral-100 text-[10px] font-semibold">{product.creator.charAt(0)}</div><span className="text-xs text-neutral-500">{product.creator}</span></div>
-                      <button onClick={() => visitStore(product.username)} className="group/btn mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-neutral-900 px-4 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-neutral-800 active:scale-[0.98]">
+                      <button onClick={() => visitStore(product.username)} className="group/btn mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-neutral-900 px-4 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-neutral-800 active:scale-[0.98] cursor-pointer">
                         Visit creator store <ArrowRight size={15} className="transition-transform duration-300 group-hover/btn:translate-x-1"/>
                       </button>
                     </div>
@@ -295,8 +304,8 @@ const Explore = () => {
 
       {/* FINAL CTA */}
       <section className="relative overflow-hidden border-t border-neutral-200 bg-[#fffdf8] px-5 py-20 sm:px-8 lg:px-16">
-        <div className="pointer-events-none absolute left-[10%] top-8 rotate-[-18deg]"><img src="/src/assets/leafStem.png" alt="" className="w-12 opacity-60"/></div>
-        <div className="pointer-events-none absolute bottom-8 right-[12%]"><img src="/src/assets/yarn.png" alt="" className="w-16 rotate-6 opacity-60"/></div>
+        <div className="pointer-events-none absolute left-[10%] top-8 rotate-[-18deg]"><img src="/src/assets/leafStem.webp" alt="" className="w-12 opacity-60"/></div>
+        <div className="pointer-events-none absolute bottom-8 right-[12%]"><img src="/src/assets/yarn.webp" alt="" className="w-16 rotate-6 z-50"/></div>
         <div className="relative mx-auto max-w-4xl text-center">
           <Sparkles size={24} className="mx-auto text-neutral-500"/>
           <h2 className="mt-5 font-caveat text-5xl font-normal leading-none sm:text-6xl">Something handmade is waiting.</h2>
@@ -315,6 +324,9 @@ const Explore = () => {
           </div>
         </div>
       </section>
+
+      {/* FOOTER */}
+      <Footer/>
     </main>
   );
 };

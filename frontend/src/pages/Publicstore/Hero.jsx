@@ -97,7 +97,7 @@ const Hero = () => {
             <img
               src={getImageUrl(
                 store?.bannerImage,
-                "/src/assets/banner.jpg",
+                "/src/assets/banner.webp",
               )}
               alt="Store banner"
               className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]"

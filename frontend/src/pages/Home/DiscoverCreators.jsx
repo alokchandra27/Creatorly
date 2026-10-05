@@ -12,7 +12,7 @@ const DiscoverCreators = () => {
       location: "Rishikesh",
       category: "Handmade Art",
       description: "Handmade with a little magic ✨",
-      image: "/src/assets/creator1.png",
+      image: "/src/assets/bookMark.webp",
       accent: "bg-orange-100",
     },
     {
@@ -21,7 +21,7 @@ const DiscoverCreators = () => {
       location: "Dehradun",
       category: "Clay & Home Decor",
       description: "Dream it • Shape it • Love it",
-      image: "/src/assets/creator2.png",
+      image: "/src/assets/keychains.webp",
       accent: "bg-yellow-100",
     },
     {
@@ -30,7 +30,7 @@ const DiscoverCreators = () => {
       location: "Rishikesh",
       category: "Crochet",
       description: "Crochet stories in every loop",
-      image: "/src/assets/creator3.png",
+      image: "/src/assets/hanumanji.webp",
       accent: "bg-green-100",
     },
     {
@@ -39,7 +39,7 @@ const DiscoverCreators = () => {
       location: "Dehradun",
       category: "Wooden Decor",
       description: "Carved with care",
-      image: "/src/assets/creator4.png",
+      image: "/src/assets/purse.webp",
       accent: "bg-amber-100",
     },
   ];

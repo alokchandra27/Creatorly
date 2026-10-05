@@ -7,7 +7,7 @@ const HowCreatorlyWorks = () => {
    
 
         <img
-          src={"/src/assets/leafStem.png"}
+          src={"/src/assets/leafStem.webp"}
           alt=""
           className="pointer-events-none absolute -left-5 top-8 w-20 rotate-[-35deg] opacity-50 sm:w-28"
         />
