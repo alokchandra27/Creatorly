@@ -1,15 +1,79 @@
 import { Heart, Sparkles, Share2, ShoppingBag } from "lucide-react";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+
+gsap.registerPlugin(ScrollTrigger);
 
 const WhatIsCreatoly = () => {
+  const sectionRef = useRef(null);
+  const imageRef = useRef(null);
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 75%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      // RIGHT CONTENT
+      tl.from(
+        ".what-content",
+        {
+          x: 50,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power3.out",
+        },
+        "-=0.45"
+      );
+
+      // FEATURE CARDS
+      tl.from(
+        ".what-feature",
+        {
+          y: 30,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.12,
+          ease: "power2.out",
+        },
+        "-=0.35"
+      );
+
+      // LEFT IMAGE
+      gsap.from(".what-image", {
+        scrollTrigger: {
+          trigger: imageRef.current,
+          start: "top 75%",
+          toggleActions: "play none none none",
+        },
+        x: -60,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out",
+      });
+
+    },
+    {
+      scope: sectionRef,
+    }
+  );
+
   return (
-    <section className="relative w-full bg-[#FAF7F2] px-6 py-20 sm:px-10 md:py-24 lg:px-20">
+    <section ref={sectionRef} className=" relative w-full bg-[#FAF7F2] px-6 py-20 sm:px-10 md:py-24 lg:px-20">
       <div className="mx-auto flex max-w-7xl lg:flex-col flex-col-reverse items-center gap-12 lg:flex-row lg:gap-20  lg:mt-0 -mt-10">
 
 
         {/* LEFT IMAGE */}
 
-        <div className="relative w-full lg:w-[48%]">
-          <div className="relative mx-auto max-w-xl overflow-hidden rounded-[3rem] bg-[#F8E8E7] p-5 sm:p-8">
+        <div ref={imageRef} className="what-image relative w-full lg:w-[48%]">
+          <div  className="relative mx-auto max-w-xl overflow-hidden rounded-[3rem] bg-[#F8E8E7] p-5 sm:p-8">
             <div className="relative overflow-hidden rounded-[2rem]">
               <img src={"/src/assets/supportsmallbusiness.webp"} alt="Creator storefront" className="h-auto w-full object-cover transition-transform duration-700 hover:scale-105 scale-150" />
             </div>
@@ -26,7 +90,7 @@ const WhatIsCreatoly = () => {
 
         {/* RIGHT TEXT */}
 
-        <div className="w-full lg:w-[52%]">
+        <div className="what-content w-full lg:w-[52%]">
           <p className="mb-2 font-caveat text-lg text-creator-pink sm:text-xl">More than a product link.</p>
 
           <h2 className="font-playfair text-3xl font-bold leading-tight text-creator-text sm:text-4xl md:text-5xl">
@@ -40,8 +104,8 @@ const WhatIsCreatoly = () => {
             customers.
           </p>
 
-          <div className="mt-9 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            <div className="group">
+          <div className=" mt-9 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <div className="what-feature group">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-pink-100 text-creator-pink transition-transform duration-300 group-hover:scale-110">
                 <Sparkles size={21} />
               </div>
@@ -51,7 +115,7 @@ const WhatIsCreatoly = () => {
               <p className="mt-2 text-xs leading-5 text-neutral-500">Build and launch your own simple mini online store in just a few minutes.</p>
             </div>
 
-            <div className="group border-neutral-200 sm:border-l sm:pl-5">
+            <div className="what-feature group border-neutral-200 sm:border-l sm:pl-5">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-700 transition-transform duration-300 group-hover:scale-110">
                 <Share2 size={21} />
               </div>
@@ -61,7 +125,7 @@ const WhatIsCreatoly = () => {
               <p className="mt-2 text-xs leading-5 text-neutral-500">Share your Easily drop your Creatorly store link in your Instagram bio, WhatsApp chats, or any social media platform.</p>
             </div>
 
-            <div className="group border-neutral-200 sm:border-l sm:pl-5">
+            <div className="what-feature group border-neutral-200 sm:border-l sm:pl-5">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100 text-yellow-700 transition-transform duration-300 group-hover:scale-110">
                 <ShoppingBag size={21} />
               </div>

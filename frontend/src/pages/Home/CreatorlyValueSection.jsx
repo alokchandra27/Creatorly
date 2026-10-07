@@ -1,8 +1,20 @@
 import { ArrowRight, Check, Link2, ShoppingBag, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
 
 const CreatorlyValueSection = () => {
   const navigate = useNavigate();
+
+  const CreatorlyValueSectionRef = useRef(null);
+  const OneLinkWholeStoreRef = useRef(null);
+  const WhyCreatorlyRef = useRef(null);
+  const CTARef = useRef(null);
 
   const features = [
     {
@@ -32,8 +44,81 @@ const CreatorlyValueSection = () => {
     "Share your link anywhere",
   ];
 
+  useGSAP(() => {
+    // 1. UPPER HERO TEXT ANIMATION (Pure Section ke aate hi)
+    gsap.from(".animate-text-top", {
+      scrollTrigger: {
+        trigger: CreatorlyValueSectionRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 0.55,
+      stagger: 0.08,
+      ease: "power3.out",
+    });
+
+    // 2. CTA BUTTONS ANIMATION (Jab actual CTA div screen par aaye)
+    gsap.from(".animate-button", {
+      scrollTrigger: {
+        trigger: CTARef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+      y: 20,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: "power2.out",
+    });
+
+    // 3. MIDDLE STORE LINK TEXT ANIMATION
+    gsap.from(".animate-text-middle", {
+      scrollTrigger: {
+        trigger: OneLinkWholeStoreRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 0.55,
+      stagger: 0.08,
+      ease: "power3.out",
+    });
+
+    // 4. FEATURES GRID CARDS ANIMATION
+    gsap.from(".animate-grid-card", {
+      scrollTrigger: {
+        trigger: OneLinkWholeStoreRef.current,
+        start: "top 65%",
+        toggleActions: "play none none none",
+      },
+      y: 40,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: "power3.out",
+    });
+
+    // 5. BOTTOM WHY CREATORLY TEXT ANIMATION
+    gsap.from(".animate-text-bottom", {
+      scrollTrigger: {
+        trigger: WhyCreatorlyRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 0.55,
+      stagger: 0.08,
+      ease: "power3.out",
+    });
+
+  }, { scope: CreatorlyValueSectionRef });
+
   return (
-    <section className="relative overflow-hidden bg-[#f8f3e8] px-5 py-20 sm:px-8 lg:px-16 lg:py-28">
+    <section ref={CreatorlyValueSectionRef} className="relative overflow-hidden bg-[#f8f3e8] px-5 py-20 sm:px-8 lg:px-16 lg:py-28">
       {/* Decorative background */}
       <div className="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-orange-200/30 blur-3xl" />
       <div className="pointer-events-none absolute -left-24 bottom-10 h-72 w-72 rounded-full bg-yellow-200/30 blur-3xl" />
@@ -43,28 +128,28 @@ const CreatorlyValueSection = () => {
         {/*  upper page content  */}
         <div className="mx-auto max-w-3xl text-center">
 
-          <p className="mb-5 text-sm font-medium uppercase tracking-[0.25em] text-neutral-500">
+          <p className="animate-text-top mb-5 text-sm font-medium uppercase tracking-[0.25em] text-neutral-500">
             Built for small businesses
           </p>
 
-          <h2 className="text-4xl font-semibold leading-[1.08] tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
+          <h2 className="animate-text-top text-4xl font-semibold leading-[1.08] tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
             Your brand deserves
-            <span className="block font-serif italic font-normal">
+            <span className="animate-text-top block font-serif italic font-normal">
               its own space.
             </span>
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg">
+          <p className="animate-text-top mx-auto mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg">
             Create your free Creatorly store. Share one simple link on
             Instagram, WhatsApp or anywhere.
           </p>
 
           {/* CTA */}
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div ref={CTARef} className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
 
             <button
               onClick={() => navigate("/auth")}
-              className="group inline-flex w-full items-center justify-center gap-2  bg-neutral-900 px-7 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 sm:w-auto"
+              className="animate-button group inline-flex w-full items-center justify-center gap-2  bg-neutral-900 px-7 py-3.5 text-sm font-medium text-white hover:-translate-y-1 hover:shadow-xl active:scale-95 sm:w-auto"
             >
               Create your store
               <ArrowRight
@@ -79,7 +164,7 @@ const CreatorlyValueSection = () => {
                   .getElementById("creatorly-how-it-works")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="inline-flex w-full items-center justify-center border border-neutral-300 bg-white/70 px-7 py-3.5 text-sm font-medium text-neutral-800 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-md active:scale-95 sm:w-auto"
+              className="animate-button inline-flex w-full items-center justify-center border border-neutral-300 bg-white/70 px-7 py-3.5 text-sm font-medium text-neutral-800 hover:-translate-y-1 hover:bg-white hover:shadow-md active:scale-95 sm:w-auto"
             >
               See how it works
             </button>
@@ -89,24 +174,25 @@ const CreatorlyValueSection = () => {
 
 
   
-        <div className="mt-24 sm:mt-32">
+        <div ref={OneLinkWholeStoreRef} className="mt-24 sm:mt-32">
 
           <div className="mb-10 text-center">
-            <p className="text-sm font-medium uppercase tracking-[0.22em] text-neutral-500">
+            <p className="animate-text-middle text-sm font-medium uppercase tracking-[0.22em] text-neutral-500">
               One simple link
             </p>
 
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
+            <h3 className="animate-text-middle mt-3 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
               One link. Your whole store.
             </h3>
 
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-neutral-500 sm:text-base">
+            <p className="animate-text-middle mx-auto mt-4 max-w-xl text-sm leading-6 text-neutral-500 sm:text-base">
               Everything your customer needs to buy from you, without the headache of endless DMs.
             </p>
           </div>
 
 
-          <div className="grid gap-5 md:grid-cols-3">
+
+              <div className="animate-grid-card grid gap-5 md:grid-cols-3">
 
             {features.map((feature, index) => {
               const Icon = feature.icon;
@@ -147,28 +233,29 @@ const CreatorlyValueSection = () => {
 
 
         <div
+        ref={WhyCreatorlyRef}
           id="creatorly-how-it-works"
-          className="mt-24 overflow-hidden rounded-[2rem] bg-neutral-900 px-7 py-12 text-white sm:px-12 lg:mt-32 lg:px-16 lg:py-16"
+          className=" mt-24 overflow-hidden rounded-[2rem] bg-neutral-900 px-7 py-12 text-white sm:px-12 lg:mt-32 lg:px-16 lg:py-16"
         >
 
           <div className="grid items-center gap-12 lg:grid-cols-2">
 
             <div>
-              <p className="text-sm font-medium uppercase tracking-[0.22em] text-neutral-400">
+              <p className=" animate-text-bottom text-sm font-medium uppercase tracking-[0.22em] text-neutral-400">
                 Why Creatorly
               </p>
 
-              <h3 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
+              <h3 className="animate-text-bottom mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
                 Made for independent small businesses.
               </h3>
 
-              <p className="mt-5 max-w-lg text-sm leading-7 text-neutral-400 sm:text-base">
+              <p className="animate-text-bottom mt-5 max-w-lg text-sm leading-7 text-neutral-400 sm:text-base">
                You don't need to hire a developer, learn how to code, or struggle with complicated e-commerce platforms. Creatorly handles the tech so you can focus entirely on running your business and serving your customers.
               </p>
             </div>
 
 
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className=" animate-grid grid gap-3 sm:grid-cols-2">
 
               {benefits.map((benefit, index) => (
                 <div

@@ -201,15 +201,15 @@ const Intro = ({ onIntroComplete }) => {
         ease: "power2.in",
       });
 
-      tl.to(
-        ".intro-page",
-        {
-          opacity: 0,
-          duration: 0.18,
-          ease: "power2.out",
-        },
-        "-=0.15",
-      );
+      // tl.to(
+      //   ".intro-page",
+      //   {
+      //     opacity: 0,
+      //     duration: 0.18,
+      //     ease: "power2.out",
+      //   },
+      //   "-=0.15",
+      // );
 
 
       // 10. GO HOME
