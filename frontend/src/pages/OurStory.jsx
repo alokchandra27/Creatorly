@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   ArrowRight,
   MessageCircle,
@@ -9,12 +9,56 @@ import {
 //   Instagram,
   Sparkles,
   ArrowDown,
+  BoomBox,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const OurStory = () => {
   const navigate = useNavigate();
+  const pageRef = useRef(null);
+
+  useGSAP(() => {
+    const sections = gsap.utils.toArray(".story-scroll-section");
+
+    sections.forEach((section, index) => {
+      if (index === 0) {
+        gsap.fromTo(
+          section,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.0,
+            ease: "power3.out",
+          }
+        );
+        return;
+      }
+
+      gsap.fromTo(
+        section,
+        { opacity: 0, y: 45 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 75%",
+            toggleActions: "play none none none",
+            once: true,
+          },
+        }
+      );
+    });
+  }, { scope: pageRef });
 
   const goToAuth = () => {
     navigate("/auth");
@@ -31,13 +75,13 @@ const OurStory = () => {
   };
 
   return (
-    <main className="w-full overflow-x-hidden bg-[#f8f3e8] text-neutral-900">
+    <main ref={pageRef} className="w-full overflow-x-hidden bg-[#f8f3e8] text-neutral-900">
 
       {/* =========================================================
           HERO
       ========================================================= */}
 
-      <section className="relative min-h-[88vh] overflow-hidden px-6 py-20 sm:px-10 md:py-24 lg:px-16 lg:py-28">
+      <section className="story-scroll-section relative min-h-[88vh] overflow-hidden px-6 py-20 sm:px-10 md:py-24 lg:px-16 lg:py-28">
 
         {/* Decorative elements */}
 
@@ -51,11 +95,11 @@ const OurStory = () => {
           className="pointer-events-none absolute left-[4%] top-[15%] w-16 rotate-[-18deg] opacity-70 sm:w-24"
         />
 
-        <img
+        {/* <img
           src="/src/assets/yarn.webp"
           alt=""
-          className="pointer-events-none absolute bottom-[8%] right-[5%] w-20 rotate-12 opacity-70 sm:w-28"
-        />
+          className="pointer-events-none absolute bottom-[8%] right-[5%] w-20 rotate-12 opacity-70 sm:w-28 z-10"
+        /> */}
 
         <div className="relative mx-auto flex min-h-[75vh] max-w-6xl items-center">
 
@@ -201,7 +245,7 @@ const OurStory = () => {
 
       <section
         id="story-start"
-        className="bg-white px-6 py-20 sm:px-10 md:py-28 lg:px-16"
+        className="story-scroll-section bg-white px-6 py-20 sm:px-10 md:py-28 lg:px-16"
       >
 
         <div className="mx-auto max-w-6xl">
@@ -234,12 +278,12 @@ const OurStory = () => {
 
           <div className="mt-16 grid gap-5 md:grid-cols-3">
 
-            {/* <StoryCard
-            //   icon={Instagram}
+            <StoryCard
+              icon={BoomBox}
               number="01"
               title="Their audience was on Instagram."
               text="Creators were already using reels, posts and stories to show what they make and build an audience around it."
-            /> */}
+            />
 
             <StoryCard
               icon={MessageCircle}
@@ -265,7 +309,7 @@ const OurStory = () => {
           CONVERSATIONS / OBSERVATION
       ========================================================= */}
 
-      <section className="relative overflow-hidden bg-[#f8f3e8] px-6 py-20 sm:px-10 md:py-28 lg:px-16">
+      <section className="story-scroll-section relative overflow-hidden bg-[#f8f3e8] px-6 py-20 sm:px-10 md:py-28 lg:px-16">
 
         <img
           src="/src/assets/leafStem.webp"
@@ -400,7 +444,7 @@ const OurStory = () => {
           THE IDEA
       ========================================================= */}
 
-      <section className="bg-white px-6 py-20 sm:px-10 md:py-28 lg:px-16">
+      <section className="story-scroll-section bg-white px-6 py-20 sm:px-10 md:py-28 lg:px-16">
 
         <div className="mx-auto max-w-5xl text-center">
 
@@ -443,7 +487,7 @@ const OurStory = () => {
               <IdeaBlock
                 icon={MessageCircle}
                 title="Your customers"
-                text="Connect directly."
+                text="Connect directly through the DMs."
               />
 
             </div>
@@ -458,7 +502,7 @@ const OurStory = () => {
           BUILDING CREATORLY
       ========================================================= */}
 
-      <section className="bg-neutral-900 px-6 py-20 text-white sm:px-10 md:py-28 lg:px-16">
+      <section className="story-scroll-section bg-neutral-900 px-6 py-20 text-white sm:px-10 md:py-28 lg:px-16">
 
         <div className="mx-auto max-w-6xl">
 
@@ -529,7 +573,7 @@ const OurStory = () => {
           WHAT CREATORLY IS
       ========================================================= */}
 
-      <section className="bg-[#f8f3e8] px-6 py-20 sm:px-10 md:py-28 lg:px-16">
+      <section className="story-scroll-section bg-[#f8f3e8] px-6 py-20 sm:px-10 md:py-28 lg:px-16">
 
         <div className="mx-auto max-w-6xl">
 
@@ -571,7 +615,7 @@ const OurStory = () => {
             <MeaningCard
               number="03"
               title="Conversations stay personal."
-              text="Customers can still reach the creator through the channels they already use."
+              text="Customers will reach the brand through the channels they already use."
             />
 
           </div>
@@ -584,7 +628,7 @@ const OurStory = () => {
           FOUNDER NOTE
       ========================================================= */}
 
-      <section className="bg-white px-6 py-20 sm:px-10 md:py-28 lg:px-16">
+      <section className="story-scroll-section bg-white px-6 py-20 sm:px-10 md:py-28 lg:px-16">
 
         <div className="mx-auto max-w-4xl">
 
@@ -597,7 +641,7 @@ const OurStory = () => {
             />
 
             <img
-              src="/src/assets/sunflower.webp"
+              src="/src/assets/flowerDaisy.webp"
               alt=""
               className="absolute -right-5 bottom-0 w-24 rotate-12 opacity-70 sm:w-32"
             />
@@ -638,9 +682,9 @@ const OurStory = () => {
           FINAL CTA
       ========================================================= */}
 
-      <section className="relative mx-4 mb-6 overflow-hidden rounded-[2.5rem] bg-neutral-900 px-6 py-16 text-white sm:mx-6 sm:px-10 md:py-20 lg:mx-10">
+      <section className="story-scroll-section relative mx-4 mb-6 overflow-hidden rounded-[2.5rem] bg-neutral-900 px-6 py-16 text-white sm:mx-6 sm:px-10 md:py-20 lg:mx-10">
 
-        <img
+        {/* <img
           src="/src/assets/flowerDaisy.webp"
           alt=""
           className="absolute -bottom-4 left-3 w-20 rotate-[-15deg] opacity-60 sm:left-8 sm:w-28"
@@ -650,7 +694,7 @@ const OurStory = () => {
           src="/src/assets/yarn.webp"
           alt=""
           className="absolute -right-2 bottom-0 w-20 rotate-12 opacity-60 sm:right-8 sm:w-28"
-        />
+        /> */}
 
         <div className="relative z-10 mx-auto max-w-3xl text-center">
 

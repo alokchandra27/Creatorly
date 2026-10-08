@@ -35,6 +35,7 @@ export const saveCart = (storeName, cart) => {
     getCartKey(storeName),
     JSON.stringify(cart)
   );
+  window.dispatchEvent(new Event("creatorly-shopping-updated"));
 };
 
 export const addToCartStorage = (storeName, product) => {
@@ -143,6 +144,7 @@ export const removeFromCart = (
 
 export const clearCart = (storeName) => {
   localStorage.removeItem(getCartKey(storeName));
+  window.dispatchEvent(new Event("creatorly-shopping-updated"));
 };
 
 // ============================================================

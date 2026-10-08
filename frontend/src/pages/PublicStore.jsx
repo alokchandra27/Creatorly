@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, CheckCircle2, ChevronLeft, ChevronRight, Heart, Home, MessageCircle, Package, Share2, ShoppingCart, Sparkles, Users, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,6 +10,8 @@ import API from "../components/API/API";
 import { addToCartStorage, getCart, getWishlist, toggleWishlistStorage } from "../utils/storeStorage";
 import AboutStore from "./AboutStore";
 import Footer from "./Footer";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ============================================================
 // IMAGE HELPER
@@ -96,7 +101,7 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
   return (
     <article
       onClick={openProduct}
-      className="group relative cursor-pointer overflow-hidden rounded-[5px] border border-creator-primary/15 bg-white shadow-[0_4px_16px_rgba(95,111,101,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-creator-accent/60 hover:shadow-[0_14px_28px_rgba(95,111,101,0.16)]"
+      className="publicstore-product-card group relative cursor-pointer overflow-hidden rounded-[5px] border border-creator-primary/15 bg-white shadow-[0_4px_16px_rgba(95,111,101,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-creator-accent/60 hover:shadow-[0_14px_28px_rgba(95,111,101,0.16)]"
     >
       {/* ================================================== */}
       {/* PRODUCT IMAGE */}
@@ -217,8 +222,13 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
 
         {/* PRICE */}
 
-        <div className="-mt-3">
+        <div >
           <strong className="font-serif text-base text-creator-text sm:text-lg">₹{Number(product?.productPrice || 0).toLocaleString("en-IN")}</strong>
+          {product?.shippingAvailable && (
+            <p className="mt-1 text-[9px] font-medium text-creator-text/50">
+              {product.shippingIncluded ? "Shipping included" : `+ ₹${Number(product.shippingCost || 0).toLocaleString("en-IN")} shipping`}
+            </p>
+          )}
 
           <button
             disabled={isOutOfStock}
@@ -270,6 +280,7 @@ const PublicStore = () => {
 
   console.log("Store Name from URL:", validStoreName);
   const navigate = useNavigate();
+  const pageRef = useRef(null);
 
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -295,6 +306,55 @@ const PublicStore = () => {
   // ==========================================================
 
   const filteredProducts = activeCategory === "All" ? products : products.filter((product) => product.category?.toLowerCase() === activeCategory.toLowerCase());
+
+  useGSAP(() => {
+    const sections = [
+      { selector: ".publicstore-hero", x: -55, y: 0 },
+      { selector: ".publicstore-profile", x: 55, y: 0 },
+      { selector: ".publicstore-collection", x: -45, y: 25 },
+      { selector: ".publicstore-empty", x: 45, y: 25 },
+      { selector: ".publicstore-products", x: -45, y: 25 },
+      { selector: ".publicstore-cta", x: 45, y: 25 },
+      { selector: ".publicstore-footer", x: 0, y: 35 },
+    ];
+
+    sections.forEach(({ selector, x, y }) => {
+      const element = document.querySelector(selector);
+      if (!element) return;
+
+      gsap.from(element, {
+        x,
+        y,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 82%",
+          toggleActions: "play none none none",
+          once: true,
+        },
+      });
+    });
+
+    const productCards = gsap.utils.toArray(".publicstore-product-card");
+
+    productCards.forEach((card, index) => {
+      gsap.from(card, {
+        y: 35,
+        opacity: 0,
+        duration: 0.55,
+        delay: (index % 4) * 0.04,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 88%",
+          toggleActions: "play none none none",
+          once: true,
+        },
+      });
+    });
+  }, { scope: pageRef, dependencies: [loading] });
 
   // ==========================================================
   // CART
@@ -518,7 +578,7 @@ const PublicStore = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-creator-bg-butter text-creator-text mt-10">
+    <div ref={pageRef} className="min-h-screen overflow-x-hidden bg-creator-bg-butter text-creator-text mt-10">
       {/* ===================================================== */}
       {/* MAIN */}
       {/* ===================================================== */}
@@ -528,7 +588,7 @@ const PublicStore = () => {
         {/* HERO */}
         {/* ================================================= */}
 
-        <section className="relative grid overflow-hidden rounded-[28px] bg-creator-bg shadow-[0_18px_55px_rgba(82,60,42,0.08)] lg:grid-cols-[0.86fr_1.14fr]">
+        <section className="publicstore-hero relative grid overflow-hidden rounded-[28px] bg-creator-bg shadow-[0_18px_55px_rgba(82,60,42,0.08)] lg:grid-cols-[0.86fr_1.14fr]">
           {/* DECORATIVE BRUSH */}
 
           <div className="pointer-events-none absolute -left-7 top-16 h-10 w-28 rotate-[-12deg] rounded-full bg-creator-pink/20 blur-[1px]" />
@@ -588,7 +648,7 @@ const PublicStore = () => {
         {/* STORE PROFILE */}
         {/* ================================================= */}
 
-        <section className="relative flex flex-col gap-5 border-b border-creator-text/10 px-2 py-8 md:flex-row md:gap-7 md:py-10">
+        <section className="publicstore-profile relative flex flex-col gap-5 border-b border-creator-text/10 px-2 py-8 md:flex-row md:gap-7 md:py-10">
           {/* small decorative heart */}
 
           <span className="absolute right-2 top-4 rotate-12 font-caveat text-xl text-creator-pink md:right-5">♡</span>
@@ -689,7 +749,7 @@ const PublicStore = () => {
         {/* COLLECTION HEADER */}
         {/* ================================================= */}
 
-        <section id="collection" className="relative scroll-mt-10 pt-12">
+        <section id="collection" className="publicstore-collection relative scroll-mt-10 pt-12">
           {/* handwritten decoration */}
 
           <div className="absolute -right-1 top-10 hidden rotate-[-8deg] font-caveat text-lg text-creator-text/60 sm:block">
@@ -727,7 +787,7 @@ const PublicStore = () => {
         {/* ================================================= */}
 
         {products.length > 0 && filteredProducts.length === 0 && (
-          <section className="relative mb-14 overflow-hidden rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center">
+          <section className="publicstore-empty relative mb-14 overflow-hidden rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center">
             {/* decoration */}
 
             <span className="absolute left-6 top-5 rotate-[-10deg] font-caveat text-xl text-creator-pink/60">♡</span>
@@ -749,7 +809,7 @@ const PublicStore = () => {
         {/* ================================================= */}
 
         {products.length === 0 && (
-          <section className="mb-14 rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center">
+          <section className="publicstore-empty mb-14 rounded-[26px] border border-dashed border-creator-text/15 bg-white/60 px-6 py-20 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-creator-accent/40">
               <Package size={25} />
             </div>
@@ -765,7 +825,7 @@ const PublicStore = () => {
         {/* ================================================= */}
 
         {filteredProducts.length > 0 && (
-          <section id="products-grid-section" className="relative scroll-mt-24 pb-16 pt-1">
+          <section id="products-grid-section" className="publicstore-products relative scroll-mt-24 pb-16 pt-1">
             {/* small decorative line */}
 
             {/* <div className="pointer-events-none absolute -left-5 top-0 hidden rotate-[-8deg] font-caveat text-sm text-creator-text/40 lg:block">made slowly ♡</div> */}
@@ -788,7 +848,7 @@ const PublicStore = () => {
         {/* ================================================= */}
 
         {(store?.whatsappNumber || store?.instagramLink) && (
-          <section className="relative mb-16 overflow-hidden rounded-[28px] bg-creator-accent px-7 py-10 sm:px-12">
+          <section className="publicstore-cta relative mb-16 overflow-hidden rounded-[28px] bg-creator-accent px-7 py-10 sm:px-12">
             {/* decorative */}
 
             <div className="absolute -right-8 -top-8 h-32 w-32 rotate-12 rounded-full border-[18px] border-white/30" />
@@ -858,7 +918,7 @@ const PublicStore = () => {
       {/* FOOTER */}
       {/* ===================================================== */}
 
-      <footer className="relative overflow-hidden border-t border-creator-text/10 bg-creator-text px-7 py-10 text-white">
+      <footer className="publicstore-footer relative overflow-hidden border-t border-creator-text/10 bg-creator-text px-7 py-10 text-white">
         {/* decorative handwritten */}
 
         <span className="pointer-events-none absolute right-5 top-5 rotate-[-8deg] font-caveat text-lg text-white/35">

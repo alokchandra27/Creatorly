@@ -11,6 +11,9 @@ export default function ProductsManagement() {
     productName: "",
     productDescription: "",
     productPrice: "",
+    shippingAvailable: false,
+    shippingCost: "",
+    shippingIncluded: false,
     category: "Other",
     stocks: "",
     color: "",
@@ -111,6 +114,9 @@ export default function ProductsManagement() {
         productName: "",
         productDescription: "",
         productPrice: "",
+        shippingAvailable: false,
+        shippingCost: "",
+        shippingIncluded: false,
         category: "clay",
         stocks: "",
         color: "",
@@ -234,15 +240,14 @@ export default function ProductsManagement() {
               <div className="mb-3 flex items-center gap-2">
                 <span className="h-px w-7 bg-creator-pink" />
 
-                <span className="font-caveat text-lg text-creator-pink">your little collection</span>
+                <span className="font-caveat text-lg text-creator-pink">My little collection</span>
               </div>
 
               <h1 className="font-caveat text-3xl font-semibold tracking-tight text-neutral-800 sm:text-4xl">
-                Products<span className="text-creator-pink">.</span>
-              </h1>
+                Products          </h1>
 
               <p className="mt-2 max-w-md text-sm leading-6 text-neutral-500 font-sans sm:text-basecd frontendcd">
-                Everything you make, in one place. Keep your collection beautiful and easy to manage.
+                Everything I create all in one place. Easy to manage, ready to grow.
               </p>
             </div>
 
@@ -615,6 +620,32 @@ function AddProductForm({ formData, images, isSaving, handleInputChange, handleI
         <Field label="Product Name" required className="md:col-span-2 text-creator-text">
           <input required type="text" name="productName" value={formData.productName} onChange={handleInputChange} placeholder="Beautiful Clay Turtle" className="creator-input border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink" />
         </Field>
+
+        {/* SHIPPING */}
+        <div className="md:col-span-2 rounded-2xl border border-black/[0.06] bg-black/[0.02] p-4">
+          <label className="flex cursor-pointer items-start gap-3">
+            <input type="checkbox" name="shippingAvailable" checked={formData.shippingAvailable} onChange={handleInputChange} className="mt-1 h-4 w-4 cursor-pointer accent-creator-pink" />
+            <div>
+              <p className="text-sm font-medium text-creator-text">Shipping available</p>
+              <p className="mt-1 text-xs text-black/45">Offer delivery for this product.</p>
+            </div>
+          </label>
+
+          {formData.shippingAvailable && (
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <Field label="Shipping cost per item">
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">₹</span>
+                  <input required type="number" min="0" name="shippingCost" value={formData.shippingCost} onChange={handleInputChange} placeholder="0" className="creator-input w-full pl-8 border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink" />
+                </div>
+              </Field>
+              <label className="flex cursor-pointer items-center gap-3 sm:pt-7">
+                <input type="checkbox" name="shippingIncluded" checked={formData.shippingIncluded} onChange={handleInputChange} className="h-4 w-4 cursor-pointer accent-creator-pink" />
+                <span className="text-sm text-creator-text">Shipping included in product price</span>
+              </label>
+            </div>
+          )}
+        </div>
 
         {/* Description */}
         <Field label="Description" required className="md:col-span-2">

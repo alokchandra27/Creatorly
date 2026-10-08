@@ -69,7 +69,7 @@ export default function Navbar({ isLoggedIn, setIsLoggedIn }) {
         <div className="flex h-15 items-center justify-between">
           {/* LEFT: Branding Section */}
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
-            <span className="font-serif text-2xl font-black tracking-tight text-creator-text ">Creatorly</span>
+            <span className="font-caveat text-2xl font-black tracking-tight text-creator-text ">Creatorly</span>
           </div>
 
           {/* CENTER: Desktop Links Matrix */}

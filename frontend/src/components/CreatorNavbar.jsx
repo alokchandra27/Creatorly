@@ -2,18 +2,37 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import API from "./API/API";
+import { getCart } from "../utils/storeStorage";
 
 export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const lastScrollY = useRef(0);
-  const [cartCount, setCartCount] = useState(2);
+  const [cartCount, setCartCount] = useState(0);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const storeName = pathname.startsWith("/publicstore/")
-    ? decodeURIComponent(pathname.split("/")[2] || "")
-    : "";
+  const storeName = pathname.startsWith("/publicstore/") ? decodeURIComponent(pathname.split("/")[2] || "") : "";
+
+  useEffect(() => {
+    if (!storeName) {
+      return undefined;
+    }
+
+    const syncCartCount = () => {
+      const cart = getCart(storeName);
+      setCartCount(cart.reduce((total, item) => total + Number(item.quantity || 0), 0));
+    };
+
+    syncCartCount();
+    window.addEventListener("creatorly-shopping-updated", syncCartCount);
+    window.addEventListener("storage", syncCartCount);
+
+    return () => {
+      window.removeEventListener("creatorly-shopping-updated", syncCartCount);
+      window.removeEventListener("storage", syncCartCount);
+    };
+  }, [storeName]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,9 +56,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
 
   // ⚡ SMART SCROLL ENGINE FUNCTION
   const scrollToSection = (elementId) => {
-    const storePath = storeName
-      ? `/publicstore/${encodeURIComponent(storeName)}`
-      : "/";
+    const storePath = storeName ? `/publicstore/${encodeURIComponent(storeName)}` : "/";
 
     if (pathname === storePath) {
       const element = document.getElementById(elementId);
@@ -78,36 +95,23 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* LEFT: Dynamic Branding mapped to URL */}
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => navigate(`/publicstore/${storeName}`)}
-          >
-            <span className="font-serif text-2xl font-black tracking-tight text-creator-text capitalize">
-              {storeName ? storeName.replace(/-/g, " ") : "Creator Store"}
-            </span>
-            <span className="text-xs bg-creator-pink/10 text-creator-pink px-2 py-0.5 rounded-full font-sans font-medium">
-              Shop ✦
-            </span>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate(`/publicstore/${storeName}`)}>
+            <span className="font-serif text-2xl font-black tracking-tight text-creator-text capitalize">{storeName ? storeName.replace(/-/g, " ") : "Creator Store"}</span>
+            <span className="text-xs bg-creator-pink/10 text-creator-pink px-2 py-0.5 rounded-full font-sans font-medium">Shop ✦</span>
           </div>
 
           {/* CENTER: Isolated Shop Navigation Links (Fixed Strings Templates) */}
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
             {/* 🛍️ Shop Element Button Trigger */}
-            <span
-              onClick={() => scrollToSection("products-grid-section")}
-              className="cursor-pointer text-creator-text/70 hover:text-creator-text transition-colors duration-150 text-sm font-medium"
-            >
+            <span onClick={() => scrollToSection("products-grid-section")} className="cursor-pointer text-creator-text/70 hover:text-creator-text transition-colors duration-150 text-sm font-medium">
               Shop
             </span>
 
             {/* ℹ️ About Store Element Button Trigger */}
-            <span
-              onClick={() => scrollToSection("about-store-section")}
-              className="cursor-pointer text-creator-text/70 hover:text-creator-text transition-colors duration-150 text-sm font-medium"
-            >
+            <span onClick={() => scrollToSection("about-store-section")} className="cursor-pointer text-creator-text/70 hover:text-creator-text transition-colors duration-150 text-sm font-medium">
               About Store
             </span>
-{/* 
+            {/* 
             {isLoggedIn && (
               <button
                 onClick={() => navigate("/dashboard")}
@@ -144,17 +148,12 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
 
           {/* MOBILE TOGGLE TRIGGER ROW */}
           <div className="flex items-center gap-4 md:hidden">
-            <button
-              onClick={() => navigate(`/publicstore/${storeName}/cart`)}
-              className="relative rounded-full border border-creator-text/10 p-2 text-creator-text"
-            >
+            <button onClick={() => navigate(`/publicstore/${storeName}/cart`)} className="relative rounded-full border border-creator-text/10 p-2 text-creator-text">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
               {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-creator-accent text-[9px] font-bold text-white">
-                  {cartCount}
-                </span>
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-creator-accent text-[9px] font-bold text-white">{cartCount}</span>
               )}
             </button>
 
@@ -178,20 +177,17 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
       {/* MOBILE EXPANDED DRAWER CONTAINER */}
       {isOpen && (
         <div className="md:hidden border-t border-creator-text/5 bg-creator-bg px-4 py-4 space-y-3 flex flex-col shadow-inner">
-          <span
-            onClick={() => scrollToSection("products-grid-section")}
-            className="text-sm font-medium text-creator-text/80 hover:text-creator-text py-1 cursor-pointer"
-          >
-            Shop 
+          <span onClick={() => scrollToSection("products-grid-section")} className="text-sm font-medium text-creator-text/80 hover:text-creator-text py-1 cursor-pointer">
+            Shop
           </span>
-          <span
-            onClick={() => scrollToSection("about-store-section")}
-            className="text-sm font-medium text-creator-text/80 hover:text-creator-text py-1 cursor-pointer"
-          >
+          <span onClick={() => scrollToSection("about-store-section")} className="text-sm font-medium text-creator-text/80 hover:text-creator-text py-1 cursor-pointer">
             About store
           </span>
           <button
-            onClick={() => { navigate("/"); setIsOpen(false); }}
+            onClick={() => {
+              navigate("/");
+              setIsOpen(false);
+            }}
             className="w-full text-center rounded-xl border border-creator-text py-2.5 text-xs font-semibold text-creator-text cursor-pointer"
           >
             Back to Creatorly

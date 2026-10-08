@@ -122,6 +122,15 @@ const Cart = () => {
     }, 0);
   }, [cart]);
 
+  const shippingTotal = useMemo(() => {
+    return cart.reduce((total, item) => {
+      if (!item.shippingAvailable || item.shippingIncluded) return total;
+      return total + Number(item.shippingCost || 0) * Number(item.quantity || 0);
+    }, 0);
+  }, [cart]);
+
+  const orderTotal = subtotal + shippingTotal;
+
   // ==========================================================
   // CHANGE QUANTITY
   // ==========================================================
@@ -218,7 +227,7 @@ ORDER DETAILS
 ${buildProductsText()}
 
 ORDER TOTAL
-₹${subtotal.toLocaleString("en-IN")}
+₹${orderTotal.toLocaleString("en-IN")}
 
 CUSTOMER DETAILS
 --------------------
@@ -604,16 +613,15 @@ Thank you!`;
                 </div>
 
                 <div className="flex justify-between text-xs text-creator-text/55">
-                  <span>Delivery</span>
-
-                  <span>Confirm with creator</span>
+                  <span>Shipping</span>
+                  <span>{shippingTotal ? `₹${shippingTotal.toLocaleString("en-IN")}` : "Included / free"}</span>
                 </div>
               </div>
 
               <div className="flex items-end justify-between">
                 <span className="text-sm text-creator-text/55">Total</span>
 
-                <strong className="font-serif text-3xl">₹{subtotal.toLocaleString("en-IN")}</strong>
+                <strong className="font-serif text-3xl">₹{orderTotal.toLocaleString("en-IN")}</strong>
               </div>
 
               {/* ORDER BUTTON */}
@@ -782,7 +790,7 @@ Thank you!`;
               <div className="mt-4 flex items-center justify-between rounded-2xl bg-creator-bg px-4 py-4">
                 <span className="text-xs text-creator-text/50">Order total</span>
 
-                <strong className="font-serif text-xl">₹{subtotal.toLocaleString("en-IN")}</strong>
+                <strong className="font-serif text-xl">₹{orderTotal.toLocaleString("en-IN")}</strong>
               </div>
             )}
 

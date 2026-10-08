@@ -605,6 +605,12 @@ I found this product on your Creatorly store.
                 ₹{formatPrice(product.productPrice)}
               </span>
 
+              {product.shippingAvailable && (
+                <span className="rounded-full bg-creator-bg px-3 py-1.5 text-[10px] font-medium text-creator-text/60">
+                  {product.shippingIncluded ? "Shipping included" : `+ ₹${formatPrice(product.shippingCost)} shipping`}
+                </span>
+              )}
+
               {!isOutOfStock ? (
                 <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-[10px] font-medium text-emerald-700">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />

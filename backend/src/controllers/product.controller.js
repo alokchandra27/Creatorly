@@ -23,6 +23,9 @@ async function createProduct(req, res) {
       productName,
       productDescription,
       productPrice,
+      shippingAvailable,
+      shippingCost,
+      shippingIncluded,
       category,
       stocks,
       color,
@@ -56,6 +59,9 @@ async function createProduct(req, res) {
       productName,
       productDescription,
       productPrice,
+      shippingAvailable: shippingAvailable === true || shippingAvailable === "true",
+      shippingCost: shippingAvailable === true || shippingAvailable === "true" ? Number(shippingCost || 0) : 0,
+      shippingIncluded: shippingIncluded === true || shippingIncluded === "true",
       sellerId,
       category,
       stocks,
@@ -161,6 +167,16 @@ async function updateProduct(req, res) {
 
 
     const updatePayload = { ...req.body };
+
+    if (Object.prototype.hasOwnProperty.call(updatePayload, "shippingAvailable")) {
+      updatePayload.shippingAvailable = updatePayload.shippingAvailable === true || updatePayload.shippingAvailable === "true";
+    }
+    if (Object.prototype.hasOwnProperty.call(updatePayload, "shippingIncluded")) {
+      updatePayload.shippingIncluded = updatePayload.shippingIncluded === true || updatePayload.shippingIncluded === "true";
+    }
+    if (Object.prototype.hasOwnProperty.call(updatePayload, "shippingCost")) {
+      updatePayload.shippingCost = updatePayload.shippingAvailable ? Number(updatePayload.shippingCost || 0) : 0;
+    }
 
  if (req.files) {
       for (const fieldName in req.files) {

@@ -16,6 +16,9 @@ const EditProduct = () => {
     productName: "",
     productDescription: "",
     productPrice: "",
+    shippingAvailable: false,
+    shippingCost: "",
+    shippingIncluded: false,
     category: "other",
     stocks: "",
     color: "",
@@ -55,6 +58,9 @@ const EditProduct = () => {
           productName: product.productName || "",
           productDescription: product.productDescription || "",
           productPrice: product.productPrice ?? "",
+          shippingAvailable: product.shippingAvailable || false,
+          shippingCost: product.shippingCost ?? "",
+          shippingIncluded: product.shippingIncluded || false,
           category: product.category || "other",
           stocks: product.stocks ?? "",
           color: product.color || "",
@@ -163,6 +169,9 @@ const EditProduct = () => {
       data.append("productName", formData.productName);
       data.append("productDescription", formData.productDescription);
       data.append("productPrice", formData.productPrice);
+      data.append("shippingAvailable", formData.shippingAvailable);
+      data.append("shippingCost", formData.shippingCost);
+      data.append("shippingIncluded", formData.shippingIncluded);
       data.append("category", formData.category);
       data.append("stocks", formData.stocks);
       data.append("color", formData.color);
@@ -363,6 +372,32 @@ const EditProduct = () => {
                       <label className="mb-2 block text-sm font-medium text-creator-accent font-caveat">Stock</label>
 
                       <input type="number" name="stocks" value={formData.stocks} onChange={handleInputChange} min="0" placeholder="20" className="creator-input w-full border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink font-caveat" />
+                    </div>
+
+                    <div className="sm:col-span-2 rounded-2xl border border-black/[0.06] bg-black/[0.02] p-4">
+                      <label className="flex cursor-pointer items-start gap-3">
+                        <input type="checkbox" name="shippingAvailable" checked={formData.shippingAvailable} onChange={handleInputChange} className="mt-1 h-4 w-4 cursor-pointer accent-black" />
+                        <div>
+                          <p className="text-sm font-medium text-creator-accent font-caveat">Shipping available</p>
+                          <p className="mt-1 text-xs text-black/45">Offer delivery for this product.</p>
+                        </div>
+                      </label>
+
+                      {formData.shippingAvailable && (
+                        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                          <div>
+                            <label className="mb-2 block text-sm font-medium text-creator-accent font-caveat">Shipping cost per item</label>
+                            <div className="relative">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">₹</span>
+                              <input required type="number" min="0" name="shippingCost" value={formData.shippingCost} onChange={handleInputChange} placeholder="0" className="creator-input w-full pl-8 border border-black/20 bg-white/50 p-3 text-sm placeholder:text-black/35 focus:outline-none focus:ring-2 focus:ring-creator-pink font-caveat" />
+                            </div>
+                          </div>
+                          <label className="flex cursor-pointer items-center gap-3 sm:pt-7">
+                            <input type="checkbox" name="shippingIncluded" checked={formData.shippingIncluded} onChange={handleInputChange} className="h-4 w-4 cursor-pointer accent-black" />
+                            <span className="text-sm text-creator-accent font-caveat">Shipping included in product price</span>
+                          </label>
+                        </div>
+                      )}
                     </div>
                   </div>
 

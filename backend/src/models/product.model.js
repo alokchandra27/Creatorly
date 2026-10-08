@@ -14,6 +14,19 @@ const productSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        shippingAvailable: {
+            type: Boolean,
+            default: false,
+        },
+        shippingCost: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
+        shippingIncluded: {
+            type: Boolean,
+            default: false,
+        },
 
         productImage1: {
             url: { type: String, required: true },

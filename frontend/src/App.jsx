@@ -7,6 +7,7 @@ import Intro from "./components/Intro";
 import ScrollToTop from "./components/ScrollToTop";
 import { useLocation } from "react-router-dom";
 import "./index.css";
+import Footer from "./pages/Footer";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() =>
@@ -76,6 +77,8 @@ const App = () => {
           />
         </>
       )}
+
+      {/* <Footer/> */}
 
     </div>
   );
