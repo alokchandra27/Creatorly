@@ -1,4 +1,7 @@
 import React, { useLayoutEffect, useRef } from "react";
+import paletteImg from "../assets/palette.webp";
+import yarnImg from "../assets/yarn.webp";
+import sunflowerImg from "../assets/sunflower.webp";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 
@@ -250,8 +253,11 @@ const Intro = ({ onIntroComplete }) => {
 
         <div className="floating-butterfly absolute left-[5%] top-[38%] h-10 w-10 sm:left-[3.5%] sm:h-12 sm:w-12">
           <img
-            src="/src/assets/palette.webp"
+            src={paletteImg}
             alt="palette"
+            loading="lazy"
+            fetchPriority="low"
+            decoding="async"
             className="h-full w-full object-contain"
           />
         </div>
@@ -282,7 +288,7 @@ const Intro = ({ onIntroComplete }) => {
               <span className="absolute -bottom-1 -right-6 text-sm text-[#78a989]">✧</span>
 
               <h1 className="font-caveat text-[50px] font-bold leading-none tracking-[-3px] text-[#e85c76] sm:text-[70px]">
-                Creator<span className="text-[#f19b72]">ly</span>
+                Jhank<span className="text-[#f19b72]">oo</span>
               </h1>
             </div>
 
@@ -297,7 +303,7 @@ const Intro = ({ onIntroComplete }) => {
             {/* PHOTO 1 */}
 
             <div className="intro-photo absolute left-[5px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[-7deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:left-8 sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              <img src={creator1} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" />
+              <img src={creator1} alt="Creator work" loading="eager" fetchPriority="high" decoding="sync" className="h-full w-full rounded-[7px] object-cover" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -305,7 +311,7 @@ const Intro = ({ onIntroComplete }) => {
             {/* PHOTO 2 */}
 
             <div className="intro-photo absolute left-[78px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[4deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:left-[168px] sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              <img src={creator2} alt="Creator work" className="h-full w-full rounded-[7px] object-cover -rotate-360" />
+              <img src={creator2} alt="Creator work" loading="eager" fetchPriority="high" decoding="sync" className="h-full w-full rounded-[7px] object-cover -rotate-360" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -313,7 +319,7 @@ const Intro = ({ onIntroComplete }) => {
             {/* PHOTO 3 */}
 
             <div className="intro-photo absolute right-[78px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[-3deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:right-[168px] sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              <img src={creator3} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" />
+              <img src={creator3} alt="Creator work" loading="eager" fetchPriority="high" decoding="sync" className="h-full w-full rounded-[7px] object-cover" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -321,7 +327,7 @@ const Intro = ({ onIntroComplete }) => {
             {/* PHOTO 4 */}
 
             <div className="intro-photo absolute right-[5px] top-1/2 h-[82px] w-[82px] -translate-y-1/2 rotate-[7deg] rounded-[10px] bg-white p-1 shadow-[0_15px_35px_rgba(71,46,50,0.13)] sm:right-8 sm:h-[125px] sm:w-[125px] sm:rounded-[12px]">
-              <img src={creator4} alt="Creator work" className="h-full w-full rounded-[7px] object-cover" />
+              <img src={creator4} alt="Creator work" loading="eager" fetchPriority="high" decoding="sync" className="h-full w-full rounded-[7px] object-cover" />
 
               <span className="absolute -top-1.5 left-1/2 h-2.5 w-8 -translate-x-1/2 -rotate-3 bg-[#ffdda4]/80 sm:h-3 sm:w-10" />
             </div>
@@ -355,7 +361,7 @@ const Intro = ({ onIntroComplete }) => {
         {/* Small paint dots */}
 
         <div className="absolute left-[15%] top-[20%] flex gap-2 sm:left-[19%]">
-          <img src="/src/assets/yarn.webp" alt="" className="h-10 w-10 sm:h-15 sm:w-15" />
+          <img src={yarnImg} alt="" loading="lazy" fetchPriority="low" decoding="async" className="h-10 w-10 sm:h-15 sm:w-15" />
         </div>
 
         {/* Flower */}
@@ -363,8 +369,11 @@ const Intro = ({ onIntroComplete }) => {
         <div className="intro-doodle floating-flower absolute bottom-[15%] right-[5%] h-8 w-8 sm:bottom-[17%] sm:right-[6%] sm:h-9 sm:w-9">
           
           <img
-            src="/src/assets/sunflower.webp"
+            src={sunflowerImg}
             alt="daisy"
+            loading="lazy"
+            fetchPriority="low"
+            decoding="async"
             className="h-full w-full object-contain"
           />
        

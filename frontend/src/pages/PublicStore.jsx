@@ -1,4 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import bannerImg from "../assets/banner.webp";
+import instagramImg from "../assets/instagram.webp";
+import facebookImg from "../assets/facebook.webp";
+import whatsappImg from "../assets/whatsapp.webp";
+import redcolorImg from "../assets/redcolor.webp";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -31,7 +36,7 @@ const getImageUrl = (image, fallback = "") => {
 // PRODUCT CARD
 // ============================================================
 
-const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishlisted }) => {
+const ProductCard = ({ product, productIndex, navigate, addToCart, toggleWishlist, isWishlisted }) => {
   const images = [getImageUrl(product?.productImage1), getImageUrl(product?.productImage2), getImageUrl(product?.productImage3), getImageUrl(product?.productImage4)].filter(Boolean);
 
   const [activeImage, setActiveImage] = useState(0);
@@ -122,6 +127,8 @@ const ProductCard = ({ product, navigate, addToCart, toggleWishlist, isWishliste
                 <img
                   src={image}
                   alt={`${product?.productName || "Product"} ${index + 1}`}
+                  loading={productIndex < 2 && index < 2 ? "eager" : "lazy"}
+                  decoding="async"
                   draggable="false"
                   className="h-full w-full select-none object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
@@ -626,7 +633,7 @@ const PublicStore = () => {
           {/* HERO IMAGE */}
 
           <div className="relative min-h-[270px] overflow-hidden lg:min-h-[440px]">
-            <img src={getImageUrl(store?.bannerImage, "/src/assets/banner.webp")} alt="Store banner" className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]" />
+            <img src={getImageUrl(store?.bannerImage, bannerImg)} alt="Store banner" loading="eager" fetchPriority="high" decoding="sync" className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]" />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 
@@ -659,6 +666,9 @@ const PublicStore = () => {
             <img
               src={getImageUrl(store?.storeLogo, "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=300")}
               alt={store?.storeName || "Store"}
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
               className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.12]"
             />
           </div>
@@ -682,7 +692,7 @@ const PublicStore = () => {
                   onClick={openInstagram}
                   className={`flex items-center gap-1.5 text-creator-primary transition-all duration-300 ${store?.instagramLink ? "cursor-pointer hover:scale-105 hover:-rotate-2" : ""}`}
                 >
-                  <img src="/src/assets/instagram.webp" alt="Instagram" className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6" />
+                  <img src={instagramImg} alt="Instagram" loading="lazy" fetchPriority="low" decoding="async" className="h-10 w-10 object-cover transition-transform duration-300 hover:rotate-6" />
 
                   <p className="font-sans text-xs font-semibold text-creator-text">{store?.instagramUsername || "Not attached"}</p>
                 </div>
@@ -693,7 +703,7 @@ const PublicStore = () => {
                   onClick={openFacebook}
                   className={`flex items-center gap-1.5 text-creator-primary transition-all duration-300 ${store?.facebookLink ? "cursor-pointer hover:scale-105 hover:rotate-2" : ""}`}
                 >
-                  <img src="/src/assets/facebook.webp" alt="Facebook" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
+                  <img src={facebookImg} alt="Facebook" loading="lazy" fetchPriority="low" decoding="async" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
 
                   <p className="font-sans text-xs font-semibold text-creator-text">{store?.facebookLink ? "Facebook" : "Not attached"}</p>
                 </div>
@@ -701,7 +711,7 @@ const PublicStore = () => {
                 {/* WHATSAPP */}
 
                 <div onClick={openWhatsApp} className="flex cursor-pointer items-center gap-1.5 text-creator-primary transition-all duration-300 hover:scale-105 hover:rotate-2">
-                  <img src="/src/assets/whatsapp.webp" alt="WhatsApp" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
+                  <img src={whatsappImg} alt="WhatsApp" loading="lazy" fetchPriority="low" decoding="async" className="h-10 w-10 object-cover transition-transform duration-300 hover:-rotate-6" />
 
                   <p className="font-sans text-xs font-semibold text-creator-text">{store?.whatsappNumber || "not available"}</p>
                 </div>
@@ -733,7 +743,7 @@ const PublicStore = () => {
               {/* ================================================= */}
 
               <div className="relative mt-3 h-32 w-32 cursor-pointer transition-all duration-500 hover:rotate-[-5deg] hover:scale-105">
-                <img src="/src/assets/redcolor.webp" alt="" className="h-32 w-32 object-contain transition-transform duration-500 hover:rotate-3" />
+                <img src={redcolorImg} alt="" loading="lazy" fetchPriority="low" decoding="async" className="h-32 w-32 object-contain transition-transform duration-500 hover:rotate-3" />
 
                 <p className="absolute inset-0 flex items-center justify-center px-5 text-center font-caveat text-sm font-semibold leading-4 text-creator-text">
                   More stats
@@ -832,7 +842,7 @@ const PublicStore = () => {
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-3">
               {filteredProducts.map((product, index) => (
-                <ProductCard key={product._id} product={product} navigate={navigate} addToCart={addToCart} toggleWishlist={toggleWishlist} isWishlisted={wishlistIds.includes(product._id)} />
+                <ProductCard key={product._id} product={product} productIndex={index} navigate={navigate} addToCart={addToCart} toggleWishlist={toggleWishlist} isWishlisted={wishlistIds.includes(product._id)} />
               ))}
             </div>
           </section>

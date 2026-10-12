@@ -4,6 +4,9 @@ import { ArrowRight } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import sunflowerKeychainsImg from "../../assets/sunflowerKeychains.webp";
+import clayClayImg from "../../assets/clayclay.webp";
+import crochetProductImg from "../../assets/crochetproduct.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -77,7 +80,9 @@ const PeoplePassionPurpose = () => {
           {/* IMAGE 1 (Main Left) */}
           <div className="animate-ppp-img absolute left-[8%] top-[12%] z-20 h-[65%] w-[55%] rotate-[-8deg] overflow-hidden border-[8px] border-white shadow-[0_15px_35px_rgba(0,0,0,0.15)] sm:border-[12px]">
             <img
-              src="/src/assets/sunflowerKeychains.webp"
+              src={sunflowerKeychainsImg}
+              loading="lazy"
+              decoding="async"
               alt="Creator working on handmade art"
               className="h-full w-full object-cover scale-120 transition-transform duration-300 hover:scale-110"
             />
@@ -86,7 +91,9 @@ const PeoplePassionPurpose = () => {
           {/* IMAGE 2 (Top Right Backing) */}
           <div className="animate-ppp-img absolute right-[8%] top-[5%] z-10 h-[48%] w-[38%] rotate-6 overflow-hidden border-[8px] border-white shadow-[0_15px_35px_rgba(0,0,0,0.12)] sm:border-[10px]">
             <img
-              src="/src/assets/clayclay.webp"
+              src={clayClayImg}
+              loading="lazy"
+              decoding="async"
               alt="Handmade products"
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
             />
@@ -95,7 +102,9 @@ const PeoplePassionPurpose = () => {
           {/* IMAGE 3 (Bottom Right Front) */}
           <div className="animate-ppp-img absolute bottom-[3%] right-[12%] z-30 h-[42%] w-[40%] rotate-[-4deg] overflow-hidden border-[8px] border-white shadow-[0_15px_35px_rgba(0,0,0,0.15)] sm:border-[10px]">
             <img
-              src="/src/assets/crochetproduct.webp"
+              src={crochetProductImg}
+              loading="lazy"
+              decoding="async"
               alt="Handmade crochet"
               className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
             />

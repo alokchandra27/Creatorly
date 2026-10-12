@@ -242,7 +242,7 @@ const EditProduct = () => {
       >
         {preview ? (
           <>
-            <img src={preview} alt={`Product ${index + 1}`} className="h-40 w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+            <img src={preview} alt={`Product ${index + 1}`} loading={index < 2 ? "eager" : "lazy"} decoding="async" className="h-40 w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
 
             <div className="absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
 

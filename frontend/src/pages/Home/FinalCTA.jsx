@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import flowerDaisyImg from "../../assets/flowerDaisy.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -80,14 +81,20 @@ const FinalCTA = () => {
     <section ref={ctaSectionRef} className="relative mx-4 mb-6 overflow-hidden rounded-[2.5rem] bg-[#FBE8EA] px-6 py-16 sm:mx-6 sm:px-10 md:py-20 lg:mx-10">
       {/* Decorative flower - Left */}
       <img 
-        src={"/src/assets/flowerDaisy.webp"} 
+        src={flowerDaisyImg} 
+        loading="lazy"
+        fetchPriority="low"
+        decoding="async"
         alt="" 
         className="animate-cta-flower-left absolute -bottom-4 left-3 w-20 rotate-[-15deg] opacity-80 sm:left-8 sm:w-28" 
       />
 
       {/* Decorative flower - Right */}
       <img 
-        src={"/src/assets/flowerDaisy.webp"} 
+        src={flowerDaisyImg} 
+        loading="lazy"
+        fetchPriority="low"
+        decoding="async"
         alt="" 
         className="animate-cta-flower-right absolute -right-3 bottom-0 w-20 rotate 12 opacity-80 sm:right-8 sm:w-28" 
       />

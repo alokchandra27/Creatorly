@@ -21,13 +21,12 @@ const App = () => {
     () => sessionStorage.getItem("creatorly-intro-seen") === "true"
   );
 
-  // 2. Main Logic: Agar user pehle intro dekh chuka hai, YA fir direct kisi link se 
-  // (jaise /auth ya /store/settings) refresh karke aa raha hai, toh loader mat dikhao.
+  // 2. Main Logic: First visit par current URL chahe jo bhi ho, loader aur intro
+  // dono dikhenge. Session me complete hone ke baad direct page render hoga.
   const [appStage, setAppStage] = useState(() => {
     const hasSeen = sessionStorage.getItem("creatorly-intro-seen") === "true";
     
-    // Agar intro dekh chuka hai, ya landing page '/' ke alawa koi aur page hai, toh direct home render karein
-    if (hasSeen || location.pathname !== "/") {
+    if (hasSeen) {
       return "home";
     }
     return "loader";
@@ -55,13 +54,13 @@ const App = () => {
         )
       )}
 
-      {/* STAGE 1: LOADER (Sirf tabhi chalega jab bilkul fresh entry ho '/' par) */}
-      {appStage === "loader" && location.pathname === "/" && (
+      {/* STAGE 1: LOADER (Fresh session par kisi bhi URL ke liye) */}
+      {appStage === "loader" && (
         <VibeLoader onComplete={handleLoaderComplete} />
       )}
 
       {/* STAGE 2: INTRO */}
-      {appStage === "intro" && location.pathname === "/" && (
+      {appStage === "intro" && (
         <Intro onIntroComplete={handleIntroComplete} />
       )}
 

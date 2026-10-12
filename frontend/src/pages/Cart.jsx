@@ -1,4 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
+import whatsappImg from "../assets/whatsapp.webp";
+import instagramImg from "../assets/instagram.webp";
+import facebookImg from "../assets/facebook.webp";
 import {
   ArrowLeft,
   ArrowRight,
@@ -458,7 +461,7 @@ Thank you!`;
 
           <section>
             <div className="space-y-3">
-              {cart.map((item) => {
+              {cart.map((item, index) => {
                 const price = Number(item.productPrice || 0);
 
                 const quantity = Number(item.quantity || 0);
@@ -471,7 +474,7 @@ Thank you!`;
                       {/* IMAGE */}
 
                       <div className="h-28 w-24 shrink-0 overflow-hidden rounded-[18px] bg-creator-bg sm:h-32 sm:w-28">
-                        <img src={getImageUrl(item.productImage1)} alt={item.productName} className="h-full w-full object-cover" />
+                        <img src={getImageUrl(item.productImage1)} alt={item.productName} loading={index < 2 ? "eager" : "lazy"} decoding="async" className="h-full w-full object-cover" />
                       </div>
 
                       {/* DETAILS */}
@@ -652,7 +655,7 @@ Thank you!`;
                       }}
                       className="flex flex-col items-center gap-1.5 rounded-2xl bg-[#EAF9EF] px-2 py-3 text-[10px] font-semibold text-neutral-700 transition hover:-translate-y-1 cursor-pointer"
                     >
-                      <img src="/src/assets/whatsapp.webp" alt="WhatsApp" className="h-10 w-10" />
+                      <img src={whatsappImg} alt="WhatsApp" loading="lazy" fetchPriority="low" decoding="async" className="h-10 w-10" />
                       WhatsApp
                     </button>
                   )}
@@ -665,7 +668,7 @@ Thank you!`;
                       }}
                       className="flex flex-col items-center gap-1.5 rounded-2xl bg-[#FCECF5] px-2 py-3 text-[10px] font-semibold text-neutral-700 transition hover:-translate-y-1 cursor-pointer"
                     >
-                      <img src="/src/assets/instagram.webp" alt="Instagram" className="h-10 w-10" />
+                      <img src={instagramImg} alt="Instagram" loading="lazy" fetchPriority="low" decoding="async" className="h-10 w-10" />
                       Instagram
                     </button>
                   )}
@@ -678,7 +681,7 @@ Thank you!`;
                       }}
                       className="flex flex-col items-center gap-1.5 rounded-2xl bg-[#EEF4FF] px-2 py-3 text-[10px] font-semibold text-neutral-700 transition hover:-translate-y-1 cursor-pointer"
                     >
-                      <img src="/src/assets/facebook.webp" alt="Facebook" className="h-10 w-10" />
+                      <img src={facebookImg} alt="Facebook" loading="lazy" fetchPriority="low" decoding="async" className="h-10 w-10" />
                       Facebook
                     </button>
                   )}
@@ -836,7 +839,7 @@ Thank you!`;
                         className="text-creator-pink"
                       /> */}
 
-                      <img src="/src/assets/instagram.webp" alt="Instagram" className="h-5 w-5"></img>
+                      <img src={instagramImg} alt="Instagram" loading="lazy" fetchPriority="low" decoding="async" className="h-5 w-5"></img>
 
                       <div>
                         <p className="text-sm font-semibold">Instagram</p>
@@ -858,7 +861,7 @@ Thank you!`;
                     className="flex items-center justify-between rounded-2xl border border-neutral-200 bg-white px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <div className="flex items-center gap-3">
-                     <img src="/src/assets/facebook.webp" alt="Facebook" className="h-5 w-5"></img>
+                     <img src={facebookImg} alt="Facebook" loading="lazy" fetchPriority="low" decoding="async" className="h-5 w-5"></img>
 
                       <div>
                         <p className="text-sm font-semibold">Facebook</p>

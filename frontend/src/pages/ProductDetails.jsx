@@ -441,6 +441,9 @@ I found this product on your Creatorly store.
                       key={activeImage}
                       src={activeImage}
                       alt={product.productName}
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="sync"
                       className="h-full w-full select-none object-cover transition duration-500 ease-out group-hover:scale-[1.025]"
                       draggable="false"
                     />
@@ -507,6 +510,8 @@ I found this product on your Creatorly store.
                     <img
                       src={image}
                       alt={`${product.productName} ${index + 1}`}
+                      loading={index < 2 ? "eager" : "lazy"}
+                      decoding="async"
                       className="h-full w-full rounded-lg object-cover"
                     />
                   </button>
@@ -530,6 +535,9 @@ I found this product on your Creatorly store.
                   <img
                     src={storeLogo}
                     alt={store?.storeName || "Creator"}
+                    loading="lazy"
+                    fetchPriority="low"
+                    decoding="async"
                     className="h-9 w-9 rounded-full border border-white object-cover shadow-sm transition group-hover:rotate-3"
                   />
                 ) : (

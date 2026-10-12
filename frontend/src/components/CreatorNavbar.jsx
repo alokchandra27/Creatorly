@@ -25,11 +25,11 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
     };
 
     syncCartCount();
-    window.addEventListener("creatorly-shopping-updated", syncCartCount);
+    window.addEventListener("Jhankoo-shopping-updated", syncCartCount);
     window.addEventListener("storage", syncCartCount);
 
     return () => {
-      window.removeEventListener("creatorly-shopping-updated", syncCartCount);
+      window.removeEventListener("Jhankoo-shopping-updated", syncCartCount);
       window.removeEventListener("storage", syncCartCount);
     };
   }, [storeName]);
@@ -142,7 +142,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
               onClick={() => navigate("/")}
               className="rounded-full border border-creator-text bg-transparent px-4 py-2 text-xs font-semibold text-creator-text hover:bg-creator-text hover:text-white transition-all duration-300 cursor-pointer"
             >
-              Creatorly Home
+              Jhankoo Home
             </button>
           </div>
 
@@ -190,7 +190,7 @@ export default function CreatorNavbar({ isLoggedIn, setIsLoggedIn }) {
             }}
             className="w-full text-center rounded-xl border border-creator-text py-2.5 text-xs font-semibold text-creator-text cursor-pointer"
           >
-            Back to Creatorly
+            Back to Jhankoo
           </button>
         </div>
       )}

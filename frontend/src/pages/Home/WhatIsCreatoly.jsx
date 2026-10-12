@@ -3,6 +3,8 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import supportSmallBusinessImg from "../../assets/supportsmallbusiness.webp";
+import paletteImg from "../../assets/palette.webp";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -75,7 +77,7 @@ const WhatIsCreatoly = () => {
         <div ref={imageRef} className="what-image relative w-full lg:w-[48%]">
           <div  className="relative mx-auto max-w-xl overflow-hidden rounded-[3rem] bg-[#F8E8E7] p-5 sm:p-8">
             <div className="relative overflow-hidden rounded-[2rem]">
-              <img src={"/src/assets/supportsmallbusiness.webp"} alt="Creator storefront" className="h-auto w-full object-cover transition-transform duration-700 hover:scale-105 scale-150" />
+              <img src={supportSmallBusinessImg} alt="Creator storefront" loading="lazy" decoding="async" className="h-auto w-full object-cover transition-transform duration-700 hover:scale-105 scale-150" />
             </div>
 
             <div className="absolute -right-2 top-8 rotate-12 text-creator-pink">
@@ -83,7 +85,7 @@ const WhatIsCreatoly = () => {
             </div>
 
             <div className="absolute bottom-6 left-4 rotate-[-12deg] hover:rotate-2 trasition-transform duration-700">
-              <img src={"/src/assets/palette.webp"} alt="" className="w-16 sm:w-20" />
+              <img src={paletteImg} alt="" loading="lazy" fetchPriority="low" decoding="async" className="w-16 sm:w-20" />
             </div>
           </div>
         </div>

@@ -160,7 +160,7 @@ const Wishlist = () => {
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
 
-              {wishlist.map((product) => (
+              {wishlist.map((product, index) => (
 
                 <article
                   key={product._id}
@@ -183,6 +183,8 @@ const Wishlist = () => {
                         product.productImage1
                       )}
                       alt={product.productName}
+                      loading={index < 2 ? "eager" : "lazy"}
+                      decoding="async"
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
                     />
 

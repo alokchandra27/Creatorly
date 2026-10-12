@@ -11,6 +11,12 @@ import PeoplePassionPurpose from "./Home/PeoplePassionPurpose";
 import FinalCTA from "./Home/FinalCTA";
 import Footer from "./Footer";
 import CreatorlyValueSection from "./Home/CreatorlyValueSection";
+import leafStemImg from "../assets/leafStem.webp";
+import crochetImg from "../assets/crochet.webp";
+import paintsAndAllImg from "../assets/paintsandall.webp";
+import keychainsImg from "../assets/keychains.webp";
+import yarnImg from "../assets/yarn.webp";
+import flowerDaisyImg from "../assets/flowerDaisy.webp";
 
 // HOME
 
@@ -199,32 +205,32 @@ useGSAP(
         <div className="w-full lg:w-1/2 min-h-[32rem] sm:min-h-[36rem] md:min-h-[40rem] lg:min-h-[calc(100vh-80px)] relative flex items-center justify-center px-4 sm:px-10 py-8 sm:py-12 lg:py-0 overflow-hidden lg:overflow-visible -mt-25 lg:-mt-0 md:mt-0">
           {/* Left leaf */}
           <div className="animate-decor absolute top-[16%] sm:top-[9%] md:top-[10%] left-[5%] sm:left-[8%] md:left-[10%] lg:left-[13%] -rotate-90 z-10">
-            <img src="/src/assets/leafStem.webp" alt="" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-24" />
+            <img src={leafStemImg} alt="" loading="eager" fetchPriority="high" decoding="sync" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-24" />
           </div>
           {/* Right leaf */}
           <div className="animate-decor absolute top-[22%] sm:top-[8%] md:top-[10%] lg:top-[14%] right-[2%] sm:right-[3%] lg:right-[6%] z-10">
-            <img src="/src/assets/leafStem.webp" alt="" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-24" />
+            <img src={leafStemImg} alt="" loading="eager" fetchPriority="high" decoding="sync" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-24" />
           </div>
           {/* Main image */}
           <div className="animate-img-main relative w-[68%] sm:w-[58%] md:w-[50%] lg:w-[65%] aspect-square z-10 rotate-6 border-[10px] sm:border-[14px] border-creator-bg shadow-[0_20px_50px_rgba(0,0,0,0.5)] max-h-[70vh] h-auto lg:-mt-10">
             {" "}
-            <img src="/src/assets/crochet.webp" alt="Artwork" className="w-full h-full object-cover" />
+            <img src={crochetImg} alt="Artwork" loading="eager" fetchPriority="high" decoding="sync" className="w-full h-full object-cover" />
           </div>
           {/* Left image */}
           <div className="animate-img-left absolute top-[24%] sm:top-[27%] md:top-[29%] lg:top-[30%] left-[2%] sm:left-[8%] md:left-[11%] lg:left-[-5%] w-[40%] sm:w-[35%] md:w-[30%] lg:w-[38%] aspect-square z-20 -rotate-12 border-[8px] sm:border-[12px] border-creator-bg shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-            <img src="/src/assets/paintsandall.webp" alt="Artwork" className="w-full h-full object-cover" />
+            <img src={paintsAndAllImg} alt="Artwork" loading="eager" fetchPriority="high" decoding="sync" className="w-full h-full object-cover" />
           </div>
           {/* Right image */}
           <div className="animate-img-right absolute bottom-[20%] sm:bottom-[23%] md:bottom-[24%] lg:bottom-[24%] right-[2%] sm:right-[7%] md:right-[10%] lg:right-[3%] w-[38%] sm:w-[33%] md:w-[28%] lg:w-[36%] aspect-square z-30 rotate-12 border-[8px] sm:border-[12px] border-creator-bg shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-            <img src="/src/assets/keychains.webp" alt="Artwork" className="w-full h-full object-cover" />
+            <img src={keychainsImg} alt="Artwork" loading="eager" fetchPriority="high" decoding="sync" className="w-full h-full object-cover" />
           </div>
           {/* Yarn */}
           <div className="animate-decor absolute bottom-[10%] lg:bottom-[3%] sm:bottom-[6%] md:bottom-[8%] lg:bottom-[14%] right-[2%] sm:right-[6%] lg:right-[18%] z-40">
-            <img src="/src/assets/yarn.webp" alt="" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-28" />
+            <img src={yarnImg} alt="" loading="eager" fetchPriority="high" decoding="sync" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-28" />
           </div>
           {/* Daisy */}
           <div className=" animate-decor absolute bottom-[22%] lg:bottom-[18%] sm:bottom-[12%] md:bottom-[14%] left-[10%] lg:left-[10%] sm:left-[8%] md:left-[10%] z-40">
-            <img src="/src/assets/flowerDaisy.webp" alt="" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-28" />
+            <img src={flowerDaisyImg} alt="" loading="eager" fetchPriority="high" decoding="sync" className="w-14 sm:w-[4.5rem] md:w-20 lg:w-28" />
           </div>
         </div>
       </section>

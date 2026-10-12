@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { gsap } from "gsap";
+import paletteImg from "../assets/palette.webp";
+import heartImg from "../assets/heart.svg";
+import flowerDaisyImg from "../assets/flowerDaisy.webp";
 
 export default function VibeLoader({ onComplete }) {
   const [progress, setProgress] = useState(0);
@@ -194,9 +197,9 @@ useEffect(() => {
         <div
           className="lg:w-30 lg:h-30 md:w-20 md:h-20 w-40 h-40 transform skew-y-20 bg-black"
           style={{
-            mask: "url('/src/assets/heart.svg') no-repeat center / contain",
+            mask: `url('${heartImg}') no-repeat center / contain`,
             WebkitMask:
-              "url('/src/assets/heart.svg') no-repeat center / contain",
+              `url('${heartImg}') no-repeat center / contain`,
           }}
         />
       </div> */}
@@ -207,8 +210,11 @@ useEffect(() => {
       </div>
       <div className="floating-item absolute bottom-[10%] right-[10%]">
         <img
-          src="/src/assets/palette.webp"
+          src={paletteImg}
           alt="palette"
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           className="lg:h-30 md:h-20 h-20"
         />
       </div>
@@ -250,8 +256,11 @@ useEffect(() => {
             </p>
             <span className="text-red-300 text-lg flex items-center justify-center gap-2">
               <img
-                src="/src/assets/heart.svg"
+                src={heartImg}
                 alt="My Icon"
+                loading="lazy"
+                fetchPriority="low"
+                decoding="async"
                 className="w-10 h-10 transform -skew-y-3"
               />
             </span>
@@ -263,8 +272,11 @@ useEffect(() => {
             </p>
             <span className="text-red-300 text-lg flex items-center justify-center gap-2">
               <img
-                src="/src/assets/flowerDaisy.webp"
+                src={flowerDaisyImg}
                 alt="My Icon"
+                loading="lazy"
+                fetchPriority="low"
+                decoding="async"
                 className="w-10 h-10 transform -skew-y-3"
               />
             </span>

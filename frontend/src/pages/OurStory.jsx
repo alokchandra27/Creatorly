@@ -16,6 +16,9 @@ import Footer from "./Footer";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import flowerDaisyImg from "../assets/flowerDaisy.webp";
+import yarnImg from "../assets/yarn.webp";
+import leafStemImg from "../assets/leafStem.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,13 +93,16 @@ const OurStory = () => {
         <div className="pointer-events-none absolute -left-32 bottom-10 h-80 w-80 rounded-full bg-pink-200/30 blur-3xl" />
 
         <img
-          src="/src/assets/flowerDaisy.webp"
+          src={flowerDaisyImg}
           alt=""
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           className="pointer-events-none absolute left-[4%] top-[15%] w-16 rotate-[-18deg] opacity-70 sm:w-24"
         />
 
         {/* <img
-          src="/src/assets/yarn.webp"
+          src={yarnImg}
           alt=""
           className="pointer-events-none absolute bottom-[8%] right-[5%] w-20 rotate-12 opacity-70 sm:w-28 z-10"
         /> */}
@@ -127,7 +133,7 @@ const OurStory = () => {
               </p>
 
               <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-neutral-600 sm:text-lg lg:mx-0">
-                Creatorly started from a simple question:
+                Jhankoo started from a simple question:
               </p>
 
               <div className="mt-6 inline-block max-w-xl border-l-4 border-creator-pink pl-5 text-left">
@@ -227,8 +233,11 @@ const OurStory = () => {
               {/* Small decorative flower */}
 
               <img
-                src="/src/assets/flowerDaisy.webp"
+                src={flowerDaisyImg}
                 alt=""
+                loading="lazy"
+                fetchPriority="low"
+                decoding="async"
                 className="absolute bottom-[18%] right-[1%] z-40 w-16 rotate-12 sm:w-20"
               />
 
@@ -312,8 +321,11 @@ const OurStory = () => {
       <section className="story-scroll-section relative overflow-hidden bg-[#f8f3e8] px-6 py-20 sm:px-10 md:py-28 lg:px-16">
 
         <img
-          src="/src/assets/leafStem.webp"
+          src={leafStemImg}
           alt=""
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           className="pointer-events-none absolute left-[2%] top-[10%] w-20 -rotate-45 opacity-50 sm:w-28"
         />
 
@@ -635,14 +647,20 @@ const OurStory = () => {
           <div className="relative overflow-hidden rounded-[2rem] bg-[#FBE8EA] px-7 py-12 sm:px-12 sm:py-16">
 
             <img
-              src="/src/assets/flowerDaisy.webp"
+              src={flowerDaisyImg}
               alt=""
+              loading="lazy"
+              fetchPriority="low"
+              decoding="async"
               className="absolute -bottom-5 -left-3 w-24 rotate-[-15deg] opacity-70 sm:w-32"
             />
 
             <img
-              src="/src/assets/flowerDaisy.webp"
+              src={flowerDaisyImg}
               alt=""
+              loading="lazy"
+              fetchPriority="low"
+              decoding="async"
               className="absolute -right-5 bottom-0 w-24 rotate-12 opacity-70 sm:w-32"
             />
 
@@ -685,14 +703,17 @@ const OurStory = () => {
       <section className="story-scroll-section relative mx-4 mb-6 overflow-hidden rounded-[2.5rem] bg-neutral-900 px-6 py-16 text-white sm:mx-6 sm:px-10 md:py-20 lg:mx-10">
 
         {/* <img
-          src="/src/assets/flowerDaisy.webp"
+          src={flowerDaisyImg}
           alt=""
           className="absolute -bottom-4 left-3 w-20 rotate-[-15deg] opacity-60 sm:left-8 sm:w-28"
         />
 
         <img
-          src="/src/assets/yarn.webp"
+          src={yarnImg}
           alt=""
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           className="absolute -right-2 bottom-0 w-20 rotate-12 opacity-60 sm:right-8 sm:w-28"
         /> */}
 

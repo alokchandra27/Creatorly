@@ -1,4 +1,8 @@
 import React, { useRef } from "react";
+import yarnKaGolaImg from "../../assets/yarnKaGola.webp";
+import clayImg from "../../assets/clay.webp";
+import paletteImg from "../../assets/palette.webp";
+import redcolorImg from "../../assets/redcolor.webp";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { MoveRight, LineSquiggle } from "lucide-react";
@@ -137,8 +141,11 @@ const LeftDiv = () => {
       {/* ASSET 1: Yarn Image */}
       <div className="animate-left-asset-1 absolute bottom-[16%] right-[5%] aspect-square w-[150px] rotate-6 border-[7px] border-creator-bg bg-white shadow-[0_15px_40px_rgba(0,0,0,0.15)] xl:right-[6%] xl:w-[190px]">
         <img
-          src="/src/assets/yarnKaGola.webp"
+          src={yarnKaGolaImg}
           alt=""
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           className="w-full h-full object-cover"
         />
       </div>
@@ -146,22 +153,28 @@ const LeftDiv = () => {
       {/* ASSET 2: Clay Image */}
       <div className="animate-left-asset-2 absolute bottom-[15%] right-[28%] aspect-square w-[90px] -rotate-12 border-[6px] border-creator-bg bg-white shadow-[0_12px_30px_rgba(0,0,0,0.12)] xl:right-[30%] xl:w-[110px]">
         <img
-          src="/src/assets/clay.webp"
+          src={clayImg}
           alt=""
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           className="w-full h-full object-cover"
         />
       </div>
 
       {/* ASSET 3: Palette Decor */}
       <div className="animate-left-decor absolute bottom-[10%] right-[1%] xl:right-[5%] opacity-90">
-        <img src="/src/assets/palette.webp" alt="" className="w-12 xl:w-16" />
+        <img src={paletteImg} alt="" loading="lazy" fetchPriority="low" decoding="async" className="w-12 xl:w-16" />
       </div>
 
       {/* ASSET 4: Red Color Decor */}
       <div className="animate-left-decor absolute bottom-[12%] left-[7%] opacity-70">
         <img
-          src="/src/assets/redcolor.webp"
+          src={redcolorImg}
           alt=""
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           className="w-12 xl:w-16"
         />
       </div>

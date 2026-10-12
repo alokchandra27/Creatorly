@@ -19,6 +19,8 @@ export default function AboutStore({ store, getImageUrl }) {
         <img
           src={getImageUrl(store?.profileImage, getImageUrl(store?.storeLogo, getImageUrl(store?.bannerImage, "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=1000")))}
           alt="About store workspace"
+          loading="lazy"
+          decoding="async"
           className="h-full min-h-[280px] md:min-h-[340px] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
 

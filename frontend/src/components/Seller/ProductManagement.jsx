@@ -3,6 +3,7 @@ import API from "../API/API";
 import { useNavigate } from "react-router-dom";
 import { Plus, Search, SlidersHorizontal, Package, Pencil, Trash2, ArrowUpRight, Sparkles, Palette, X, ChevronDown, ImagePlus, Loader2 } from "lucide-react";
 import processAndCompressImage from "./ProcessAndCompressImage";
+import bluecolorImg from "../../assets/bluecolor.webp";
 
 export default function ProductsManagement() {
   const [activeTab, setActiveTab] = useState("list");
@@ -427,7 +428,7 @@ function StatCard({ icon, number, label }) {
 ============================================================= */
 
 function ProductCard({ product, index, onEdit, onDelete }) {
-  const image = product?.productImage1?.url || "/src/assets/bluecolor.webp";
+  const image = product?.productImage1?.url || bluecolorImg;
 
   const stock = Number(product?.stocks || 0);
 
@@ -443,7 +444,7 @@ function ProductCard({ product, index, onEdit, onDelete }) {
     >
       {/* Image */}
       <div className="relative aspect-[4/4.4] overflow-hidden rounded-[10px] bg-neutral-100 shadow-sm transition-all duration-500 group-hover:shadow-xl ">
-        <img src={image} alt={product.productName} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
+        <img src={image} alt={product.productName} loading={index < 2 ? "eager" : "lazy"} decoding="async" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
 
         {/* Soft image overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />

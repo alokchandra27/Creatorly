@@ -3,6 +3,7 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Palette, UserRound, ArrowRight, Link2, MessageCircle, Package, Store } from 'lucide-react'
+import leafStemImg from "../../assets/leafStem.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -58,7 +59,10 @@ const HowCreatorlyWorks = () => {
   return (
     <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#FFFDF9] px-6 py-20 sm:px-10 md:py-24 lg:px-16">
         <img
-          src={"/src/assets/leafStem.webp"}
+          src={leafStemImg}
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           alt=""
           className="pointer-events-none absolute -left-5 top-8 w-20 rotate-[-35deg] opacity-50 sm:w-28"
         />

@@ -1,4 +1,5 @@
 import React from 'react'
+import bannerImg from "../../assets/banner.webp";
 import {ArrowRight, Sparkles} from "lucide-react";
 
 const Hero = () => {
@@ -97,9 +98,12 @@ const Hero = () => {
             <img
               src={getImageUrl(
                 store?.bannerImage,
-                "/src/assets/banner.webp",
+                bannerImg,
               )}
               alt="Store banner"
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
               className="h-full w-full object-cover transition-transform duration-[1200ms] hover:scale-[1.035]"
             />
 

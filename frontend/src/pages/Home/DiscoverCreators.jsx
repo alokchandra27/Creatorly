@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { ArrowRight, Search, MapPin, Sparkles, SlidersHorizontal, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import bookMarkImg from "../../assets/bookMark.webp";
+import keychainsImg from "../../assets/keychains.webp";
+import hanumanjiImg from "../../assets/hanumanji.webp";
+import purseImg from "../../assets/purse.webp";
 
 const DiscoverCreators = () => {
   const navigate = useNavigate();
@@ -12,7 +16,7 @@ const DiscoverCreators = () => {
       location: "Rishikesh",
       category: "Handmade Art",
       description: "Handmade with a little magic ✨",
-      image: "/src/assets/bookMark.webp",
+      image: bookMarkImg,
       accent: "bg-orange-100",
     },
     {
@@ -21,7 +25,7 @@ const DiscoverCreators = () => {
       location: "Dehradun",
       category: "Clay & Home Decor",
       description: "Dream it • Shape it • Love it",
-      image: "/src/assets/keychains.webp",
+      image: keychainsImg,
       accent: "bg-yellow-100",
     },
     {
@@ -30,7 +34,7 @@ const DiscoverCreators = () => {
       location: "Rishikesh",
       category: "Crochet",
       description: "Crochet stories in every loop",
-      image: "/src/assets/hanumanji.webp",
+      image: hanumanjiImg,
       accent: "bg-green-100",
     },
     {
@@ -39,7 +43,7 @@ const DiscoverCreators = () => {
       location: "Dehradun",
       category: "Wooden Decor",
       description: "Carved with care",
-      image: "/src/assets/purse.webp",
+      image: purseImg,
       accent: "bg-amber-100",
     },
   ];
@@ -163,7 +167,7 @@ const DiscoverCreators = () => {
                   {/* Image */}
 
                   <div className={`relative aspect-[4/3] overflow-hidden ${creator.accent}`}>
-                    <img src={creator.image} alt={creator.name} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                    <img src={creator.image} alt={creator.name} loading={index < 2 ? "eager" : "lazy"} decoding="async" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
 
                     <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   </div>

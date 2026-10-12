@@ -4,6 +4,9 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import bg1Img from "../../assets/bg1.webp";
+import bg2Img from "../../assets/bg2.webp";
+import bg3Img from "../../assets/bg3.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,19 +22,19 @@ const CreatorlyValueSection = () => {
   const features = [
     {
       icon: ShoppingBag,
-      bgImage:"/src/assets/bg1.webp",
+      bgImage:bg1Img,
       title: "Your products",
       text: "Showcase everything you sell in one beautiful, organized space.",
     },
     {
       icon: UserRound,
-      bgImage:"/src/assets/bg2.webp",
+      bgImage:bg2Img,
       title: "Your story",
       text: "Tell customers who you are, what you stand for, and what makes your business special.",
     },
     {
       icon: Link2,
-      bgImage:"/src/assets/bg3.webp",
+      bgImage:bg3Img,
       title: "Your way to order",
       text: "Let customers place orders directly or connect with you seamlessly via WhatsApp or Instagram.",
     },

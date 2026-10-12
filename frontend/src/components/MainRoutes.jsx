@@ -31,7 +31,7 @@ const CreatorlyPageLoader = () => {
       <div className="text-center">
         {/* Brand */}
         <div className="flex items-center justify-center">
-          <span className="font-caveat text-4xl text-neutral-800">Creatorly</span>
+          <span className="font-caveat text-4xl text-neutral-800">Jhankoo</span>
 
           <span className="ml-1 animate-pulse text-lg text-creator-pink">♥</span>
         </div>
@@ -45,7 +45,7 @@ const CreatorlyPageLoader = () => {
           <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-creator-pink/40" style={{ animationDelay: "300ms" }} />
         </div>
 
-        <p className="mt-3 text-xs tracking-wide text-neutral-400">Bringing things together...</p>
+        <p className="mt-3 text-xs tracking-wide text-neutral-400">Your Personal Storefront...</p>
       </div>
     </div>
   );

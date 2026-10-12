@@ -633,7 +633,7 @@ export default function StoreSettings() {
                       <div className="flex flex-col gap-4 rounded-2xl border border-creator-text/8 bg-creator-bg-butter/50 p-4 sm:flex-row sm:items-center">
                         <div className="flex h-24 w-full shrink-0 items-center justify-center overflow-hidden rounded-xl border border-creator-text/8 bg-creator-bg sm:w-40">
                           {imagePreviews[imageField.name] ? (
-                            <img src={imagePreviews[imageField.name]} alt={`${imageField.label} preview`} className="h-full w-full object-cover" />
+                            <img src={imagePreviews[imageField.name]} alt={`${imageField.label} preview`} loading="lazy" fetchPriority="low" decoding="async" className="h-full w-full object-cover" />
                           ) : (
                             <ImagePlus size={24} className="text-creator-text/25" />
                           )}
