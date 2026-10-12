@@ -285,7 +285,7 @@ const PublicStore = () => {
   const { storeName } = useParams();
   const validStoreName = typeof storeName === "string" && storeName.trim() && storeName !== "undefined" && storeName !== "null" ? storeName.trim() : null;
 
-  console.log("Store Name from URL:", validStoreName);
+  
   const navigate = useNavigate();
   const pageRef = useRef(null);
 
@@ -361,7 +361,7 @@ const PublicStore = () => {
         },
       });
     });
-  }, { scope: pageRef, dependencies: [loading] });
+  }, { scope: pageRef.current || undefined, dependencies: [loading] });
 
   // ==========================================================
   // CART
@@ -407,7 +407,7 @@ const PublicStore = () => {
   // ==========================================================
 
   const fetchStoreData = async () => {
-    console.log("Fetching store data for:", validStoreName);
+   
 
     if (!validStoreName) {
       setLoading(false);
@@ -419,10 +419,9 @@ const PublicStore = () => {
       setLoading(true);
       setError("");
 
-      // SAME API AS YOUR OLD CODE
       const response = await API.get(`/api/shop/${encodeURIComponent(validStoreName)}`);
 
-      console.log("Fetched store data:", response.data);
+
 
       setStore(response.data.store);
       setProducts(response.data.products || []);

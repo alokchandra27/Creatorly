@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Axios instance create kar rahe hain
 const API = axios.create({
-  baseURL: "http://localhost:3000", // Yahan meri api ki  backend ki base URL hai
+  baseURL: "https://jhankoo.onrender.com", // Yahan meri api ki  backend ki base URL hai
   // headers: {
   //   "Content-Type": "application/json",
   // },

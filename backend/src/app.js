@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const path = require('path');
 const connectDB = require('./db/db');
 const authRoutes = require('./routes/auth.routes');
 const productRoutes = require('./routes/product.routes')
@@ -17,7 +18,6 @@ connectDB();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://prompt-vault-xi-umber.vercel.app" 
 ];
 
 app.use(cors({
@@ -32,10 +32,25 @@ app.use(cors({
   credentials: true,
 }))
 
+app.get('/health' , (req, res) => {
+  res.status(200).json({ message: 'Server is alive and kicking!' });
+});
+
 
 app.use('/api/auth', authRoutes );
 app.use('/api/products', productRoutes);
 app.use('/api/store', storeRoutes );
 app.use('/api/shop', publicStoreRoutes);
+
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+app.use((req, res, next) => {
+
+  if (req.url.startsWith('/api')) {
+    return next();
+  }
+
+  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+});
 
 module.exports = app;

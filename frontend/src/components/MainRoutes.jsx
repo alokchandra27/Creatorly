@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useParams } from "react-router-dom";
+import NotFound from "./NotFound";
 
 // Pages aur Components  Lazy Imports
 const Home = lazy(() => import("../pages/Home"));
@@ -114,6 +115,10 @@ const MainRoutes = ({ isLoggedIn, setIsLoggedIn }) => {
         <Route path="/publicstore/:storeName/cart" element={<Cart />} />
 
         <Route path="/publicstore/:storeName/wishlist" element={<Wishlist />} />
+
+        {/* 4. CATCH-ALL ROUTE FOR 404 PAGE */}
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

@@ -85,7 +85,7 @@ const Cart = () => {
       try {
         setLoadingStore(true);
 
-        const response = await fetch(`http://localhost:3000/api/shop/${encodeURIComponent(storeName)}`);
+        const response = await fetch(`https://jhankoo.onrender.com/api/shop/${encodeURIComponent(storeName)}`);
 
         if (!response.ok) {
           throw new Error("Unable to fetch store");

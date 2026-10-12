@@ -4,7 +4,7 @@ const productModel = require("../models/product.model");
 async function getSellerStoreByStoreName(req, res) {
   try {
     const { storeName } = req.params;
-    console.log("Fetching public store page for storeName:", storeName);
+    // console.log("Fetching public store page for storeName:", storeName);
 
     // 1. Pehle check karo kya main Store Table mein koi document hai
     let storeProfile = await storeModel
@@ -13,11 +13,11 @@ async function getSellerStoreByStoreName(req, res) {
       })
       .select("-createdAt -updatedAt -__v ");
 
-    console.log("IMAGE DATA:", {
-      profileImage: storeProfile?.profileImage,
-      storeLogo: storeProfile?.storeLogo,
-      bannerImage: storeProfile?.bannerImage,
-    });
+    // console.log("IMAGE DATA:", {
+    //   profileImage: storeProfile?.profileImage,
+    //   storeLogo: storeProfile?.storeLogo,
+    //   bannerImage: storeProfile?.bannerImage,
+    // });
 
     let sellerId = null;
     let finalStoreData = {};
