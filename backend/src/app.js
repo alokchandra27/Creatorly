@@ -42,7 +42,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/store', storeRoutes );
 app.use('/api/shop', publicStoreRoutes);
 
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use((req, res, next) => {
 
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
     return next();
   }
 
-  res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 module.exports = app;

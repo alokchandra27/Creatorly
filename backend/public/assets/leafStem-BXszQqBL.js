@@ -1,0 +1,1 @@
+var e=`/assets/leafStem-e910UJfR.webp`;export{e as t};

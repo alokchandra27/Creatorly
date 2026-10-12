@@ -1,0 +1,1 @@
+var e=`/assets/redcolor-CMHh9BH8.webp`;export{e as t};

@@ -1,0 +1,1 @@
+var e=`/assets/whatsapp-85wp-Ubi.webp`,t=`/assets/instagram-0bRb8day.webp`,n=`/assets/facebook-BepF3K0M.webp`;export{t as n,e as r,n as t};
