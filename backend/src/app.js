@@ -14,7 +14,11 @@ app.use(express.json());
 app.use(cookieParser());
 connectDB();
 
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://jhankoo.onrender.com"
+
+];
 
 app.use(
   cors({
